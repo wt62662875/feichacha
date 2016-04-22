@@ -1,0 +1,16 @@
+//
+//  feichacha.pch
+//  feichacha
+//
+//  Created by wt on 16/4/21.
+//  Copyright © 2016年 wangtao. All rights reserved.
+//
+
+#ifndef feichacha_pch
+#define feichacha_pch
+#import "Public.h"
+
+// Include any system framework and library headers here that should be included in all compilation units.
+// You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
+
+#endif /* feichacha_pch */

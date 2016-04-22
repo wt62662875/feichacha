@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9531" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="125" id="KGk-i7-Jjw" customClass="shufflingTableViewCell">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="125"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="124.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GLH-Dw-NDB" customClass="SDCycleScrollView">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="124.5"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </subviews>
+                <constraints>
+                    <constraint firstAttribute="bottom" secondItem="GLH-Dw-NDB" secondAttribute="bottom" id="4fI-e1-AHc"/>
+                    <constraint firstItem="GLH-Dw-NDB" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="fLs-K8-1zg"/>
+                    <constraint firstAttribute="trailing" secondItem="GLH-Dw-NDB" secondAttribute="trailing" id="nZw-bI-U6S"/>
+                    <constraint firstItem="GLH-Dw-NDB" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="oaF-uh-rKI"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="shufflingView" destination="GLH-Dw-NDB" id="v8B-NT-R08"/>
+            </connections>
+            <point key="canvasLocation" x="227" y="273.5"/>
+        </tableViewCell>
+    </objects>
+</document>
