@@ -163,12 +163,23 @@
         [cell.goodsOldPrice2 setAttributedText:attri];
         [cell.goodsOldPrice3 setAttributedText:attri];
 
-        
+        [cell.classButton addTarget:self action:@selector(classButton:) forControlEvents:UIControlEventTouchUpInside];
+        [cell.goodsButton1 addTarget:self action:@selector(goodsButton:) forControlEvents:UIControlEventTouchUpInside];
+        [cell.goodsButton2 addTarget:self action:@selector(goodsButton:) forControlEvents:UIControlEventTouchUpInside];
+        [cell.goodsButton3 addTarget:self action:@selector(goodsButton:) forControlEvents:UIControlEventTouchUpInside];
+        [cell.addShoppingCartButton1 addTarget:self action:@selector(addShoppingCartButton:) forControlEvents:UIControlEventTouchUpInside];
+        [cell.addShoppingCartButton2 addTarget:self action:@selector(addShoppingCartButton:) forControlEvents:UIControlEventTouchUpInside];
+        [cell.addShoppingCartButton3 addTarget:self action:@selector(addShoppingCartButton:) forControlEvents:UIControlEventTouchUpInside];
+
         return cell;
     }
     
     return nil;
 }
+#pragma mark 分类图片点击事件
+
+#pragma mark 商品点击事件
+
 #pragma mark 促销点击事件
 -(void)salesPromotionClick:(UIButton *)sender{
     NSLog(@"促销");
