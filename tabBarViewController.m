@@ -45,7 +45,10 @@
  
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(initFiveButton:) name:@"initFiveButton"object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(initFourButton:) name:@"initFourButton"object:nil];
+    
 }
+
+
 -(void)initFiveButton:(NSNotification*)notification{
     [tabbarView removeFromSuperview];
     [self initFiveButton];
@@ -56,6 +59,7 @@
 }
 -(void)initFiveButton{
     tabbarView = [[UIView alloc]initWithFrame:CGRectMake(0, SCREENHTIGHT-49, SCREENWIDTH, 49)];
+    [tabbarView setBackgroundColor:[UIColor whiteColor]];
     [self.view addSubview:tabbarView];
     image1 = [[UIImageView alloc]initWithFrame:CGRectMake(SCREENWIDTH/5/2-10, 8, 20, 20)];
     [image1 setImage:[UIImage imageNamed:@"footer_nav1_1"]];
@@ -132,6 +136,7 @@
 }
 -(void)initFourButton{
     tabbarView = [[UIView alloc]initWithFrame:CGRectMake(0, SCREENHTIGHT-49, SCREENWIDTH, 49)];
+    [tabbarView setBackgroundColor:[UIColor whiteColor]];
     [self.view addSubview:tabbarView];
     image1 = [[UIImageView alloc]initWithFrame:CGRectMake(SCREENWIDTH/4/2-10, 8, 20, 20)];
     [image1 setImage:[UIImage imageNamed:@"footer_nav1_1"]];

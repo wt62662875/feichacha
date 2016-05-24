@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="freshFruitViewController">
+            <connections>
+                <outlet property="badgeLabel" destination="R3r-2F-h3h" id="cnv-mI-tDc"/>
+                <outlet property="tableView" destination="cf2-We-C10" id="CUA-Jt-075"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zo5-T7-kTt">
+                    <rect key="frame" x="0.0" y="0.0" width="600" height="64"/>
+                    <subviews>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qAy-Zf-imk">
+                            <rect key="frame" x="0.0" y="63" width="600" height="1"/>
+                            <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.93725490199999995" alpha="1" colorSpace="calibratedRGB"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="1" id="8HD-1k-7a1"/>
+                            </constraints>
+                        </view>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="x6d-Fi-4Gl">
+                            <rect key="frame" x="0.0" y="19" width="44" height="44"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="44" id="Gxq-fD-bUE"/>
+                                <constraint firstAttribute="height" constant="44" id="esl-e7-qDZ"/>
+                            </constraints>
+                            <state key="normal" image="arrow_left.png"/>
+                            <connections>
+                                <action selector="backView:" destination="-1" eventType="touchUpInside" id="qU3-EC-tgF"/>
+                            </connections>
+                        </button>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="新鲜水果" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tgg-5g-JVO">
+                            <rect key="frame" x="266" y="32" width="68" height="21"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstItem="x6d-Fi-4Gl" firstAttribute="leading" secondItem="zo5-T7-kTt" secondAttribute="leading" id="3rk-rP-SWH"/>
+                        <constraint firstAttribute="height" constant="64" id="GfU-E6-3OA"/>
+                        <constraint firstAttribute="bottom" secondItem="qAy-Zf-imk" secondAttribute="bottom" id="HCd-06-9Hf"/>
+                        <constraint firstItem="qAy-Zf-imk" firstAttribute="top" secondItem="x6d-Fi-4Gl" secondAttribute="bottom" id="Sb0-uI-Qjw"/>
+                        <constraint firstItem="Tgg-5g-JVO" firstAttribute="centerX" secondItem="zo5-T7-kTt" secondAttribute="centerX" id="Vc5-D6-CjT"/>
+                        <constraint firstItem="qAy-Zf-imk" firstAttribute="top" secondItem="Tgg-5g-JVO" secondAttribute="bottom" constant="11" id="aTW-E9-l7K"/>
+                        <constraint firstAttribute="trailing" secondItem="qAy-Zf-imk" secondAttribute="trailing" id="o1P-ri-MWe"/>
+                        <constraint firstItem="qAy-Zf-imk" firstAttribute="leading" secondItem="zo5-T7-kTt" secondAttribute="leading" id="rqo-6A-y5v"/>
+                    </constraints>
+                </view>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="cf2-We-C10">
+                    <rect key="frame" x="0.0" y="64" width="600" height="536"/>
+                    <color key="backgroundColor" red="0.98431372549019602" green="1" blue="0.93725490196078431" alpha="1" colorSpace="calibratedRGB"/>
+                    <connections>
+                        <outlet property="dataSource" destination="-1" id="u4U-Sc-wqQ"/>
+                        <outlet property="delegate" destination="-1" id="7zD-yT-vXg"/>
+                    </connections>
+                </tableView>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CK4-6a-t2Z">
+                    <rect key="frame" x="536" y="536" width="44" height="44"/>
+                    <subviews>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5yb-GH-vKT">
+                            <rect key="frame" x="0.0" y="0.0" width="44" height="44"/>
+                            <state key="normal" image="shop_cart_icon1.png"/>
+                        </button>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="99" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="R3r-2F-h3h">
+                            <rect key="frame" x="28" y="0.0" width="16" height="16"/>
+                            <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="16" id="JTm-bM-o0x"/>
+                                <constraint firstAttribute="height" constant="16" id="fcc-XH-oZc"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstItem="5yb-GH-vKT" firstAttribute="centerX" secondItem="CK4-6a-t2Z" secondAttribute="centerX" id="6b5-rG-anP"/>
+                        <constraint firstAttribute="width" constant="44" id="7UY-Ls-Du0"/>
+                        <constraint firstItem="5yb-GH-vKT" firstAttribute="centerY" secondItem="CK4-6a-t2Z" secondAttribute="centerY" id="Bdq-2J-EBB"/>
+                        <constraint firstItem="R3r-2F-h3h" firstAttribute="top" secondItem="CK4-6a-t2Z" secondAttribute="top" id="Fwe-ss-J9D"/>
+                        <constraint firstAttribute="trailing" secondItem="R3r-2F-h3h" secondAttribute="trailing" id="VkI-CD-ygm"/>
+                        <constraint firstAttribute="height" constant="44" id="egP-80-mnV"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="zo5-T7-kTt" secondAttribute="trailing" id="CPl-RR-wXh"/>
+                <constraint firstItem="cf2-We-C10" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="Cm4-O2-T6A"/>
+                <constraint firstAttribute="bottom" secondItem="cf2-We-C10" secondAttribute="bottom" id="EOY-44-87Z"/>
+                <constraint firstAttribute="trailing" secondItem="CK4-6a-t2Z" secondAttribute="trailing" constant="20" id="MoW-cA-PiU"/>
+                <constraint firstItem="cf2-We-C10" firstAttribute="top" secondItem="zo5-T7-kTt" secondAttribute="bottom" id="Pho-1H-VWA"/>
+                <constraint firstAttribute="trailing" secondItem="cf2-We-C10" secondAttribute="trailing" id="QMY-c9-Eg4"/>
+                <constraint firstAttribute="bottom" secondItem="CK4-6a-t2Z" secondAttribute="bottom" constant="20" id="law-TH-tvl"/>
+                <constraint firstItem="zo5-T7-kTt" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="mtH-UM-h68"/>
+                <constraint firstItem="zo5-T7-kTt" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="wEb-8q-k7M"/>
+            </constraints>
+        </view>
+    </objects>
+    <resources>
+        <image name="arrow_left.png" width="7" height="11"/>
+        <image name="shop_cart_icon1.png" width="44" height="44"/>
+    </resources>
+</document>

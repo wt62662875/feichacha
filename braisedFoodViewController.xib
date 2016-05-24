@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9531" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="braisedFoodViewController">
+            <connections>
+                <outlet property="badgeLabel" destination="Hzs-mZ-szG" id="UIw-iI-QQc"/>
+                <outlet property="tableView" destination="ZVw-Q6-Kcg" id="Mpf-aO-aLu"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZrL-gu-OK5">
+                    <rect key="frame" x="0.0" y="0.0" width="600" height="64"/>
+                    <subviews>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Orw-Hf-kL4">
+                            <rect key="frame" x="0.0" y="63" width="600" height="1"/>
+                            <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.93725490199999995" alpha="1" colorSpace="calibratedRGB"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="1" id="RTz-51-iZ8"/>
+                            </constraints>
+                        </view>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0VY-sM-9Ve">
+                            <rect key="frame" x="0.0" y="19" width="44" height="44"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="44" id="ftc-pa-7MW"/>
+                                <constraint firstAttribute="height" constant="44" id="yAV-We-bU5"/>
+                            </constraints>
+                            <state key="normal" image="arrow_left.png"/>
+                            <connections>
+                                <action selector="backView:" destination="-1" eventType="touchUpInside" id="36z-Za-c8A"/>
+                            </connections>
+                        </button>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="卤味熟食" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oa3-1N-Rhv">
+                            <rect key="frame" x="266" y="32" width="68" height="21"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstItem="Orw-Hf-kL4" firstAttribute="leading" secondItem="ZrL-gu-OK5" secondAttribute="leading" id="2NZ-Vf-3Xv"/>
+                        <constraint firstAttribute="height" constant="64" id="8RF-yJ-otZ"/>
+                        <constraint firstItem="Orw-Hf-kL4" firstAttribute="top" secondItem="0VY-sM-9Ve" secondAttribute="bottom" id="8Ub-ln-8gh"/>
+                        <constraint firstItem="oa3-1N-Rhv" firstAttribute="centerX" secondItem="ZrL-gu-OK5" secondAttribute="centerX" id="GtL-g6-Jfy"/>
+                        <constraint firstItem="0VY-sM-9Ve" firstAttribute="leading" secondItem="ZrL-gu-OK5" secondAttribute="leading" id="HRG-vT-uWx"/>
+                        <constraint firstAttribute="trailing" secondItem="Orw-Hf-kL4" secondAttribute="trailing" id="LEF-N7-FaD"/>
+                        <constraint firstItem="Orw-Hf-kL4" firstAttribute="top" secondItem="oa3-1N-Rhv" secondAttribute="bottom" constant="11" id="VMM-Xv-coh"/>
+                        <constraint firstAttribute="bottom" secondItem="Orw-Hf-kL4" secondAttribute="bottom" id="iaI-aM-w1B"/>
+                    </constraints>
+                </view>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="ZVw-Q6-Kcg">
+                    <rect key="frame" x="0.0" y="64" width="600" height="536"/>
+                    <color key="backgroundColor" red="0.97254901960784312" green="0.94901960784313721" blue="0.88627450980392153" alpha="1" colorSpace="calibratedRGB"/>
+                    <connections>
+                        <outlet property="dataSource" destination="-1" id="H8s-jP-fBh"/>
+                        <outlet property="delegate" destination="-1" id="meD-IJ-ZJe"/>
+                    </connections>
+                </tableView>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VhE-fG-bex">
+                    <rect key="frame" x="536" y="536" width="44" height="44"/>
+                    <subviews>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UvM-Bc-nSn">
+                            <rect key="frame" x="0.0" y="0.0" width="44" height="44"/>
+                            <state key="normal" image="shop_cart_icon1.png"/>
+                        </button>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="99" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Hzs-mZ-szG">
+                            <rect key="frame" x="28" y="0.0" width="16" height="16"/>
+                            <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="16" id="YZK-MB-8xo"/>
+                                <constraint firstAttribute="width" constant="16" id="em8-5m-f4N"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="44" id="22L-Zv-QUp"/>
+                        <constraint firstItem="UvM-Bc-nSn" firstAttribute="centerY" secondItem="VhE-fG-bex" secondAttribute="centerY" id="24e-XQ-YPa"/>
+                        <constraint firstItem="Hzs-mZ-szG" firstAttribute="top" secondItem="VhE-fG-bex" secondAttribute="top" id="KzB-1n-wxY"/>
+                        <constraint firstItem="UvM-Bc-nSn" firstAttribute="centerX" secondItem="VhE-fG-bex" secondAttribute="centerX" id="hTX-KR-zYK"/>
+                        <constraint firstAttribute="trailing" secondItem="Hzs-mZ-szG" secondAttribute="trailing" id="pHk-SZ-SFJ"/>
+                        <constraint firstAttribute="width" constant="44" id="w86-H0-26w"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="ZrL-gu-OK5" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="3ZH-xk-1kW"/>
+                <constraint firstItem="ZrL-gu-OK5" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="484-vk-eom"/>
+                <constraint firstAttribute="trailing" secondItem="ZVw-Q6-Kcg" secondAttribute="trailing" id="ABg-Dg-nd3"/>
+                <constraint firstAttribute="trailing" secondItem="ZrL-gu-OK5" secondAttribute="trailing" id="HVe-uk-7wx"/>
+                <constraint firstAttribute="trailing" secondItem="VhE-fG-bex" secondAttribute="trailing" constant="20" id="Uif-DH-LSf"/>
+                <constraint firstAttribute="bottom" secondItem="ZVw-Q6-Kcg" secondAttribute="bottom" id="WQN-Wq-3Py"/>
+                <constraint firstItem="ZVw-Q6-Kcg" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="qfk-si-zCG"/>
+                <constraint firstItem="ZVw-Q6-Kcg" firstAttribute="top" secondItem="ZrL-gu-OK5" secondAttribute="bottom" id="sB7-ga-heI"/>
+                <constraint firstAttribute="bottom" secondItem="VhE-fG-bex" secondAttribute="bottom" constant="20" id="tbm-7t-Cc2"/>
+            </constraints>
+        </view>
+    </objects>
+    <resources>
+        <image name="arrow_left.png" width="7" height="11"/>
+        <image name="shop_cart_icon1.png" width="44" height="44"/>
+    </resources>
+</document>

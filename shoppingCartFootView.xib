@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9531" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="shoppingCartFootView">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="61"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="共￥99.99" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0Zs-j7-vXp">
+                    <rect key="frame" x="8" y="16.5" width="70.5" height="18"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                    <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="i9T-3f-uXi">
+                    <rect key="frame" x="220" y="0.0" width="100" height="50"/>
+                    <color key="backgroundColor" red="1" green="0.83921568629999999" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="100" id="Nl2-Uf-gfY"/>
+                    </constraints>
+                    <state key="normal" title="选好了">
+                        <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                </button>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="n0O-NX-MLc">
+                    <rect key="frame" x="0.0" y="49" width="320" height="1"/>
+                    <color key="backgroundColor" red="0.87843137250000003" green="0.87843137250000003" blue="0.87843137250000003" alpha="1" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="1" id="BAf-hG-UQ5"/>
+                    </constraints>
+                </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="c42-Dw-ahq">
+                    <rect key="frame" x="0.0" y="50" width="320" height="10"/>
+                    <color key="backgroundColor" red="0.97647058819999999" green="0.98039215690000003" blue="0.99607843139999996" alpha="1" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="10" id="tJH-sw-sHX"/>
+                    </constraints>
+                </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7z5-f1-Dds">
+                    <rect key="frame" x="0.0" y="60" width="320" height="1"/>
+                    <color key="backgroundColor" red="0.87843137250000003" green="0.87843137250000003" blue="0.87843137250000003" alpha="1" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="1" id="BuU-bh-UgR"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="7z5-f1-Dds" secondAttribute="bottom" id="1nn-fK-Qim"/>
+                <constraint firstItem="i9T-3f-uXi" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="3C3-QG-LpG"/>
+                <constraint firstItem="0Zs-j7-vXp" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" constant="-5" id="Fqq-G5-Mv6"/>
+                <constraint firstItem="c42-Dw-ahq" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="HSd-GK-D9J"/>
+                <constraint firstAttribute="trailing" secondItem="c42-Dw-ahq" secondAttribute="trailing" id="HsJ-Rq-aCT"/>
+                <constraint firstAttribute="trailing" secondItem="n0O-NX-MLc" secondAttribute="trailing" id="KSB-6v-qub"/>
+                <constraint firstItem="7z5-f1-Dds" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="RTv-0d-vyq"/>
+                <constraint firstItem="7z5-f1-Dds" firstAttribute="top" secondItem="c42-Dw-ahq" secondAttribute="bottom" id="flX-i1-X2U"/>
+                <constraint firstAttribute="trailing" secondItem="7z5-f1-Dds" secondAttribute="trailing" id="h78-g9-26t"/>
+                <constraint firstAttribute="bottom" secondItem="i9T-3f-uXi" secondAttribute="bottom" constant="11" id="hOM-93-N4s"/>
+                <constraint firstItem="c42-Dw-ahq" firstAttribute="top" secondItem="n0O-NX-MLc" secondAttribute="bottom" id="o58-lO-cfu"/>
+                <constraint firstItem="n0O-NX-MLc" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="uGF-H9-TjA"/>
+                <constraint firstItem="0Zs-j7-vXp" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="8" id="xYv-H6-SH6"/>
+                <constraint firstAttribute="trailing" secondItem="i9T-3f-uXi" secondAttribute="trailing" id="xcZ-aP-8yE"/>
+            </constraints>
+            <nil key="simulatedStatusBarMetrics"/>
+            <nil key="simulatedTopBarMetrics"/>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="priceLabel" destination="0Zs-j7-vXp" id="lvP-nI-Oyt"/>
+                <outlet property="toPayButton" destination="i9T-3f-uXi" id="Yqw-vp-Bot"/>
+            </connections>
+            <point key="canvasLocation" x="227" y="37"/>
+        </view>
+    </objects>
+</document>

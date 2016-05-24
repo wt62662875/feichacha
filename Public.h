@@ -13,10 +13,12 @@
 #import "AppUtils.h"
 #import <SVProgressHUD.h>
 #import "UIImageView+WebCache.h"
+#import <UIButton+WebCache.h>
 #import <AFNetworking.h>
 #import "MJRefresh.h"
 #import <IQKeyboardManager.h>
 #import "SDCycleScrollView.h"
+#import "UIAlertView+Blocks.h"
 
 
 #ifndef LiuLiuGanXi_Operation_Public_h
@@ -25,7 +27,7 @@
 
 #endif
 
-#define SeviceURL @"http://heycake.cn"
+#define SeviceURL @"http://api.feichacha.com/api"
 //#define SeviceURL @"http://192.168.1.150:996"
 
 
@@ -34,7 +36,6 @@
 
 #define TOKEN [USERDEFAULTS objectForKey:@"TOKEN"]
 #define X_CLIENT_TOKEN @"x-client-token"
-
 
 // 黄色/
 #define YELLOW_COLOR	RGBCOLORA(194,143,95,1

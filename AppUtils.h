@@ -39,12 +39,12 @@
  */
 + (NSString *)generateUuidString;
 #pragma mark 分享链接
-+ (BOOL)sendLinkURL:(NSString *)urlString
-            TagName:(NSString *)tagName
-              Title:(NSString *)title
-        Description:(NSString *)description
-         ThumbImage:(UIImage *)thumbImage
-            InScene:(enum WXScene)scene;
+//+ (BOOL)sendLinkURL:(NSString *)urlString
+//            TagName:(NSString *)tagName
+//              Title:(NSString *)title
+//        Description:(NSString *)description
+//         ThumbImage:(UIImage *)thumbImage
+//            InScene:(enum WXScene)scene;
 
 /**
  * 设置圆角
@@ -59,6 +59,8 @@
 
 #pragma mark HTML码转换UIcolor
 + (UIColor *)colorWithHexString:(NSString *)stringToConvert;
+#pragma mark 根据图片url获取图片尺寸
++(CGSize)getImageSizeWithURL:(id)imageURL;
 @end
 
 

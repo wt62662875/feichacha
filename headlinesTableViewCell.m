@@ -18,7 +18,7 @@
 }
 
 -(void)layoutSubviews{
-    _line1_left.constant = SCREENWIDTH/3;
+    _line1_left.constant = SCREENWIDTH/3-8;
     _line2_right.constant = SCREENWIDTH/3;
 
 //    _left.constant = 100;

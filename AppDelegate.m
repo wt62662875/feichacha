@@ -4,7 +4,7 @@
 //
 //  Created by wt on 16/4/21.
 //  Copyright © 2016年 wangtao. All rights reserved.
-//
+//  百度地图QPXoo4yamC4XuEEOTdbhj3BI4uBwTnsD
 
 #import "AppDelegate.h"
 #import "luanchViewController.h"
@@ -21,7 +21,6 @@
     // Override point for customization after application launch.
     //判断是不是第一次启动应用
     if(![[NSUserDefaults standardUserDefaults] boolForKey:@"firstLaunch"]){
-         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"firstLaunch"];
 //         NSLog(@"第一次启动");
         UIStoryboard *stroyBoard = GetStoryboard(@"Main");
         luanchViewController *luanchVC = [stroyBoard instantiateViewControllerWithIdentifier:@"luanchViewController"];
@@ -35,7 +34,19 @@
         }
     
     
+    // 要使用百度地图，请先启动BaiduMapManager
+    _mapManager = [[BMKMapManager alloc]init];
+    // 如果要关注网络及授权验证事件，请设定     generalDelegate参数
+    BOOL ret = [_mapManager start:@"QPXoo4yamC4XuEEOTdbhj3BI4uBwTnsD"  generalDelegate:nil];
+    if (!ret) {
+        NSLog(@"manager start failed!");
+    }
+    // Add the navigation controller's view to the window and display.
+    [self.window addSubview:navigationController.view];
+    [self.window makeKeyAndVisible];
     return YES;
+
+
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {
