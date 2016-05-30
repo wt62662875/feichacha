@@ -11,13 +11,21 @@
 #import "serchHeadCollectionReusableView.h"
 #import "baseViewController.h"
 
-@interface serchViewController ()<JCTagViewDelegate>
+@interface serchViewController ()<JCTagViewDelegate,UITextFieldDelegate>
 {
     UIButton *comprehensiveButton;
     UIButton *salesButton;
     UIButton *thePriceButton;
     BOOL thePriceBool;
     BOOL changeBool;
+    
+    UILabel *hotSerch;
+    JCTagView *JCView;
+    UILabel *historySerch;
+    JCTagView *JCView2;
+    UIButton *clearHistory;
+    
+    NSArray *datas;
 }
 @property (weak, nonatomic) IBOutlet UIView *serchView;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *scrollBackViewHeigh;
@@ -27,6 +35,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *badgeLabel;
 @property (weak, nonatomic) IBOutlet UIView *badgeView;
 
+@property (weak, nonatomic) IBOutlet UITextField *serchTextField;
 ///数组数据源
 @property (nonatomic, strong) NSArray *dataSource;
 
@@ -44,10 +53,45 @@
     _serchView.layer.borderWidth = 1;
     _serchView.layer.borderColor = RGBCOLORA(190, 190, 190, 1).CGColor;
     // Do any additional setup after loading the view.
+    _collectionView.hidden = YES;
+    _badgeView.hidden = YES;
     [self initJCTagView];
 }
-///懒加载
+- (IBAction)changed:(id)sender {
+    if (_serchTextField.text.length == 0) {
+        _collectionView.hidden = YES;
+        _badgeView.hidden = YES;
+    }
+}
+//搜索接口
+-(void)serchAPI:(NSString *)order{
+    [SVProgressHUD showWithStatus:@"加载中..."];
+    [[NetworkUtils shareNetworkUtils] serchGoods:[USERDEFAULTS objectForKey:@"shopID"] serchStr:_serchTextField.text Order:order success:^(id responseObject) {
+        NSLog(@"数据:%@",responseObject);
+        if ([[responseObject objectForKey:@"ResultType"]intValue] == 0) {
+            datas = [[NSArray alloc]init];
+            datas = [responseObject objectForKey:@"AppendData"];
+            [_collectionView reloadData];
+        }else {
+            [SVProgressHUD showErrorWithStatus:@"请求失败，请稍后重试" maskType:SVProgressHUDMaskTypeNone];
+        }
+        [SVProgressHUD dismiss];
+    } failure:^(NSString *error) {
+        [SVProgressHUD dismiss];
+    }];
 
+}
+//点击搜索
+- (BOOL)textFieldShouldReturn:(UITextField *)textField{
+    [self serchAdd:textField.text];
+    [self initJCTagView];
+    _collectionView.hidden = NO;
+    _badgeView.hidden = NO;
+    [self serchAPI:@"ture"];
+    
+    return YES;
+}
+///懒加载
 - (NSArray *)dataSource {
     if (!_dataSource) {
         self.dataSource = [NSArray arrayWithObjects:@"大家",@"你是什么",@"是不是呢",@"想要什么呢",@"吃大餐了哦哦哦",@"技术部的大牛",@"商场部的技术",@"全体人员注意了。开始了",@"全体人员注意了。开始了",@"全体人员注意了。开始了",@"全体人员注意了。开始了",@"全体人员注意了。开始了",@"全体人员注意了。开始了", nil];
@@ -55,39 +99,60 @@
     return _dataSource;
 }
 - (NSArray *)dataSource2 {
-    if (!_dataSource2) {
-        self.dataSource2 = [NSArray arrayWithObjects:@"大家",@"你是什么",@"是不是呢",@"想要什么呢",@"吃大餐了哦哦哦",@"技术部的大牛",@"商场部的技术",@"全体人员注意了。开始了", nil];
-    }
+//    if (!_dataSource2) {
+        self.dataSource2 = [USERDEFAULTS objectForKey:@"SearchRecord"];
+//    }
     return _dataSource2;
 }
+//搜索记录增加变更
+-(void)serchAdd:(NSString *)sender{
+    NSMutableArray * temp = [[NSMutableArray alloc]initWithArray:[USERDEFAULTS objectForKey:@"SearchRecord"]];
+    
+    if ([temp containsObject:sender]) {
+        [temp removeObject:sender];
+        [temp insertObject:sender atIndex:0];
+    }else{
+        [temp insertObject:sender atIndex:0];
+    }
+    if (temp.count >10) {
+        [temp removeLastObject];
+    }
+    [USERDEFAULTS setObject:temp forKey:@"SearchRecord"];
+}
 -(void)initJCTagView{
-    UILabel *hotSerch = [[UILabel alloc]initWithFrame:CGRectMake(8, 8, SCREENWIDTH, 22)];
+    [hotSerch removeFromSuperview];
+    [JCView removeFromSuperview];
+    [historySerch removeFromSuperview];
+    [JCView2 removeFromSuperview];
+    [clearHistory removeFromSuperview];
+    
+    hotSerch = [[UILabel alloc]initWithFrame:CGRectMake(8, 8, SCREENWIDTH, 22)];
     hotSerch.text = @"热门搜索";
     hotSerch.font = [UIFont systemFontOfSize:15];
     hotSerch.textColor = RGBCOLORA(139, 139, 139, 1);
     [_backScrollView addSubview:hotSerch];
     
-    JCTagView *JCView = [[JCTagView alloc] initWithFrame:CGRectMake(0, 38, SCREENWIDTH, 0)];
+    JCView = [[JCTagView alloc] initWithFrame:CGRectMake(0, 38, SCREENWIDTH, 0)];
     JCView.delegate = self;
     JCView.JCSignalTagColor = [UIColor whiteColor];
     JCView.JCbackgroundColor = [UIColor clearColor];
     [JCView setArrayTagWithLabelArray:self.dataSource];
     [_backScrollView addSubview:JCView];
     
-    UILabel *historySerch = [[UILabel alloc]initWithFrame:CGRectMake(8, JCView.frame.size.height+50, SCREENWIDTH, 22)];
+    historySerch = [[UILabel alloc]initWithFrame:CGRectMake(8, JCView.frame.size.height+50, SCREENWIDTH, 22)];
     historySerch.text = @"历史搜索";
     historySerch.font = [UIFont systemFontOfSize:15];
     historySerch.textColor = RGBCOLORA(139, 139, 139, 1);
     [_backScrollView addSubview:historySerch];
     
-    JCTagView *JCView2 = [[JCTagView alloc] initWithFrame:CGRectMake(0, historySerch.frame.origin.y+30, SCREENWIDTH, 0)];
+    JCView2 = [[JCTagView alloc] initWithFrame:CGRectMake(0, historySerch.frame.origin.y+30, SCREENWIDTH, 0)];
     JCView2.delegate = self;
     JCView2.JCSignalTagColor = [UIColor whiteColor];
     JCView2.JCbackgroundColor = [UIColor clearColor];
     [JCView2 setArrayTagWithLabelArray:self.dataSource2];
     [_backScrollView addSubview:JCView2];
     
-    UIButton *clearHistory = [UIButton buttonWithType:UIButtonTypeCustom];
+    clearHistory = [UIButton buttonWithType:UIButtonTypeCustom];
     [clearHistory setFrame:CGRectMake(20, JCView2.frame.origin.y+JCView2.frame.size.height+20, SCREENWIDTH-40, 30)];
     clearHistory.layer.cornerRadius = 4;
     clearHistory.layer.borderWidth = 1;
@@ -95,34 +160,40 @@
     [clearHistory setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     clearHistory.titleLabel.font = [UIFont systemFontOfSize:15];
     [clearHistory setTitle:@"清空历史" forState:UIControlStateNormal];
+    [clearHistory addTarget:self action:@selector(clearHistoryClick:) forControlEvents:UIControlEventTouchUpInside];
     [_backScrollView addSubview:clearHistory];
     
     _scrollBackViewHeigh.constant = clearHistory.frame.origin.y + 40;
-    _collectionView.hidden = YES;
-    _badgeView.hidden = YES;
+
 }
 -(void)buttonClick:(NSString *)str{
-    
-    _collectionView.hidden = NO;
-    _badgeView.hidden = NO;
-    NSLog(@"1111%@",str);
+    _serchTextField.text = str;
+    [self textFieldShouldReturn:_serchTextField];
+
+}
+//清空历史记录
+-(void)clearHistoryClick:(UIButton *)sender{
+    [USERDEFAULTS removeObjectForKey:@"SearchRecord"];
+    [self initJCTagView];
 }
 
 
 //定义展示的UICollectionViewCell的个数
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return 12;
+    return datas.count;
 }
 //每个UICollectionView展示的内容
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString * CellIdentifier = @"serchCollectionViewCell";
     serchCollectionViewCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:CellIdentifier forIndexPath:indexPath];
-    [cell.goodsImage sd_setImageWithURL:[NSURL URLWithString:@"http://manage.feichacha.com/html/shop/images/index_img2.png"]];
+    [cell.goodsImage sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[datas[indexPath.row] objectForKey:@"ImageUrl"]]]];
     cell.addShoppingCartButton1.tag = indexPath.row;
     [cell.addShoppingCartButton1 addTarget:self action:@selector(addShoppingCartButton1:) forControlEvents:UIControlEventTouchUpInside];
-    
+    cell.goodsName.text = [datas[indexPath.row] objectForKey:@"Name"];
+    cell.goodsPrice1.text = [NSString stringWithFormat:@"￥%@",[datas[indexPath.row] objectForKey:@"Price"]];
+    cell.goodsMessage1.text = [datas[indexPath.row] objectForKey:@"Size"];
     /**
      老价格加下划线
      **/
@@ -220,8 +291,10 @@
     thePriceBool = !thePriceBool;
     if (thePriceBool) {
         [thePriceButton setImage:[UIImage imageNamed:@"arrow_top_1"] forState:UIControlStateNormal];
+        [self serchAPI:@"true"];
     }else{
         [thePriceButton setImage:[UIImage imageNamed:@"arrow_bottom_1"] forState:UIControlStateNormal];
+        [self serchAPI:@"false"];
     }
     
 }

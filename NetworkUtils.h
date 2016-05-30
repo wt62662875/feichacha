@@ -36,7 +36,42 @@ typedef void(^FailureBlock)(NSString *error);
  */
 -(void)login:(NSString *)phoneNumber code:(NSString *)code success:(SuccessBlock)success failure:(FailureBlock)faileure;
 
+/**
+ *  上传经纬度返回最近门店
+ *
+ *  @param lat   经度
+ *  @param lon   纬度
+ *  @param success  成功回调
+ *  @param faileure 失败回调
+ */
+-(void)companyDetail:(NSString *)lat lon:(NSString *)lon success:(SuccessBlock)success failure:(FailureBlock)faileure;
 
+/**
+ *  获取分类名称列表
+ *
+ *  @param success  成功回调
+ *  @param faileure 失败回调
+ */
+-(void)listProClass:(SuccessBlock)success failure:(FailureBlock)faileure;
 
+/**
+ *  根据商店Id分类Id获取分类下对应的商品列表
+ *
+ *  @param compnayId   商店Id
+ *  @param classId     分类Id
+ *  @param success     成功回调
+ *  @param faileure    失败回调
+ */
+-(void)ClassProductList:(NSString *)compnayId classId:(NSString *)classId success:(SuccessBlock)success failure:(FailureBlock)faileure;
 
+/**
+ *  根据商家Id和输入的商品关键字搜索商品列表
+ *
+ *  @param compnayId   商店Id
+ *  @param serchStr    搜索str
+ *  @param Order       价格排序：true 升序，false 降序
+ *  @param success     成功回调
+ *  @param faileure    失败回调
+ */
+-(void)serchGoods:(NSString *)compnayId serchStr:(NSString *)serchStr Order:(NSString *)Order success:(SuccessBlock)success failure:(FailureBlock)faileure;
 @end

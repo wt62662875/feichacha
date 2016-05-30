@@ -25,8 +25,10 @@
     _bannerHeigh.constant = SCREENWIDTH*0.327;
     _getVerificationCode.layer.cornerRadius = 4;
     _determine.layer.cornerRadius = 4;
+    
     // Do any additional setup after loading the view from its nib.
 }
+
 - (IBAction)textFieldDidChange:(UITextField *)sender {
     if (sender == self.phoneNumberTextField) {
         if (sender.text.length > 11) {

@@ -49,5 +49,48 @@
         faileure(errorStr);
     }];
 }
+-(void)companyDetail:(NSString *)lat lon:(NSString *)lon success:(SuccessBlock)success failure:(FailureBlock)faileure{
+    AFHTTPRequestOperationManager *manager = [self baseHtppRequest];
+    NSString *url = [SeviceURL stringByAppendingFormat:@"/CompanyDetail/Company?lat=%@&lon=%@",lat,lon];
+    [manager GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        success(responseObject);
+    }failure:^(AFHTTPRequestOperation *operation, NSError *error){
+        NSString *errorStr = [error.userInfo objectForKey:@"NSLocalizedDescription"];
+        faileure(errorStr);
+    }];
+}
+-(void)listProClass:(SuccessBlock)success failure:(FailureBlock)faileure{
+    AFHTTPRequestOperationManager *manager = [self baseHtppRequest];
+    NSString *url = [SeviceURL stringByAppendingFormat:@"/ProClass/ListProClass"];
+    [manager GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        success(responseObject);
+    }failure:^(AFHTTPRequestOperation *operation, NSError *error){
+        NSString *errorStr = [error.userInfo objectForKey:@"NSLocalizedDescription"];
+        faileure(errorStr);
+    }];
+}
+-(void)ClassProductList:(NSString *)compnayId classId:(NSString *)classId success:(SuccessBlock)success failure:(FailureBlock)faileure{
+    AFHTTPRequestOperationManager *manager = [self baseHtppRequest];
+    NSString *url = [SeviceURL stringByAppendingFormat:@"/ProClass/ClassProductList?CompnayId=%@&ClassId=%@",compnayId,classId];
+    [manager GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        success(responseObject);
+    }failure:^(AFHTTPRequestOperation *operation, NSError *error){
+        NSString *errorStr = [error.userInfo objectForKey:@"NSLocalizedDescription"];
+        faileure(errorStr);
+    }];
+}
+-(void)serchGoods:(NSString *)compnayId serchStr:(NSString *)serchStr Order:(NSString *)Order success:(SuccessBlock)success failure:(FailureBlock)faileure{
+    AFHTTPRequestOperationManager *manager = [self baseHtppRequest];
+    NSString *url = [SeviceURL stringByAppendingFormat:@"/Search/SearchtList"];
+//    url = [url stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    NSDictionary *dic = [[NSDictionary alloc]initWithObjectsAndKeys:compnayId,@"CompnayId",Order,@"Order",serchStr,@"str", nil];
+    NSLog(@"%@",url);
+    [manager POST:url parameters:dic success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        success(responseObject);
+    }failure:^(AFHTTPRequestOperation *operation, NSError *error){
+        NSString *errorStr = [error.userInfo objectForKey:@"NSLocalizedDescription"];
+        faileure(errorStr);
+    }];
+}
 
 @end

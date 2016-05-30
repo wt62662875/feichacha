@@ -7,7 +7,8 @@
 //
 //320     375   414
 #pragma    isRegister   是否登陆   1登陆   0未登录
-#pragma    phoneNumber   用户名
+#pragma    shopID   当前所选店铺ID
+
 
 
 #import "AppUtils.h"
@@ -28,9 +29,11 @@
 #endif
 
 #define SeviceURL @"http://api.feichacha.com/api"
+#define IMGURL @"http://manage.feichacha.com"
+
+
+
 //#define SeviceURL @"http://192.168.1.150:996"
-
-
 
 #define RGBCOLORA(r,g,b,a) [UIColor colorWithRed:(r)/255.0f green:(g)/255.0f blue:(b)/255.0f alpha:(a)]
 

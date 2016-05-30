@@ -31,6 +31,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *deliveryTo;   //配送至
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
+@property (weak, nonatomic) IBOutlet UIButton *titleAddress;
 
 /** layers */
 @property(nonatomic,strong)NSMutableArray<CALayer *> *animationLayers;
@@ -53,20 +54,17 @@
 
         [self initGuideView];
     }
+    [self getCurrentAddress];
+
+}
+//获取当前地址
+-(void)getCurrentAddress{
     //初始化BMKLocationService
     _locService = [[BMKLocationService alloc]init];
     _locService.delegate = self;
     //启动LocationService
     [_locService startUserLocationService];
-
-
 }
-//实现相关delegate 处理位置信息更新
-//处理方向变更信息
-//- (void)didUpdateUserHeading:(BMKUserLocation *)userLocation
-//{
-//    NSLog(@"heading is %@",userLocation.heading);
-//}
 //处理位置坐标更新
 - (void)didUpdateBMKUserLocation:(BMKUserLocation *)userLocation
 {
@@ -82,6 +80,23 @@
         if(flag)
         {
 //          NSLog(@"反geo检索发送成功");
+            NSString *latString = [NSString stringWithFormat:@"%f",userLocation.location.coordinate.latitude];
+            NSString *lonString = [NSString stringWithFormat:@"%f",userLocation.location.coordinate.longitude];
+            
+            [SVProgressHUD showWithStatus:@"加载中..."];
+            [[NetworkUtils shareNetworkUtils] companyDetail:latString lon:lonString success:^(id responseObject) {
+                NSLog(@"数据:%@",responseObject);
+                if ([[responseObject objectForKey:@"ResultType"]intValue] == 0) {
+                    [USERDEFAULTS setObject:[[responseObject objectForKey:@"AppendData"] objectForKey:@"Id"] forKey:@"shopID"];
+                }else {
+                    [SVProgressHUD showErrorWithStatus:@"请求失败，请稍后重试" maskType:SVProgressHUDMaskTypeNone];
+                }
+                [SVProgressHUD dismiss];
+            } failure:^(NSString *error) {
+                [SVProgressHUD dismiss];
+            }];
+            
+            
             _locService.delegate = nil;
         }
         else
@@ -89,7 +104,10 @@
           NSLog(@"反geo检索发送失败");    
         }
         NSLog(@"didUpdateUserLocation lat %f,long %f",userLocation.location.coordinate.latitude,userLocation.location.coordinate.longitude);
+
+
     }
+
 }
 //接收反向地理编码结果
 -(void) onGetReverseGeoCodeResult:(BMKGeoCodeSearch *)searcher result:
@@ -101,7 +119,7 @@ errorCode:(BMKSearchErrorCode)error{
       {
           [tempArray addObject:poiInfo.name];
       }
-      NSLog(@"%@",tempArray[0]);
+      [_titleAddress setTitle:tempArray[0] forState:UIControlStateNormal];
 
   }
   else {
@@ -504,9 +522,17 @@ errorCode:(BMKSearchErrorCode)error{
 {
     UIStoryboard *stroyBoard = GetStoryboard(@"Main");
     taiwaneseFoodViewController *taiwaneseFoodVC = [stroyBoard instantiateViewControllerWithIdentifier:@"taiwaneseFoodViewController"];
+    CassegrainWineryViewController *cassegrainWinerVC = [stroyBoard instantiateViewControllerWithIdentifier:@"CassegrainWineryViewController"];
+
     if (index == 0) {
         [self.navigationController pushViewController:taiwaneseFoodVC animated:YES];
+    }else if(index == 1){
+        aDishThatGoesWithLiquorViewController *freshFruitVC = [[aDishThatGoesWithLiquorViewController alloc] initWithNibName:@"aDishThatGoesWithLiquorViewController"   bundle:nil];
+        [self.navigationController pushViewController:freshFruitVC animated:YES];
+    }else{
+        [self.navigationController pushViewController:cassegrainWinerVC animated:YES];
     }
+    
     NSLog(@"%ld",(long)index);
 }
 #pragma mark 搜索按钮
