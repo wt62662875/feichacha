@@ -13,6 +13,10 @@
 #import "baseViewController.h"
 
 @interface salesPromotionViewController ()<UITableViewDataSource,UITableViewDelegate>
+{
+    NSArray *datas;
+    NSMutableArray *lastDatas;
+}
 @property (weak, nonatomic) IBOutlet UILabel *badgeLabel;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
@@ -26,18 +30,40 @@
     _badgeLabel.layer.masksToBounds = YES;
     // Do any additional setup after loading the view.
     [self initTableHeadView];
-//    guideView *guiView = [[NSBundle mainBundle] loadNibNamed:@"guideView" owner:self options:nil][0];
-    CGSize size =  [AppUtils getImageSizeWithURL:[NSURL URLWithString:@"http://img05.tooopen.com/images/20140604/sy_62331342149.jpg"]];
-    NSLog(@"%f==%f",size.height,size.width);
+    [self PromotionsListDatas];
 
 }
-
+-(void)PromotionsListDatas{
+    [SVProgressHUD showWithStatus:@"加载中..."];
+    
+    [[NetworkUtils shareNetworkUtils] PromotionsList:[USERDEFAULTS objectForKey:@"shopID"] success:^(id responseObject) {
+        NSLog(@"数据:%@",responseObject);
+        if ([[responseObject objectForKey:@"ResultType"]intValue] == 0) {
+            datas = [[NSMutableArray alloc]init];
+            datas = [responseObject objectForKey:@"AppendData"];
+            lastDatas = [datas mutableCopy];
+            [lastDatas removeObjectsInRange:NSMakeRange(0, 2)];
+            
+            [_tableView reloadData];
+        }else {
+            
+            [SVProgressHUD showErrorWithStatus:@"请求失败，请稍后重试" maskType:SVProgressHUDMaskTypeNone];
+        }
+        [SVProgressHUD dismiss];
+    } failure:^(NSString *error) {
+        [SVProgressHUD dismiss];
+    }];
+}
 #pragma mark CELL的row数量
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     if (section == 2) {
-        return 2;
+        if ((lastDatas.count)%2 == 0) {
+            return lastDatas.count/2;
+        }else{
+            return lastDatas.count/2+1;
+        }
     }
-    return 3;
+    return 1;
 }
 #pragma mark CELL的高度
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -57,11 +83,23 @@
         }
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
         cell.contentView.backgroundColor = RGBCOLORA(239, 239, 239, 1);
-        [cell.goodsImage1 sd_setImageWithURL:[NSURL URLWithString:@"http://manage.feichacha.com/html/shop/images/img1.png"]];
-        [cell.goodsImage2 sd_setImageWithURL:[NSURL URLWithString:@"http://manage.feichacha.com/html/shop/images/img1.png"]];
+        [cell.goodsImage1 sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[lastDatas[indexPath.row*2] objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"loading_default"]];
+        cell.goodsName1.text = [lastDatas[indexPath.row*2] objectForKey:@"Name"];
+        cell.goodsSpecifications1.text = [lastDatas[indexPath.row*2] objectForKey:@"Size"];
+        cell.price1.text = [NSString stringWithFormat:@"%@",[lastDatas[indexPath.row*2] objectForKey:@"Price"]];
+        if (lastDatas.count %2 != 0 && lastDatas.count/2 == indexPath.row) {
+            cell.backView2.hidden = YES;
+        }else{
+            [cell.goodsImage2 sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[lastDatas[indexPath.row*2+1] objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"loading_default"]];
+            cell.goodsName2.text = [lastDatas[indexPath.row*2+1] objectForKey:@"Name"];
+            cell.goodsSpecifications2.text = [lastDatas[indexPath.row*2+1] objectForKey:@"Size"];
+            cell.price2.text = [NSString stringWithFormat:@"%@",[lastDatas[indexPath.row*2+1] objectForKey:@"Price"]];
+        }
+        
+        cell.goodsOldPrice1.hidden = YES;
+        cell.goodsOldPrice2.hidden = YES;
         [cell.buyButton1 setBackgroundColor:RGBCOLORA(246, 170, 0, 1)];
         [cell.buyButton2 setBackgroundColor:RGBCOLORA(246, 170, 0, 1)];
-        
         
         [cell.buyButton1 addTarget:self action:@selector(buyButton1:) forControlEvents:UIControlEventTouchUpInside];
         [cell.buyButton2 addTarget:self action:@selector(buyButton2:) forControlEvents:UIControlEventTouchUpInside];
@@ -74,7 +112,20 @@
         cell = [[NSBundle mainBundle] loadNibNamed:@"salesPromotionGoodsTableViewCell" owner:self options:nil][0];
     }
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
-    [cell.goodsImage sd_setImageWithURL:[NSURL URLWithString:@"http://manage.feichacha.com/html/shop/images/f_cx_img1.png"]];
+    if (indexPath.section == 0) {
+        [cell.goodsImage sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[datas[0] objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"loading_default"]];
+        cell.goodsName.text = [datas[0] objectForKey:@"Name"];
+        cell.goodsSpecifications.text = [datas[0] objectForKey:@"Size"];
+        cell.goodsPrice.text = [NSString stringWithFormat:@"%@",[datas[0] objectForKey:@"Price"]];
+    }else{
+        [cell.goodsImage sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[datas[1] objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"loading_default"]];
+        cell.goodsName.text = [datas[1] objectForKey:@"Name"];
+        cell.goodsSpecifications.text = [datas[1] objectForKey:@"Size"];
+        cell.goodsPrice.text = [NSString stringWithFormat:@"%@",[datas[1] objectForKey:@"Price"]];
+    }
+    
+    cell.goodsOldPrice.hidden = YES;
+    
     [cell.buyButton addTarget:self action:@selector(buyButton:) forControlEvents:UIControlEventTouchUpInside];
     
     return cell;

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="KGk-i7-Jjw" customClass="haveAddressSerchTableViewCell">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="49"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="48.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="faQ-P3-MhM">
+                        <rect key="frame" x="30" y="8" width="37.5" height="18"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                        <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VL5-td-qVl">
+                        <rect key="frame" x="8" y="26" width="31" height="14.5"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="map_icon.png" translatesAutoresizingMaskIntoConstraints="NO" id="59Q-Ui-B2F">
+                        <rect key="frame" x="8" y="8" width="14" height="19"/>
+                    </imageView>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1KL-Qh-tSG">
+                        <rect key="frame" x="8" y="47" width="312" height="1"/>
+                        <color key="backgroundColor" red="0.87843137250000003" green="0.87843137250000003" blue="0.87843137250000003" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="1" id="TlA-fB-N1E"/>
+                        </constraints>
+                    </view>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="faQ-P3-MhM" firstAttribute="leading" secondItem="59Q-Ui-B2F" secondAttribute="trailing" constant="8" id="Aux-HW-2og"/>
+                    <constraint firstItem="1KL-Qh-tSG" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="8" id="WSf-DU-uyF"/>
+                    <constraint firstItem="VL5-td-qVl" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="8" id="cF8-Vx-vRS"/>
+                    <constraint firstItem="59Q-Ui-B2F" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="8" id="cYK-f9-STB"/>
+                    <constraint firstAttribute="bottom" secondItem="1KL-Qh-tSG" secondAttribute="bottom" id="ftK-3Z-DZv"/>
+                    <constraint firstAttribute="trailing" secondItem="1KL-Qh-tSG" secondAttribute="trailing" id="gn0-km-gw3"/>
+                    <constraint firstItem="VL5-td-qVl" firstAttribute="top" secondItem="faQ-P3-MhM" secondAttribute="bottom" id="mBL-n6-abB"/>
+                    <constraint firstItem="59Q-Ui-B2F" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="8" id="n5R-lf-1n9"/>
+                    <constraint firstItem="faQ-P3-MhM" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="8" id="p99-k9-QcK"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="address" destination="VL5-td-qVl" id="eVd-4N-MGR"/>
+                <outlet property="name" destination="faQ-P3-MhM" id="Z2N-Lc-o3p"/>
+            </connections>
+            <point key="canvasLocation" x="245" y="230.5"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="map_icon.png" width="14" height="19"/>
+    </resources>
+</document>

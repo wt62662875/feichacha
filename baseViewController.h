@@ -26,6 +26,11 @@
 #import "taiwaneseFoodViewController.h"
 #import "VerifyTheMobilePhoneViewController.h"
 #import "aDishThatGoesWithLiquorViewController.h"
+#import "addressManageViewController.h"
+#import "lotteViewController.h"
+#import "cocktailViewController.h"
+#import "snackFoodCarnivalSeasonViewController.h"
+#import "articlesForDailyUseViewController.h"
 
 @interface baseViewController : UIViewController
 

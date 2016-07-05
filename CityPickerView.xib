@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9531" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="CityPicker">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="250"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uy0-qq-xGr">
+                    <rect key="frame" x="160" y="0.0" width="160" height="50"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="160" id="Nv6-ER-pJU"/>
+                        <constraint firstAttribute="height" constant="50" id="o9P-EY-Kza"/>
+                    </constraints>
+                    <state key="normal" title="确定">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <variation key="default">
+                        <mask key="constraints">
+                            <exclude reference="Nv6-ER-pJU"/>
+                        </mask>
+                    </variation>
+                    <variation key="heightClass=compact-widthClass=compact" fixedFrame="YES">
+                        <rect key="frame" x="165" y="0.0" width="165" height="40"/>
+                    </variation>
+                    <connections>
+                        <action selector="SureBtn:" destination="iN0-l3-epB" eventType="touchUpInside" id="bm6-6v-0Ha"/>
+                    </connections>
+                </button>
+                <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WTq-nw-96X">
+                    <rect key="frame" x="0.0" y="50" width="320" height="200"/>
+                </pickerView>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fMU-Ej-RO0">
+                    <rect key="frame" x="0.0" y="0.0" width="160" height="50"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="50" id="Kgg-3X-57R"/>
+                        <constraint firstAttribute="width" constant="160" id="sYE-wB-XyA"/>
+                    </constraints>
+                    <state key="normal" title="取消">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <variation key="default">
+                        <mask key="constraints">
+                            <exclude reference="sYE-wB-XyA"/>
+                        </mask>
+                    </variation>
+                    <variation key="heightClass=compact-widthClass=compact" fixedFrame="YES">
+                        <rect key="frame" x="0.0" y="0.0" width="165" height="40"/>
+                    </variation>
+                    <connections>
+                        <action selector="cancelBtn:" destination="iN0-l3-epB" eventType="touchUpInside" id="yaB-Sx-NEa"/>
+                    </connections>
+                </button>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sBU-DB-rYY">
+                    <rect key="frame" x="160" y="0.0" width="0.0" height="50"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="50" id="UWm-dR-j5h"/>
+                        <constraint firstAttribute="width" id="mGj-0j-ITY"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="fMU-Ej-RO0" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="3LR-yC-TAL"/>
+                <constraint firstItem="sBU-DB-rYY" firstAttribute="leading" secondItem="fMU-Ej-RO0" secondAttribute="trailing" id="4yZ-XC-Foy"/>
+                <constraint firstItem="uy0-qq-xGr" firstAttribute="leading" secondItem="sBU-DB-rYY" secondAttribute="trailing" id="6je-Km-0fY"/>
+                <constraint firstAttribute="trailing" secondItem="WTq-nw-96X" secondAttribute="trailing" id="GKd-Nm-cYE"/>
+                <constraint firstItem="fMU-Ej-RO0" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="NP6-Rq-rsm"/>
+                <constraint firstAttribute="trailing" secondItem="uy0-qq-xGr" secondAttribute="trailing" id="SxN-HU-C6c"/>
+                <constraint firstItem="sBU-DB-rYY" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="YHd-l8-lbI"/>
+                <constraint firstItem="WTq-nw-96X" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="gk7-uE-3yD"/>
+                <constraint firstAttribute="bottom" secondItem="WTq-nw-96X" secondAttribute="bottom" id="hIm-WA-XUk"/>
+                <constraint firstItem="WTq-nw-96X" firstAttribute="top" secondItem="fMU-Ej-RO0" secondAttribute="bottom" id="lTy-aE-ICx"/>
+                <constraint firstItem="uy0-qq-xGr" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="nDX-Rc-rbb"/>
+                <constraint firstItem="sBU-DB-rYY" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="pDX-fU-gob"/>
+            </constraints>
+            <nil key="simulatedStatusBarMetrics"/>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="CityPicker" destination="WTq-nw-96X" id="w1f-Ub-Pp3"/>
+            </connections>
+            <point key="canvasLocation" x="144" y="430"/>
+        </view>
+    </objects>
+</document>

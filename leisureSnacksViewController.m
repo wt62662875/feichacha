@@ -23,7 +23,6 @@
     float classHeadViewY5;
     float classHeadViewY6;
     float classHeadViewY7;
-    float classHeadViewY8;
     
     UIButton *navButton1;
     UIButton *navButton2;
@@ -32,7 +31,16 @@
     UIButton *navButton5;
     UIButton *navButton6;
     UIButton *navButton7;
-    UIButton *navButton8;
+    
+    NSArray *allDatas;
+    NSArray * datas1;
+    NSArray * datas2;
+    NSArray * datas3;
+    NSArray * datas4;
+    NSArray * datas5;
+    NSArray * datas6;
+    NSArray * datas7;
+
 }
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 @property (weak, nonatomic) IBOutlet UILabel *badgeLabel;
@@ -50,24 +58,66 @@
     
     [self.collectionView registerClass:[leisureSnacksBannerCollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"leisureSnacksBannerCollectionReusableView"];
     
-    classHeadViewY1 = SCREENWIDTH*0.307;
-    if (12 % 2 == 0) {
-        classHeadViewY2 = classHeadViewY1 +78+(SCREENWIDTH/2+102)*(4/2);
-        classHeadViewY3 = classHeadViewY2 +78+(SCREENWIDTH/2+102)*(4/2);
-        classHeadViewY4 = classHeadViewY3 +78+(SCREENWIDTH/2+102)*(4/2);
-        classHeadViewY5 = classHeadViewY4 +78+(SCREENWIDTH/2+102)*(4/2);
-        classHeadViewY6 = classHeadViewY5 +78+(SCREENWIDTH/2+102)*(4/2);
-        classHeadViewY7 = classHeadViewY6 +78+(SCREENWIDTH/2+102)*(4/2);
-        classHeadViewY8 = classHeadViewY7 +78+(SCREENWIDTH/2+102)*(4/2);
-        
-    }else{
-        classHeadViewY2 = classHeadViewY1 +44+187+(SCREENWIDTH/2+74)*(12/2+1)+4;
-        classHeadViewY3 = classHeadViewY2 +44+187+(SCREENWIDTH/2+74)*(12/2+1)+4;
-        classHeadViewY4 = classHeadViewY3 +44+187+(SCREENWIDTH/2+74)*(12/2+1)+4;
-        
-    }
+    [self ActivityListDatas];
 
     // Do any additional setup after loading the view.
+}
+-(void)ActivityListDatas{
+    [SVProgressHUD showWithStatus:@"加载中..."];
+    
+    [[NetworkUtils shareNetworkUtils] ActivityList:[_getDatas objectForKey:@"Id"] ActType:[_getDatas objectForKey:@"ActType"] success:^(id responseObject) {
+        NSLog(@"数据:%@",responseObject);
+        if ([[responseObject objectForKey:@"ResultType"]intValue] == 0) {
+            allDatas = [[responseObject objectForKey:@"AppendData"] objectForKey:@"ActivityProductClass"];
+            datas1 = [allDatas[0] objectForKey:@"ActivityProduct"];
+            datas2 = [allDatas[1] objectForKey:@"ActivityProduct"];
+            datas3 = [allDatas[2] objectForKey:@"ActivityProduct"];
+            datas4 = [allDatas[3] objectForKey:@"ActivityProduct"];
+            datas5 = [allDatas[4] objectForKey:@"ActivityProduct"];
+            datas6 = [allDatas[5] objectForKey:@"ActivityProduct"];
+            datas7 = [allDatas[6] objectForKey:@"ActivityProduct"];
+            classHeadViewY1 = SCREENWIDTH*0.307;
+            if (datas1.count %2 == 0) {
+                classHeadViewY2 = classHeadViewY1 +78+(SCREENWIDTH/2+102)*(datas1.count/2);
+            }else{
+                classHeadViewY2 = classHeadViewY1 +78+(SCREENWIDTH/2+102)*(datas1.count/2+1);
+            }
+            if (datas2.count %2 == 0) {
+                classHeadViewY3 = classHeadViewY2 +78+(SCREENWIDTH/2+102)*(datas2.count/2);
+            }else{
+                classHeadViewY3 = classHeadViewY2 +78+(SCREENWIDTH/2+102)*(datas2.count/2+1);
+            }
+            if (datas3.count %2 == 0) {
+                classHeadViewY4 = classHeadViewY3 +78+(SCREENWIDTH/2+102)*(datas3.count/2);
+            }else{
+                classHeadViewY4 = classHeadViewY3 +78+(SCREENWIDTH/2+102)*(datas3.count/2+1);
+            }
+            if (datas4.count %2 == 0) {
+                classHeadViewY5 = classHeadViewY4 +78+(SCREENWIDTH/2+102)*(datas4.count/2);
+            }else{
+                classHeadViewY5 = classHeadViewY4 +78+(SCREENWIDTH/2+102)*(datas4.count/2+1);
+            }
+            if (datas5.count %2 == 0) {
+                classHeadViewY6 = classHeadViewY5 +78+(SCREENWIDTH/2+102)*(datas5.count/2);
+            }else{
+                classHeadViewY6 = classHeadViewY5 +78+(SCREENWIDTH/2+102)*(datas5.count/2+1);
+            }
+            if (datas6.count %2 == 0) {
+                classHeadViewY7 = classHeadViewY6 +78+(SCREENWIDTH/2+102)*(datas6.count/2);
+            }else{
+                classHeadViewY7 = classHeadViewY6 +78+(SCREENWIDTH/2+102)*(datas6.count/2+1);
+            }
+
+            
+            [_collectionView reloadData];
+        }else {
+            
+            [SVProgressHUD showErrorWithStatus:@"请求失败，请稍后重试" maskType:SVProgressHUDMaskTypeNone];
+        }
+        [SVProgressHUD dismiss];
+    } failure:^(NSString *error) {
+        [SVProgressHUD dismiss];
+    }];
 }
 //定义展示的UICollectionViewCell的个数
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
@@ -75,8 +125,8 @@
     if (section == 0) {
         return 0;
     }else{
-        return 4;
-    }
+        NSArray *tempArray = [allDatas[section-1] objectForKey:@"ActivityProduct"];
+        return tempArray.count;    }
 }
 //每个UICollectionView展示的内容
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
@@ -87,7 +137,12 @@
     cell.layer.borderColor = RGBCOLORA(250, 217, 55, 1).CGColor;
     cell.buyButton.layer.cornerRadius = 4;
     
-    [cell.iamge sd_setImageWithURL:[NSURL URLWithString:@"http://manage.feichacha.com/html/shop/images/xx_img1.jpg"]];
+    [cell.iamge sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[[allDatas[indexPath.section-1] objectForKey:@"ActivityProduct"][indexPath.row]objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"loading_default"]];
+    cell.name.text = [[allDatas[indexPath.section-1] objectForKey:@"ActivityProduct"][indexPath.row]objectForKey:@"Name"];
+    cell.specifications.text = [[allDatas[indexPath.section-1] objectForKey:@"ActivityProduct"][indexPath.row]objectForKey:@"Size"];
+    cell.price.text = [NSString stringWithFormat:@"￥%@",[[allDatas[indexPath.section-1] objectForKey:@"ActivityProduct"][indexPath.row]objectForKey:@"Price"]];
+    cell.oldPrice.hidden = YES;
+
     [cell.buyButton addTarget:self action:@selector(buyButton:) forControlEvents:UIControlEventTouchUpInside];
     
     return cell;
@@ -121,7 +176,8 @@
             reusableview = headView;
         }else{
             leisureSnacksHeadCollectionReusableView * headView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"leisureSnacksHeadCollectionReusableView" forIndexPath:indexPath];
-            
+            headView.titleLabel.text = [allDatas[indexPath.section-1] objectForKey:@"Name"];
+
             reusableview = headView;
             
         }
@@ -168,7 +224,6 @@
     [navButton5 setBackgroundColor:RGBCOLORA(250, 217, 55, 1)];
     [navButton6 setBackgroundColor:RGBCOLORA(250, 217, 55, 1)];
     [navButton7 setBackgroundColor:RGBCOLORA(250, 217, 55, 1)];
-    [navButton8 setBackgroundColor:RGBCOLORA(250, 217, 55, 1)];
     [navButton1 setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [navButton2 setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [navButton3 setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
@@ -176,7 +231,6 @@
     [navButton5 setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [navButton6 setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [navButton7 setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [navButton8 setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
 
     
     if (point.y >= classHeadViewY1 && point.y < classHeadViewY2) {
@@ -197,12 +251,9 @@
     }else if (point.y >= classHeadViewY6 && point.y < classHeadViewY7){
         [navButton6 setBackgroundColor:RGBCOLORA(255, 255, 255, 1)];
         [navButton6 setTitleColor:RGBCOLORA(89, 182, 41, 1) forState:UIControlStateNormal];
-    }else if (point.y >= classHeadViewY7 && point.y < classHeadViewY8){
+    }else if (point.y >= classHeadViewY7 ){
         [navButton7 setBackgroundColor:RGBCOLORA(255, 255, 255, 1)];
         [navButton7 setTitleColor:RGBCOLORA(89, 182, 41, 1) forState:UIControlStateNormal];
-    }else if (point.y >= classHeadViewY8 ){
-        [navButton8 setBackgroundColor:RGBCOLORA(255, 255, 255, 1)];
-        [navButton8 setTitleColor:RGBCOLORA(89, 182, 41, 1) forState:UIControlStateNormal];
     }
     
 }
@@ -263,14 +314,6 @@
     [navButton7 setFrame:CGRectMake(SCREENWIDTH/2, 39, SCREENWIDTH/4, 39)];
     [navButton7 setTitle:@"糖果巧克力" forState:UIControlStateNormal];
     
-    navButton8 = [UIButton buttonWithType:UIButtonTypeCustom];
-    [navButton8 setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [navButton8.titleLabel setFont:[UIFont systemFontOfSize:15]];
-    [navButton8 setBackgroundColor:RGBCOLORA(250, 217, 55, 1)];
-    [navButton8 setFrame:CGRectMake(SCREENWIDTH/4*3, 39, SCREENWIDTH/4, 39)];
-    [navButton8 setTitle:@"我要喝酒" forState:UIControlStateNormal];
-    
-    
     navButton1.tag = 1;
     navButton2.tag = 2;
     navButton3.tag = 3;
@@ -278,7 +321,6 @@
     navButton5.tag = 5;
     navButton6.tag = 6;
     navButton7.tag = 7;
-    navButton8.tag = 8;
     
     [navButton1 addTarget:self action:@selector(navButton:) forControlEvents:UIControlEventTouchUpInside];
     [navButton2 addTarget:self action:@selector(navButton:) forControlEvents:UIControlEventTouchUpInside];
@@ -287,7 +329,6 @@
     [navButton5 addTarget:self action:@selector(navButton:) forControlEvents:UIControlEventTouchUpInside];
     [navButton6 addTarget:self action:@selector(navButton:) forControlEvents:UIControlEventTouchUpInside];
     [navButton7 addTarget:self action:@selector(navButton:) forControlEvents:UIControlEventTouchUpInside];
-    [navButton8 addTarget:self action:@selector(navButton:) forControlEvents:UIControlEventTouchUpInside];
     
     [navigationView addSubview:navButton1];
     [navigationView addSubview:navButton2];
@@ -296,7 +337,6 @@
     [navigationView addSubview:navButton5];
     [navigationView addSubview:navButton6];
     [navigationView addSubview:navButton7];
-    [navigationView addSubview:navButton8];
     
     UIView *line1 = [[UIView alloc]initWithFrame:CGRectMake(0, 39, SCREENWIDTH, 1)];
     line1.backgroundColor = RGBCOLORA(89, 182, 41, 1);
@@ -313,7 +353,6 @@
     
     [self.view addSubview:navigationView];
     
-    navButton8.hidden = YES;
     
 }
 -(void)navButton:(UIButton *)sender{
@@ -339,9 +378,7 @@
         case 7:
             [_collectionView setContentOffset:CGPointMake(0, classHeadViewY7+1) animated:YES];
             break;
-        case 8:
-            [_collectionView setContentOffset:CGPointMake(0, classHeadViewY8+1) animated:YES];
-            break;
+
         default:
             break;
     }

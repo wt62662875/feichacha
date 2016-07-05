@@ -18,15 +18,16 @@
     float classHeadViewY1;
     float classHeadViewY2;
     float classHeadViewY3;
-    float classHeadViewY4;
-    float classHeadViewY5;
+
 
     UIButton *navButton1;
     UIButton *navButton2;
     UIButton *navButton3;
-    UIButton *navButton4;
-    UIButton *navButton5;
 
+    NSArray *allDatas;
+    NSArray * datas1;
+    NSArray * datas2;
+    NSArray * datas3;
 }
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -41,27 +42,55 @@
     _badgeLabel.layer.masksToBounds = YES;
     
     [self initNavigationView];
-    classHeadViewY1 = SCREENWIDTH*0.486;
-    if (12 % 2 == 0) {
-        classHeadViewY2 = classHeadViewY1 +61+132*4;
-        classHeadViewY3 = classHeadViewY2 +61+(SCREENWIDTH/2+100)*2;
-        classHeadViewY4 = classHeadViewY3 +61+(SCREENWIDTH/2+100)*2;
-        classHeadViewY5 = classHeadViewY4 +61+(SCREENWIDTH/2+100)*2;
-
-    }else{
-        classHeadViewY2 = classHeadViewY1 +44+187+(SCREENWIDTH/2+74)*(12/2+1)+4;
-        classHeadViewY3 = classHeadViewY2 +44+187+(SCREENWIDTH/2+74)*(12/2+1)+4;
-        classHeadViewY4 = classHeadViewY3 +44+187+(SCREENWIDTH/2+74)*(12/2+1)+4;
-        
-    }
+    [self ActivityListDatas];
     // Do any additional setup after loading the view from its nib.
+}
+-(void)ActivityListDatas{
+    [SVProgressHUD showWithStatus:@"加载中..."];
+    
+    [[NetworkUtils shareNetworkUtils] ActivityList:[_getDatas objectForKey:@"Id"] ActType:[_getDatas objectForKey:@"ActType"] success:^(id responseObject) {
+        NSLog(@"数据:%@",responseObject);
+        if ([[responseObject objectForKey:@"ResultType"]intValue] == 0) {
+            allDatas = [[responseObject objectForKey:@"AppendData"] objectForKey:@"ActivityProductClass"];
+            datas1 = [allDatas[0] objectForKey:@"ActivityProduct"];
+            datas2 = [allDatas[1] objectForKey:@"ActivityProduct"];
+            datas3 = [allDatas[2] objectForKey:@"ActivityProduct"];
+            classHeadViewY1 = SCREENWIDTH*0.486;
+
+            classHeadViewY2 = classHeadViewY1 +61+132*datas1.count;
+            if (datas2.count %2 == 0) {
+                classHeadViewY3 = classHeadViewY2 +61+(SCREENWIDTH/2+100)*(datas2.count/2);
+            }else{
+                classHeadViewY3 = classHeadViewY2 +61+(SCREENWIDTH/2+100)*(datas2.count/2+1);
+            }
+            
+            [_tableView reloadData];
+        }else {
+            
+            [SVProgressHUD showErrorWithStatus:@"请求失败，请稍后重试" maskType:SVProgressHUDMaskTypeNone];
+        }
+        [SVProgressHUD dismiss];
+    } failure:^(NSString *error) {
+        [SVProgressHUD dismiss];
+    }];
 }
 #pragma mark CELL的row数量
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     if (section == 0) {
-        return 4;
+        return datas1.count;
     }
-    return 2;
+    if (section == 1) {
+        if (datas2.count %2 == 0) {
+            return  datas2.count/2;
+        }else{
+            return  datas2.count/2+1;
+        }
+    }
+    if (datas3.count %2 == 0) {
+        return  datas3.count/2;
+    }else{
+        return  datas3.count/2+1;
+    }
 }
 #pragma mark CELL的高度
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -81,7 +110,12 @@
             cell = [[NSBundle mainBundle] loadNibNamed:@"braisedFoodTableViewCell1" owner:self options:nil][0];
         }
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
-        [cell.image sd_setImageWithURL:[NSURL URLWithString:@"http://manage.feichacha.com/html/shop/images/lw_img1.jpg"]];
+        [cell.image sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[datas1[indexPath.row] objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"loading_default"]];
+        cell.name.text = [datas1[indexPath.row] objectForKey:@"Name"];
+        cell.specifications.text = [datas1[indexPath.row] objectForKey:@"Size"];
+        cell.price.text = [NSString stringWithFormat:@"￥%@",[datas1[indexPath.row] objectForKey:@"Price"]];
+        
+        cell.oldPrice.hidden = YES;
         cell.buyButton.tag = indexPath.row;
         [cell.buyButton addTarget:self action:@selector(buyButton:) forControlEvents:UIControlEventTouchUpInside];
         return cell;
@@ -94,9 +128,37 @@
         }
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
         
-        [cell.goodsImage1 sd_setImageWithURL:[NSURL URLWithString:@"http://manage.feichacha.com/html/shop/images/lw_img1.jpg"]];
-        [cell.goodsImage2 sd_setImageWithURL:[NSURL URLWithString:@"http://manage.feichacha.com/html/shop/images/lw_img1.jpg"]];
-
+        if (indexPath.section == 1) {
+            [cell.goodsImage1 sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[datas2[indexPath.row*2] objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"loading_default"]];
+            cell.goodsName1.text = [datas2[indexPath.row*2] objectForKey:@"Name"];
+            cell.goodsSpecifications1.text = [datas2[indexPath.row*2] objectForKey:@"Size"];
+            cell.price1.text = [NSString stringWithFormat:@"%@",[datas2[indexPath.row*2] objectForKey:@"Price"]];
+            if (datas2.count %2 != 0 && datas2.count/2 == indexPath.row) {
+                cell.backView2.hidden = YES;
+            }else{
+                [cell.goodsImage2 sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[datas2[indexPath.row*2+1] objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"loading_default"]];
+                cell.goodsName2.text = [datas2[indexPath.row*2+1] objectForKey:@"Name"];
+                cell.goodsSpecifications2.text = [datas2[indexPath.row*2+1] objectForKey:@"Size"];
+                cell.price2.text = [NSString stringWithFormat:@"%@",[datas2[indexPath.row*2+1] objectForKey:@"Price"]];
+            }
+        }else{
+            [cell.goodsImage1 sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[datas3[indexPath.row*2] objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"loading_default"]];
+            cell.goodsName1.text = [datas3[indexPath.row*2] objectForKey:@"Name"];
+            cell.goodsSpecifications1.text = [datas3[indexPath.row*2] objectForKey:@"Size"];
+            cell.price1.text = [NSString stringWithFormat:@"%@",[datas3[indexPath.row*2] objectForKey:@"Price"]];
+            
+            if (datas3.count %2 != 0 && datas3.count/2 == indexPath.row) {
+                cell.backView2.hidden = YES;
+            }else{
+                [cell.goodsImage2 sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[datas3[indexPath.row*2+1] objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"loading_default"]];
+                cell.goodsName2.text = [datas3[indexPath.row*2+1] objectForKey:@"Name"];
+                cell.goodsSpecifications2.text = [datas3[indexPath.row*2+1] objectForKey:@"Size"];
+                cell.price2.text = [NSString stringWithFormat:@"%@",[datas3[indexPath.row*2+1] objectForKey:@"Price"]];
+            }
+        }
+        
+        cell.goodsOldPrice1.hidden = YES;
+        cell.goodsOldPrice2.hidden = YES;
         [cell.buyButton1 addTarget:self action:@selector(buyButton1:) forControlEvents:UIControlEventTouchUpInside];
         [cell.buyButton2 addTarget:self action:@selector(buyButton2:) forControlEvents:UIControlEventTouchUpInside];
         return cell;
@@ -104,7 +166,7 @@
     
 }
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
-    return 5;
+    return 3;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
     return 61;
@@ -120,15 +182,11 @@
     label.textAlignment = NSTextAlignmentCenter;
     label.textColor = RGBCOLORA(248, 242, 226, 1);
     if (section == 0) {
-        label.text = @"小编热荐";
+        label.text = @"今日爆品";
     }else if (section == 1) {
-        label.text = @"陈麻麻";
+        label.text = @"百年卤味";
     }else if (section == 2) {
-        label.text = @"唯一卤味";
-    }else if (section == 3) {
-        label.text = @"紫燕百味鸡";
-    }else if (section == 4) {
-        label.text = @"廖记棒棒鸡";
+        label.text = @"陈麻麻";
     }
     [headView addSubview:label];
     
@@ -196,30 +254,25 @@
     [navButton1 setBackgroundColor:RGBCOLORA(150, 2, 25, 1)];
     [navButton2 setBackgroundColor:RGBCOLORA(150, 2, 25, 1)];
     [navButton3 setBackgroundColor:RGBCOLORA(150, 2, 25, 1)];
-    [navButton4 setBackgroundColor:RGBCOLORA(150, 2, 25, 1)];
-    [navButton5 setBackgroundColor:RGBCOLORA(150, 2, 25, 1)];
+
 
     if (point.y >= classHeadViewY1 && point.y < classHeadViewY2) {
         [navButton1 setBackgroundColor:RGBCOLORA(177, 6, 32, 1)];
     }else if (point.y >= classHeadViewY2 && point.y < classHeadViewY3){
         [navButton2 setBackgroundColor:RGBCOLORA(177, 6, 32, 1)];
-    }else if (point.y >= classHeadViewY3 && point.y < classHeadViewY4){
+    }else if (point.y >= classHeadViewY3 ){
         [navButton3 setBackgroundColor:RGBCOLORA(177, 6, 32, 1)];
-    }else if (point.y >= classHeadViewY4 && point.y < classHeadViewY5){
-        [navButton4 setBackgroundColor:RGBCOLORA(177, 6, 32, 1)];
-    }else if (point.y >= classHeadViewY5 ){
-        [navButton5 setBackgroundColor:RGBCOLORA(177, 6, 32, 1)];
     }
     
 }
 -(void)initNavigationView{
-    UIView *headView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREENWIDTH, SCREENWIDTH*0.486+78)];
+    UIView *headView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREENWIDTH, SCREENWIDTH*0.486+39)];
     UIImageView *imageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, SCREENWIDTH, SCREENWIDTH*0.486)];
     [imageView sd_setImageWithURL:[NSURL URLWithString:@"http://manage.feichacha.com/html/shop/images/lw_banner.jpg"]];
     [headView addSubview:imageView];
     _tableView.tableHeaderView = headView;
     
-    navigationView = [[UIView alloc]initWithFrame:CGRectMake(0, SCREENWIDTH*0.486+64, SCREENWIDTH, 78)];
+    navigationView = [[UIView alloc]initWithFrame:CGRectMake(0, SCREENWIDTH*0.486+64, SCREENWIDTH, 39)];
     navigationView.backgroundColor = RGBCOLORA(150, 2, 25, 1);
     
 
@@ -228,68 +281,40 @@
     [navButton1.titleLabel setFont:[UIFont systemFontOfSize:15]];
     [navButton1 setBackgroundColor:RGBCOLORA(150, 2, 25, 1)];
     [navButton1 setFrame:CGRectMake(0, 0, SCREENWIDTH/3, 39)];
-    [navButton1 setTitle:@"小编热荐" forState:UIControlStateNormal];
+    [navButton1 setTitle:@"今日爆品" forState:UIControlStateNormal];
     
     navButton2 = [UIButton buttonWithType:UIButtonTypeCustom];
     [navButton2 setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [navButton2.titleLabel setFont:[UIFont systemFontOfSize:15]];
     [navButton2 setBackgroundColor:RGBCOLORA(150, 2, 25, 1)];
     [navButton2 setFrame:CGRectMake(SCREENWIDTH/3, 0, SCREENWIDTH/3, 39)];
-    [navButton2 setTitle:@"陈麻麻" forState:UIControlStateNormal];
+    [navButton2 setTitle:@"百年卤味" forState:UIControlStateNormal];
     
     navButton3 = [UIButton buttonWithType:UIButtonTypeCustom];
     [navButton3 setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [navButton3.titleLabel setFont:[UIFont systemFontOfSize:15]];
     [navButton3 setBackgroundColor:RGBCOLORA(150, 2, 25, 1)];
     [navButton3 setFrame:CGRectMake(SCREENWIDTH/3*2, 0, SCREENWIDTH/3, 39)];
-    [navButton3 setTitle:@"唯一卤味" forState:UIControlStateNormal];
-    
-    navButton4 = [UIButton buttonWithType:UIButtonTypeCustom];
-    [navButton4 setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [navButton4.titleLabel setFont:[UIFont systemFontOfSize:15]];
-    [navButton4 setBackgroundColor:RGBCOLORA(150, 2, 25, 1)];
-    [navButton4 setFrame:CGRectMake(0, 39, SCREENWIDTH/3, 39)];
-    [navButton4 setTitle:@"紫燕百味鸡" forState:UIControlStateNormal];
-    
-    navButton5 = [UIButton buttonWithType:UIButtonTypeCustom];
-    [navButton5 setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [navButton5.titleLabel setFont:[UIFont systemFontOfSize:15]];
-    [navButton5 setBackgroundColor:RGBCOLORA(150, 2, 25, 1)];
-    [navButton5 setFrame:CGRectMake(SCREENWIDTH/3, 39, SCREENWIDTH/3, 39)];
-    [navButton5 setTitle:@"廖记棒棒鸡" forState:UIControlStateNormal];
-    
-//    navButton6 = [UIButton buttonWithType:UIButtonTypeCustom];
-//    [navButton6 setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-//    [navButton6.titleLabel setFont:[UIFont systemFontOfSize:15]];
-//    [navButton6 setBackgroundColor:RGBCOLORA(150, 2, 25, 1)];
-//    [navButton6 setFrame:CGRectMake(0, 39, SCREENWIDTH/3, 39)];
-//    [navButton6 setTitle:@"紫燕百味鸡" forState:UIControlStateNormal];
+    [navButton3 setTitle:@"陈麻麻" forState:UIControlStateNormal];
     
     navButton1.tag = 1;
     navButton2.tag = 2;
     navButton3.tag = 3;
-    navButton4.tag = 4;
-    navButton5.tag = 5;
 
     [navButton1 addTarget:self action:@selector(navButton:) forControlEvents:UIControlEventTouchUpInside];
     [navButton2 addTarget:self action:@selector(navButton:) forControlEvents:UIControlEventTouchUpInside];
     [navButton3 addTarget:self action:@selector(navButton:) forControlEvents:UIControlEventTouchUpInside];
-    [navButton4 addTarget:self action:@selector(navButton:) forControlEvents:UIControlEventTouchUpInside];
-    [navButton5 addTarget:self action:@selector(navButton:) forControlEvents:UIControlEventTouchUpInside];
 
     [navigationView addSubview:navButton1];
     [navigationView addSubview:navButton2];
     [navigationView addSubview:navButton3];
-    [navigationView addSubview:navButton4];
-    [navigationView addSubview:navButton5];
 
-    UIView *line1 = [[UIView alloc]initWithFrame:CGRectMake(0, 39, SCREENWIDTH, 1)];
-    line1.backgroundColor = [UIColor blackColor];
-    UIView *line2 = [[UIView alloc]initWithFrame:CGRectMake(SCREENWIDTH/3, 0, 1, 78)];
+
+
+    UIView *line2 = [[UIView alloc]initWithFrame:CGRectMake(SCREENWIDTH/3, 0, 1, 39)];
     line2.backgroundColor = [UIColor blackColor];
-    UIView *line3 = [[UIView alloc]initWithFrame:CGRectMake(SCREENWIDTH/3*2, 0, 1, 78)];
+    UIView *line3 = [[UIView alloc]initWithFrame:CGRectMake(SCREENWIDTH/3*2, 0, 1, 39)];
     line3.backgroundColor = [UIColor blackColor];
-    [navigationView addSubview:line1];
     [navigationView addSubview:line2];
     [navigationView addSubview:line3];
     
@@ -307,12 +332,6 @@
             break;
         case 3:
             [_tableView setContentOffset:CGPointMake(0, classHeadViewY3+1) animated:YES];
-            break;
-        case 4:
-            [_tableView setContentOffset:CGPointMake(0, classHeadViewY4+1) animated:YES];
-            break;
-        case 5:
-            [_tableView setContentOffset:CGPointMake(0, classHeadViewY5+1) animated:YES];
             break;
         default:
             break;

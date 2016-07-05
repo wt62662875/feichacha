@@ -24,6 +24,12 @@
     UIButton *navButton2;
     UIButton *navButton3;
     UIButton *navButton4;
+    
+    NSArray *allDatas;
+    NSArray * datas1;
+    NSArray * datas2;
+    NSArray * datas3;
+    NSArray * datas4;
 
 }
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -39,32 +45,59 @@
     _badgeLabel.layer.masksToBounds = YES;
     [self initNavigationView];
 
-    classHeadViewY1 = SCREENWIDTH*0.375;
-    if (12 % 2 == 0) {
-        classHeadViewY2 = classHeadViewY1 +44+4*116;
-        classHeadViewY3 = classHeadViewY2 +44+3*132;
-        classHeadViewY4 = classHeadViewY3 +44+(SCREENWIDTH/2+100)*4;
-    }else{
-        classHeadViewY2 = classHeadViewY1 +44+187+(SCREENWIDTH/2+74)*(12/2+1)+4;
-        classHeadViewY3 = classHeadViewY2 +44+187+(SCREENWIDTH/2+74)*(12/2+1)+4;
-        classHeadViewY4 = classHeadViewY3 +44+187+(SCREENWIDTH/2+74)*(12/2+1)+4;
-        
-    }
-
-
+    [self ActivityListDatas];
 
     // Do any additional setup after loading the view from its nib.
+}
+-(void)ActivityListDatas{
+    [SVProgressHUD showWithStatus:@"加载中..."];
+    
+    [[NetworkUtils shareNetworkUtils] ActivityList:[_getDatas objectForKey:@"Id"] ActType:[_getDatas objectForKey:@"ActType"] success:^(id responseObject) {
+        NSLog(@"数据:%@",responseObject);
+        if ([[responseObject objectForKey:@"ResultType"]intValue] == 0) {
+            allDatas = [[responseObject objectForKey:@"AppendData"] objectForKey:@"ActivityProductClass"];
+            datas1 = [allDatas[0] objectForKey:@"ActivityProduct"];
+            datas2 = [allDatas[1] objectForKey:@"ActivityProduct"];
+            datas3 = [allDatas[2] objectForKey:@"ActivityProduct"];
+            datas4 = [allDatas[3] objectForKey:@"ActivityProduct"];
+
+            classHeadViewY1 = SCREENWIDTH*0.375;
+            classHeadViewY2 = classHeadViewY1 +44+datas1.count*116;
+            classHeadViewY3 = classHeadViewY2 +44+datas2.count*132;
+            if (datas3.count %2 == 0) {
+                classHeadViewY4 = classHeadViewY3 +44+(SCREENWIDTH/2+100)*(datas3.count/2);
+            }else{
+                classHeadViewY4 = classHeadViewY3 +44+(SCREENWIDTH/2+100)*(datas3.count/2+1);
+            }
+
+            [_tableView reloadData];
+        }else {
+            
+            [SVProgressHUD showErrorWithStatus:@"请求失败，请稍后重试" maskType:SVProgressHUDMaskTypeNone];
+        }
+        [SVProgressHUD dismiss];
+    } failure:^(NSString *error) {
+        [SVProgressHUD dismiss];
+    }];
 }
 #pragma mark CELL的row数量
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     if (section == 0) {
-        return 4;
+        return datas1.count;
     }else if (section == 1){
-        return 3;
+        return datas2.count;
     }else if(section == 2){
-        return 4;
+        if (datas3.count %2 == 0) {
+            return datas3.count/2;
+        }else{
+            return datas3.count/2+1;
+        }
     }
-    return 2;
+    if (datas4.count %2 == 0) {
+        return datas4.count/2;
+    }else{
+        return datas4.count/2+1;
+    }
 }
 #pragma mark CELL的高度
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -87,7 +120,12 @@
                 cell = [[NSBundle mainBundle] loadNibNamed:@"freshFruitRightTableViewCell" owner:self options:nil][0];
             }
             [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
-            [cell.image sd_setImageWithURL:[NSURL URLWithString:@"http://manage.feichacha.com/html/shop/images/xxsg_img1.png"]];
+            [cell.image sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[datas1[indexPath.row] objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"loading_default"]];
+            cell.name.text = [datas1[indexPath.row] objectForKey:@"Name"];
+            cell.specifications.text = [datas1[indexPath.row] objectForKey:@"Size"];
+            cell.price.text = [NSString stringWithFormat:@"￥%@",[datas1[indexPath.row] objectForKey:@"Price"]];
+            
+            cell.oldPrice.hidden = YES;
             cell.buyButton.tag = indexPath.row;
             [cell.buyButton addTarget:self action:@selector(buyButton0:) forControlEvents:UIControlEventTouchUpInside];
             
@@ -99,10 +137,14 @@
                 cell = [[NSBundle mainBundle] loadNibNamed:@"freshFruitLeftTableViewCell" owner:self options:nil][0];
             }
             [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
-            [cell.image sd_setImageWithURL:[NSURL URLWithString:@"http://manage.feichacha.com/html/shop/images/xxsg_img2.png"]];
+            [cell.image sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[datas1[indexPath.row] objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"loading_default"]];
+            cell.name.text = [datas1[indexPath.row] objectForKey:@"Name"];
+            cell.specifications.text = [datas1[indexPath.row] objectForKey:@"Size"];
+            cell.price.text = [NSString stringWithFormat:@"￥%@",[datas1[indexPath.row] objectForKey:@"Price"]];
+            
+            cell.oldPrice.hidden = YES;
             cell.buyButton.tag = indexPath.row;
             [cell.buyButton addTarget:self action:@selector(buyButton0:) forControlEvents:UIControlEventTouchUpInside];
-
             
             return cell;
 
@@ -114,10 +156,14 @@
             cell = [[NSBundle mainBundle] loadNibNamed:@"freshFruitTableViewCell1" owner:self options:nil][0];
         }
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
-        [cell.image sd_setImageWithURL:[NSURL URLWithString:@"http://manage.feichacha.com/html/shop/images/xxsg_img5.png"]];
+        [cell.image sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[datas2[indexPath.row] objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"loading_default"]];
+        cell.name.text = [datas2[indexPath.row] objectForKey:@"Name"];
+        cell.specifications.text = [datas2[indexPath.row] objectForKey:@"Size"];
+        cell.price.text = [NSString stringWithFormat:@"￥%@",[datas2[indexPath.row] objectForKey:@"Price"]];
+        
+        cell.oldPrice.hidden = YES;
         [cell.buyButton addTarget:self action:@selector(buyButton:) forControlEvents:UIControlEventTouchUpInside];
 
-        
         return cell;
     }else{
         static NSString *cellIdentifier = @"freshFruitTableViewCell2";
@@ -126,8 +172,37 @@
             cell = [[NSBundle mainBundle] loadNibNamed:@"freshFruitTableViewCell2" owner:self options:nil][0];
         }
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
-        [cell.goodsImage1 sd_setImageWithURL:[NSURL URLWithString:@"http://manage.feichacha.com/html/shop/images/img1.png"]];
-        [cell.goodsImage2 sd_setImageWithURL:[NSURL URLWithString:@"http://manage.feichacha.com/html/shop/images/img1.png"]];
+        if (indexPath.section == 2) {
+            [cell.goodsImage1 sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[datas3[indexPath.row*2] objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"loading_default"]];
+            cell.goodsName1.text = [datas3[indexPath.row*2] objectForKey:@"Name"];
+            cell.goodsSpecifications1.text = [datas3[indexPath.row*2] objectForKey:@"Size"];
+            cell.price1.text = [NSString stringWithFormat:@"%@",[datas3[indexPath.row*2] objectForKey:@"Price"]];
+
+            if (datas3.count %2 != 0 && datas3.count/2 == indexPath.row) {
+                cell.backView2.hidden = YES;
+            }else{
+                [cell.goodsImage2 sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[datas3[indexPath.row*2+1] objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"loading_default"]];
+                cell.goodsName2.text = [datas3[indexPath.row*2+1] objectForKey:@"Name"];
+                cell.goodsSpecifications2.text = [datas3[indexPath.row*2+1] objectForKey:@"Size"];
+                cell.price2.text = [NSString stringWithFormat:@"%@",[datas3[indexPath.row*2+1] objectForKey:@"Price"]];
+            }
+        }else{
+            [cell.goodsImage1 sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[datas4[indexPath.row*2] objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"loading_default"]];
+            cell.goodsName1.text = [datas4[indexPath.row*2] objectForKey:@"Name"];
+            cell.goodsSpecifications1.text = [datas4[indexPath.row*2] objectForKey:@"Size"];
+            cell.price1.text = [NSString stringWithFormat:@"%@",[datas4[indexPath.row*2] objectForKey:@"Price"]];
+            if (datas4.count %2 != 0 && datas4.count/2 == indexPath.row) {
+                cell.backView2.hidden = YES;
+            }else{
+                [cell.goodsImage2 sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[datas4[indexPath.row*2+1] objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"loading_default"]];
+                cell.goodsName2.text = [datas4[indexPath.row*2+1] objectForKey:@"Name"];
+                cell.goodsSpecifications2.text = [datas4[indexPath.row*2+1] objectForKey:@"Size"];
+                cell.price2.text = [NSString stringWithFormat:@"%@",[datas4[indexPath.row*2+1] objectForKey:@"Price"]];
+            }
+        }
+        
+        cell.goodsOldPrice1.hidden = YES;
+        cell.goodsOldPrice2.hidden = YES;
         [cell.buyButton1 addTarget:self action:@selector(buyButton1:) forControlEvents:UIControlEventTouchUpInside];
         [cell.buyButton2 addTarget:self action:@selector(buyButton2:) forControlEvents:UIControlEventTouchUpInside];
 

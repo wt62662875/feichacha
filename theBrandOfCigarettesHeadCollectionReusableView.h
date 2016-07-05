@@ -9,5 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @interface theBrandOfCigarettesHeadCollectionReusableView : UICollectionReusableView
+@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 
 @end

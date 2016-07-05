@@ -10,6 +10,6 @@
 
 @interface goodsDetailsViewController : UIViewController
 
-@property (weak, nonatomic) NSString *test;
+@property (weak, nonatomic) id getID;
 
 @end

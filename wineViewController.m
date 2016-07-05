@@ -29,6 +29,11 @@
     UIButton *navButton3;
     UIButton *navButton4;
     
+    NSArray *allDatas;
+    NSArray * datas1;
+    NSArray * datas2;
+    NSArray * datas3;
+    NSArray * datas4;
 }
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 @property (weak, nonatomic) IBOutlet UILabel *badgeLabel;
@@ -47,19 +52,48 @@
     
     [self.collectionView registerClass:[wineBannerCollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"wineBannerCollectionReusableView"];
     
-    classHeadViewY1 = SCREENWIDTH*0.346;
-    if (12 % 2 == 0) {
-        classHeadViewY2 = classHeadViewY1 +78+(SCREENWIDTH/2+102)*(4/2);
-        classHeadViewY3 = classHeadViewY2 +78+(SCREENWIDTH/2+102)*(4/2);
-        classHeadViewY4 = classHeadViewY3 +78+(SCREENWIDTH/2+102)*(4/2);
-        
-    }else{
-        classHeadViewY2 = classHeadViewY1 +44+187+(SCREENWIDTH/2+74)*(12/2+1)+4;
-        classHeadViewY3 = classHeadViewY2 +44+187+(SCREENWIDTH/2+74)*(12/2+1)+4;
-        classHeadViewY4 = classHeadViewY3 +44+187+(SCREENWIDTH/2+74)*(12/2+1)+4;
-        
-    }
+    [self ActivityListDatas];
 
+}
+-(void)ActivityListDatas{
+    [SVProgressHUD showWithStatus:@"加载中..."];
+    
+    [[NetworkUtils shareNetworkUtils] ActivityList:[_getDatas objectForKey:@"Id"] ActType:[_getDatas objectForKey:@"ActType"] success:^(id responseObject) {
+        NSLog(@"数据:%@",responseObject);
+        if ([[responseObject objectForKey:@"ResultType"]intValue] == 0) {
+            allDatas = [[responseObject objectForKey:@"AppendData"] objectForKey:@"ActivityProductClass"];
+            datas1 = [allDatas[0] objectForKey:@"ActivityProduct"];
+            datas2 = [allDatas[1] objectForKey:@"ActivityProduct"];
+            datas3 = [allDatas[2] objectForKey:@"ActivityProduct"];
+            datas4 = [allDatas[3] objectForKey:@"ActivityProduct"];
+
+            classHeadViewY1 = SCREENWIDTH*0.346;
+            if ((datas1.count-1) %2 == 0) {
+                classHeadViewY2 = classHeadViewY1 +148+(SCREENWIDTH/2+102)*((datas1.count-1)/2);
+            }else{
+                classHeadViewY2 = classHeadViewY1 +148+(SCREENWIDTH/2+102)*((datas1.count-1)/2+1);
+            }
+            if ((datas2.count-1) %2 == 0) {
+                classHeadViewY3 = classHeadViewY2 +148+(SCREENWIDTH/2+102)*((datas2.count-1)/2);
+            }else{
+                classHeadViewY3 = classHeadViewY2 +148+(SCREENWIDTH/2+102)*((datas2.count/2-1)+1);
+            }
+            if ((datas3.count-1 %2) == 0) {
+                classHeadViewY4 = classHeadViewY3 +148+(SCREENWIDTH/2+102)*((datas2.count-1)/2);
+            }else{
+                classHeadViewY4 = classHeadViewY3 +148+(SCREENWIDTH/2+102)*((datas2.count/2-1)+1);
+            }
+            
+            
+            [_collectionView reloadData];
+        }else {
+            
+            [SVProgressHUD showErrorWithStatus:@"请求失败，请稍后重试" maskType:SVProgressHUDMaskTypeNone];
+        }
+        [SVProgressHUD dismiss];
+    } failure:^(NSString *error) {
+        [SVProgressHUD dismiss];
+    }];
 }
 //定义展示的UICollectionViewCell的个数
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
@@ -67,7 +101,8 @@
     if (section == 0) {
         return 0;
     }else{
-        return 4;
+        NSArray *tempArray = [allDatas[section-1] objectForKey:@"ActivityProduct"];
+        return tempArray.count-1;
     }
 }
 //每个UICollectionView展示的内容
@@ -78,7 +113,12 @@
     cell.layer.cornerRadius = 4;
     cell.buyButton.layer.cornerRadius = 4;
     
-    [cell.image sd_setImageWithURL:[NSURL URLWithString:@"http://manage.feichacha.com/html/shop/images/jou_img2.jpg"]];
+    [cell.image sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[[allDatas[indexPath.section-1] objectForKey:@"ActivityProduct"][indexPath.row+1]objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"loading_default"]];
+    cell.name.text = [[allDatas[indexPath.section-1] objectForKey:@"ActivityProduct"][indexPath.row+1]objectForKey:@"Name"];
+    cell.specifications.text = [[allDatas[indexPath.section-1] objectForKey:@"ActivityProduct"][indexPath.row+1]objectForKey:@"Size"];
+    cell.price.text = [NSString stringWithFormat:@"￥%@",[[allDatas[indexPath.section-1] objectForKey:@"ActivityProduct"][indexPath.row+1]objectForKey:@"Price"]];
+    cell.oldPrice.hidden = YES;
+    
     [cell.buyButton addTarget:self action:@selector(buyButton:) forControlEvents:UIControlEventTouchUpInside];
     
     return cell;
@@ -110,7 +150,12 @@
             reusableview = headView;
         }else{
             wineHeadView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"wineHeadCollectionReusableView" forIndexPath:indexPath];
-            [wineHeadView.image sd_setImageWithURL:[NSURL URLWithString:@"http://manage.feichacha.com/html/shop/images/jou_img1.jpg"]];
+            wineHeadView.titleLabel.text = [allDatas[indexPath.section-1] objectForKey:@"Name"];
+            [wineHeadView.image sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[[allDatas[indexPath.section-1] objectForKey:@"ActivityProduct"][0]objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"loading_default"]];
+            wineHeadView.name.text = [[allDatas[indexPath.section-1] objectForKey:@"ActivityProduct"][0]objectForKey:@"Name"];
+            wineHeadView.message.text = [[allDatas[indexPath.section-1] objectForKey:@"ActivityProduct"][0]objectForKey:@"Size"];
+            wineHeadView.price.text = [NSString stringWithFormat:@"%@",[[allDatas[indexPath.section-1] objectForKey:@"ActivityProduct"][0]objectForKey:@"Price"]];
+
             wineHeadView.buyButton.tag = indexPath.section;
             [wineHeadView.buyButton addTarget:self action:@selector(SectionBuyButton:) forControlEvents:UIControlEventTouchUpInside];
             

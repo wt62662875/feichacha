@@ -9,5 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @interface drinkWineHeadCollectionReusableView : UICollectionReusableView
+@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 
 @end

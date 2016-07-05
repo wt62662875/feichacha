@@ -10,6 +10,7 @@
 
 @interface wineHeadCollectionReusableView : UICollectionReusableView
 @property (weak, nonatomic) IBOutlet UIView *backView;
+@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 
 @property (weak, nonatomic) IBOutlet UIImageView *image;
 

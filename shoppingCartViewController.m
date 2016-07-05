@@ -11,6 +11,7 @@
 #import "shoppingCartHeadView.h"
 #import "shoppingCartFootView.h"
 #import "shoppingCartAddressTableViewCell.h"
+#import "VerifyTheMobilePhoneViewController.h"
 
 @interface shoppingCartViewController ()<UITableViewDelegate,UITableViewDataSource>
 {

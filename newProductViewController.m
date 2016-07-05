@@ -14,6 +14,10 @@
 
 
 @interface newProductViewController ()
+{
+    NSMutableArray *datas;
+    NSMutableArray *lastDatas;
+}
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UILabel *badgeLabel;
 
@@ -28,10 +32,36 @@
     _badgeLabel.layer.cornerRadius = 8;
     _badgeLabel.layer.masksToBounds = YES;
     // Do any additional setup after loading the view.
+    [self newListDatas];
+}
+-(void)newListDatas{
+    [SVProgressHUD showWithStatus:@"加载中..."];
+    
+    [[NetworkUtils shareNetworkUtils] newList:[USERDEFAULTS objectForKey:@"shopID"] success:^(id responseObject) {
+//        NSLog(@"数据:%@",responseObject);
+        if ([[responseObject objectForKey:@"ResultType"]intValue] == 0) {
+            datas = [[NSMutableArray alloc]init];
+            datas = [responseObject objectForKey:@"AppendData"];
+            lastDatas = [datas mutableCopy];
+            [lastDatas removeObjectsInRange:NSMakeRange(0, 3)];
+
+            [_tableView reloadData];
+        }else {
+            
+            [SVProgressHUD showErrorWithStatus:@"请求失败，请稍后重试" maskType:SVProgressHUDMaskTypeNone];
+        }
+        [SVProgressHUD dismiss];
+    } failure:^(NSString *error) {
+        [SVProgressHUD dismiss];
+    }];
 }
 #pragma mark CELL的row数量
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 8;
+    if ((lastDatas.count)%2 == 0) {
+        return 6+(lastDatas.count)/2;
+    }else{
+        return 6+(lastDatas.count)/2+1;
+    }
 }
 #pragma mark CELL的高度
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -57,7 +87,23 @@
             cell = [[NSBundle mainBundle] loadNibNamed:@"newProductGoods1TableViewCell" owner:self options:nil][0];
         }
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
-        [cell.goodsImage sd_setImageWithURL:[NSURL URLWithString:@"http://manage.feichacha.com/html/shop/images/img1.png"]];
+        if (indexPath.row == 1) {
+            [cell.goodsImage sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[datas[0] objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"loading_default"]];
+            cell.goodsName.text = [datas[0] objectForKey:@"Name"];
+            cell.goodsMessage.text = [datas[0] objectForKey:@"Size"];
+            cell.goodsPrice.text = [NSString stringWithFormat:@"￥%@",[datas[0] objectForKey:@"Price"]];
+        }else if (indexPath.row == 3) {
+            [cell.goodsImage sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[datas[1] objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"loading_default"]];
+            cell.goodsName.text = [datas[1] objectForKey:@"Name"];
+            cell.goodsMessage.text = [datas[1] objectForKey:@"Size"];
+            cell.goodsPrice.text = [NSString stringWithFormat:@"￥%@",[datas[1] objectForKey:@"Price"]];
+        }else if (indexPath.row == 4) {
+            [cell.goodsImage sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[datas[2] objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"loading_default"]];
+            cell.goodsName.text = [datas[2] objectForKey:@"Name"];
+            cell.goodsMessage.text = [datas[2] objectForKey:@"Size"];
+            cell.goodsPrice.text = [NSString stringWithFormat:@"￥%@",[datas[2] objectForKey:@"Price"]];
+        }
+        
         cell.buyButton.tag = indexPath.row;
         [cell.buyButton addTarget:self action:@selector(buyButton:) forControlEvents:UIControlEventTouchUpInside];
     
@@ -85,6 +131,8 @@
         }
         if (indexPath.row == 2) {
             cell.backView.backgroundColor = RGBCOLORA(207, 174, 167, 1);
+            cell.message1.text = @"春意暖暖 吃心大开";
+            cell.message2.text = @"今日上线新品";
         }
         
         
@@ -98,18 +146,33 @@
         }
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
 
-        [cell.goodsImage1 sd_setImageWithURL:[NSURL URLWithString:@"http://manage.feichacha.com/html/shop/images/img1.png"]];
-        [cell.goodsImage2 sd_setImageWithURL:[NSURL URLWithString:@"http://manage.feichacha.com/html/shop/images/img1.png"]];
+        [cell.goodsImage1 sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[lastDatas[(indexPath.row-6)*2] objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"loading_default"]];
+        cell.goodsName1.text = [lastDatas[(indexPath.row-6)*2] objectForKey:@"Name"];
+        cell.goodsSpecifications1.text = [lastDatas[(indexPath.row-6)*2] objectForKey:@"Size"];
+        cell.price1.text = [NSString stringWithFormat:@"￥%@",[lastDatas[(indexPath.row-6)*2] objectForKey:@"Price"]];
 
-        /**
-         老价格加下划线
-         **/
-        NSString *oldPrice = @"原价：5.28";
-        NSMutableAttributedString *attri = [[NSMutableAttributedString alloc] initWithString:oldPrice];
-        [attri addAttribute:NSStrikethroughStyleAttributeName value:@(NSUnderlinePatternSolid | NSUnderlineStyleSingle) range:NSMakeRange(0, oldPrice.length)];
-        [attri addAttribute:NSStrikethroughColorAttributeName value:[UIColor blackColor] range:NSMakeRange(0, oldPrice.length)];
-        [cell.goodsOldPrice1 setAttributedText:attri];
-        [cell.goodsOldPrice2 setAttributedText:attri];
+        if (lastDatas.count %2 != 0 && lastDatas.count/2 == indexPath.row-6) {
+            cell.backView2.hidden = YES;
+        }else{
+            [cell.goodsImage2 sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[lastDatas[(indexPath.row-6)*2+1] objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"loading_default"]];
+            cell.goodsName2.text = [lastDatas[(indexPath.row-6)*2+1] objectForKey:@"Name"];
+            cell.goodsSpecifications2.text = [lastDatas[(indexPath.row-6)*2+1] objectForKey:@"Size"];
+            cell.price2.text = [NSString stringWithFormat:@"￥%@",[lastDatas[(indexPath.row-6)*2+1] objectForKey:@"Price"]];
+
+        }
+
+        
+        cell.goodsOldPrice1.hidden = YES;
+        cell.goodsOldPrice2.hidden = YES;
+//        /**
+//         老价格加下划线
+//         **/
+//        NSString *oldPrice = @"原价：5.28";
+//        NSMutableAttributedString *attri = [[NSMutableAttributedString alloc] initWithString:oldPrice];
+//        [attri addAttribute:NSStrikethroughStyleAttributeName value:@(NSUnderlinePatternSolid | NSUnderlineStyleSingle) range:NSMakeRange(0, oldPrice.length)];
+//        [attri addAttribute:NSStrikethroughColorAttributeName value:[UIColor blackColor] range:NSMakeRange(0, oldPrice.length)];
+//        [cell.goodsOldPrice1 setAttributedText:attri];
+//        [cell.goodsOldPrice2 setAttributedText:attri];
     
         cell.buyButton1.tag = indexPath.row;
         cell.buyButton2.tag = indexPath.row;

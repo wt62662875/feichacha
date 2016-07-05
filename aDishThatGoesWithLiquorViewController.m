@@ -12,6 +12,9 @@
 #import "baseViewController.h"
 
 @interface aDishThatGoesWithLiquorViewController ()
+{
+    NSArray *datas;
+}
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UILabel *badgeLabel;
 
@@ -24,13 +27,33 @@
     _badgeLabel.layer.cornerRadius = 8;
     _badgeLabel.layer.masksToBounds = YES;
     [self initHeadFootView];
-    
+    [self ActivityListDatas];
+
     // Do any additional setup after loading the view from its nib.
 }
-
+-(void)ActivityListDatas{
+    [SVProgressHUD showWithStatus:@"加载中..."];
+    
+    [[NetworkUtils shareNetworkUtils] ActivityList:[_getDatas objectForKey:@"Id"] ActType:[_getDatas objectForKey:@"ActType"] success:^(id responseObject) {
+        NSLog(@"数据:%@",responseObject);
+        if ([[responseObject objectForKey:@"ResultType"]intValue] == 0) {
+            datas = [[NSMutableArray alloc]init];
+            datas = [[responseObject objectForKey:@"AppendData"] objectForKey:@"ActivityProduct"];
+            
+            [_tableView reloadData];
+            
+        }else {
+            
+            [SVProgressHUD showErrorWithStatus:@"请求失败，请稍后重试" maskType:SVProgressHUDMaskTypeNone];
+        }
+        [SVProgressHUD dismiss];
+    } failure:^(NSString *error) {
+        [SVProgressHUD dismiss];
+    }];
+}
 #pragma mark CELL的row数量
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 7;
+    return datas.count;
 }
 #pragma mark CELL的高度
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -47,11 +70,13 @@
         }
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
         
-        [cell.goodsImage sd_setImageWithURL:[NSURL URLWithString:@"http://manage.feichacha.com/html/shop/images/xia_img1.jpg"]];
+        [cell.goodsImage sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[datas[indexPath.row] objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"loading_default"]];
+        cell.name.text = [datas[indexPath.row] objectForKey:@"Name"];
+        cell.price.text = [NSString stringWithFormat:@"%@元",[datas[indexPath.row] objectForKey:@"Price"]];
+        cell.oldPrice.hidden = YES;
+        
         cell.buyButton.tag = indexPath.row;
         [cell.buyButton addTarget:self action:@selector(buyButton:) forControlEvents:UIControlEventTouchUpInside];
-        
-        
         return cell;
     }else{
         static NSString *cellIdentifier = @"aDishThatGoesWithLiquorTableViewCell2";
@@ -61,7 +86,11 @@
         }
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
         
-        [cell.goodsImage sd_setImageWithURL:[NSURL URLWithString:@"http://manage.feichacha.com/html/shop/images/xia_img1.jpg"]];
+        [cell.goodsImage sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[datas[indexPath.row] objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"loading_default"]];
+        cell.name.text = [datas[indexPath.row] objectForKey:@"Name"];
+        cell.price.text = [NSString stringWithFormat:@"%@元",[datas[indexPath.row] objectForKey:@"Price"]];
+        cell.oldPrice.hidden = YES;
+        
         cell.buyButton.tag = indexPath.row;
         [cell.buyButton addTarget:self action:@selector(buyButton:) forControlEvents:UIControlEventTouchUpInside];
         

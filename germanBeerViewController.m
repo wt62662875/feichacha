@@ -12,6 +12,9 @@
 #import "germanBeerFootCollectionReusableView.h"
 
 @interface germanBeerViewController ()<UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout>
+{
+    NSArray *datas;
+}
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 
 @property (weak, nonatomic) IBOutlet UILabel *badgeLabel;
@@ -25,11 +28,33 @@
     _badgeLabel.layer.cornerRadius = 8;
     _badgeLabel.layer.masksToBounds = YES;
     // Do any additional setup after loading the view.
+    [self ActivityListDatas];
+
+}
+-(void)ActivityListDatas{
+    [SVProgressHUD showWithStatus:@"加载中..."];
+    
+    [[NetworkUtils shareNetworkUtils] ActivityList:[_getDatas objectForKey:@"Id"] ActType:[_getDatas objectForKey:@"ActType"] success:^(id responseObject) {
+        NSLog(@"数据:%@",responseObject);
+        if ([[responseObject objectForKey:@"ResultType"]intValue] == 0) {
+            datas = [[NSMutableArray alloc]init];
+            datas = [[responseObject objectForKey:@"AppendData"] objectForKey:@"ActivityProduct"];
+
+            [_collectionView reloadData];
+            
+        }else {
+            
+            [SVProgressHUD showErrorWithStatus:@"请求失败，请稍后重试" maskType:SVProgressHUDMaskTypeNone];
+        }
+        [SVProgressHUD dismiss];
+    } failure:^(NSString *error) {
+        [SVProgressHUD dismiss];
+    }];
 }
 //定义展示的UICollectionViewCell的个数
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return 10;
+    return datas.count;
 }
 //每个UICollectionView展示的内容
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
@@ -37,6 +62,9 @@
     static NSString * CellIdentifier = @"germanBeerCollectionViewCell";
     germanBeerCollectionViewCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:CellIdentifier forIndexPath:indexPath];
 
+    cell.name.text = [datas[indexPath.row] objectForKey:@"Name"];
+    cell.price.text = [NSString stringWithFormat:@"￥%@",[datas[indexPath.row] objectForKey:@"Price"]];
+    
     switch (indexPath.row) {
         case 0:
             [cell.backImageView setImage:[UIImage imageNamed:@"beer_por1"]];

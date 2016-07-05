@@ -28,6 +28,12 @@
     UIButton *navButton4;
     UIButton *navButton5;
     
+    NSArray *allDatas;
+    NSArray * datas1;
+    NSArray * datas2;
+    NSArray * datas3;
+    NSArray * datas4;
+    NSArray * datas5;
 }
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 @property (weak, nonatomic) IBOutlet UILabel *badgeLabel;
@@ -45,30 +51,73 @@
 
     [self.collectionView registerClass:[dairyCakeBannerCollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"dairyCakeBannerCollectionReusableView"];
 
-    classHeadViewY1 = SCREENWIDTH*0.426;
-    if (12 % 2 == 0) {
-        classHeadViewY2 = classHeadViewY1 +78+(SCREENWIDTH/2+102)*(4/2);
-        classHeadViewY3 = classHeadViewY2 +78+(SCREENWIDTH/2+102)*(4/2);
-        classHeadViewY4 = classHeadViewY3 +78+(SCREENWIDTH/2+102)*(4/2);
-        classHeadViewY5 = classHeadViewY4 +78+(SCREENWIDTH/2+102)*(4/2);
-        
-    }else{
-        classHeadViewY2 = classHeadViewY1 +44+187+(SCREENWIDTH/2+74)*(12/2+1)+4;
-        classHeadViewY3 = classHeadViewY2 +44+187+(SCREENWIDTH/2+74)*(12/2+1)+4;
-        classHeadViewY4 = classHeadViewY3 +44+187+(SCREENWIDTH/2+74)*(12/2+1)+4;
-        
-    }
+
+    [self ActivityListDatas];
 
     // Do any additional setup after loading the view.
+}
+-(void)ActivityListDatas{
+    [SVProgressHUD showWithStatus:@"加载中..."];
+    
+    [[NetworkUtils shareNetworkUtils] ActivityList:[_getDatas objectForKey:@"Id"] ActType:[_getDatas objectForKey:@"ActType"] success:^(id responseObject) {
+        NSLog(@"数据:%@",responseObject);
+        if ([[responseObject objectForKey:@"ResultType"]intValue] == 0) {
+            allDatas = [[responseObject objectForKey:@"AppendData"] objectForKey:@"ActivityProductClass"];
+            datas1 = [allDatas[0] objectForKey:@"ActivityProduct"];
+            datas2 = [allDatas[1] objectForKey:@"ActivityProduct"];
+            datas3 = [allDatas[2] objectForKey:@"ActivityProduct"];
+            datas4 = [allDatas[3] objectForKey:@"ActivityProduct"];
+            datas5 = [allDatas[4] objectForKey:@"ActivityProduct"];
+            classHeadViewY1 = SCREENWIDTH*0.426;
+            
+            if (datas1.count %2 == 0) {
+                classHeadViewY2 = classHeadViewY1 +78+(SCREENWIDTH/2+102)*(datas1.count/2);
+            }else{
+                classHeadViewY2 = classHeadViewY1 +78+(SCREENWIDTH/2+102)*(datas1.count/2+1);
+            }
+            if (datas2.count %2 == 0) {
+                classHeadViewY3 = classHeadViewY2 +78+(SCREENWIDTH/2+102)*(datas2.count/2);
+            }else{
+                classHeadViewY3 = classHeadViewY2 +78+(SCREENWIDTH/2+102)*(datas2.count/2+1);
+            }
+            if (datas3.count %2 == 0) {
+                classHeadViewY4 = classHeadViewY3 +78+(SCREENWIDTH/2+102)*(datas3.count/2);
+            }else{
+                classHeadViewY4 = classHeadViewY3 +78+(SCREENWIDTH/2+102)*(datas3.count/2+1);
+            }
+            if (datas4.count %2 == 0) {
+                classHeadViewY5 = classHeadViewY4 +78+(SCREENWIDTH/2+102)*(datas4.count/2);
+            }else{
+                classHeadViewY5 = classHeadViewY4 +78+(SCREENWIDTH/2+102)*(datas4.count/2+1);
+            }
+            
+            [_collectionView reloadData];
+        }else {
+            
+            [SVProgressHUD showErrorWithStatus:@"请求失败，请稍后重试" maskType:SVProgressHUDMaskTypeNone];
+        }
+        [SVProgressHUD dismiss];
+    } failure:^(NSString *error) {
+        [SVProgressHUD dismiss];
+    }];
 }
 //定义展示的UICollectionViewCell的个数
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
     if (section == 0) {
         return 0;
+    }else if (section == 1) {
+        return  datas1.count;
+    }else if (section == 2) {
+        return datas2.count;
+    }else if (section == 3) {
+        return datas3.count;
+    }else if (section == 4) {
+        return datas4.count;
     }else{
-        return 4;
+        return datas5.count;
     }
+    
 }
 //每个UICollectionView展示的内容
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
@@ -79,7 +128,36 @@
     cell.layer.borderColor = RGBCOLORA(245, 169, 50, 1).CGColor;
     cell.buyButton.layer.cornerRadius = 4;
 
-    [cell.iamge sd_setImageWithURL:[NSURL URLWithString:@"http://manage.feichacha.com/html/shop/images/yl_img1.jpg"]];
+    if (indexPath.section == 1) {
+        [cell.iamge sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[datas1[indexPath.row] objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"loading_default"]];
+        cell.name.text = [datas1[indexPath.row] objectForKey:@"Name"];
+        cell.specifications.text = [datas1[indexPath.row] objectForKey:@"Size"];
+        cell.price.text = [NSString stringWithFormat:@"￥%@",[datas1[indexPath.row] objectForKey:@"Price"]];
+    }else if (indexPath.section == 2) {
+        [cell.iamge sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[datas2[indexPath.row] objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"loading_default"]];
+        cell.name.text = [datas2[indexPath.row] objectForKey:@"Name"];
+        cell.specifications.text = [datas2[indexPath.row] objectForKey:@"Size"];
+        cell.price.text = [NSString stringWithFormat:@"￥%@",[datas2[indexPath.row] objectForKey:@"Price"]];
+    }else if (indexPath.section == 3) {
+        [cell.iamge sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[datas3[indexPath.row] objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"loading_default"]];
+        cell.name.text = [datas3[indexPath.row] objectForKey:@"Name"];
+        cell.specifications.text = [datas3[indexPath.row] objectForKey:@"Size"];
+        cell.price.text = [NSString stringWithFormat:@"￥%@",[datas3[indexPath.row] objectForKey:@"Price"]];
+
+    }else if (indexPath.section == 4) {
+        [cell.iamge sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[datas4[indexPath.row] objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"loading_default"]];
+        cell.name.text = [datas4[indexPath.row] objectForKey:@"Name"];
+        cell.specifications.text = [datas4[indexPath.row] objectForKey:@"Size"];
+        cell.price.text = [NSString stringWithFormat:@"￥%@",[datas4[indexPath.row] objectForKey:@"Price"]];
+    }else{
+        [cell.iamge sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[datas5[indexPath.row] objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"loading_default"]];
+        cell.name.text = [datas5[indexPath.row] objectForKey:@"Name"];
+        cell.specifications.text = [datas5[indexPath.row] objectForKey:@"Size"];
+        cell.price.text = [NSString stringWithFormat:@"￥%@",[datas5[indexPath.row] objectForKey:@"Price"]];
+    }
+    
+    
+    cell.oldPrice.hidden = YES;
     [cell.buyButton addTarget:self action:@selector(buyButton:) forControlEvents:UIControlEventTouchUpInside];
     
     return cell;
@@ -113,7 +191,7 @@
             reusableview = headView;
         }else{
             dairyCakeHeadCollectionReusableView * headView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"dairyCakeHeadCollectionReusableView" forIndexPath:indexPath];
-            
+            headView.titleLabel.text = [allDatas[indexPath.section-1] objectForKey:@"Name"];
             reusableview = headView;
 
         }
@@ -183,7 +261,7 @@
     [navButton1.titleLabel setFont:[UIFont systemFontOfSize:15]];
     [navButton1 setBackgroundColor:RGBCOLORA(245, 169, 50, 1)];
     [navButton1 setFrame:CGRectMake(0, 0, SCREENWIDTH/3, 39)];
-    [navButton1 setTitle:@"小编热荐" forState:UIControlStateNormal];
+    [navButton1 setTitle:@"小编力荐" forState:UIControlStateNormal];
     
     navButton2 = [UIButton buttonWithType:UIButtonTypeCustom];
     [navButton2 setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
@@ -211,7 +289,7 @@
     [navButton5.titleLabel setFont:[UIFont systemFontOfSize:15]];
     [navButton5 setBackgroundColor:RGBCOLORA(245, 169, 50, 1)];
     [navButton5 setFrame:CGRectMake(SCREENWIDTH/3, 39, SCREENWIDTH/3, 39)];
-    [navButton5 setTitle:@"饼干蛋糕" forState:UIControlStateNormal];
+    [navButton5 setTitle:@"饼干糕点" forState:UIControlStateNormal];
     
     //    navButton6 = [UIButton buttonWithType:UIButtonTypeCustom];
     //    [navButton6 setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];

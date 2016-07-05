@@ -13,4 +13,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *buyButton;
 
 @property (weak, nonatomic) IBOutlet UIImageView *titleImage;
+@property (weak, nonatomic) IBOutlet UILabel *name;
+@property (weak, nonatomic) IBOutlet UILabel *size;
+@property (weak, nonatomic) IBOutlet UILabel *price;
 @end

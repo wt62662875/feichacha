@@ -10,11 +10,14 @@
 #import "addressManageTableViewCell.h"
 #import "editOrAddAddressViewController.h"
 #import "addressManageToShopTableViewCell.h"
+#import "baseViewController.h"
 
-@interface addressManageViewController ()
+@interface addressManageViewController ()<UITableViewDelegate,UITableViewDataSource>
 {
     BOOL selectBool;                    //0送货上门   1门店自提
     NSString *editAddBool;              //1新增   0修改
+    NSArray *deliveryDatas;             //送货上门列表
+    NSString *sendAddressID;            //修改的地址ID
 }
 @property (weak, nonatomic) IBOutlet UIButton *addAddressButton;
 @property (weak, nonatomic) IBOutlet UIView *titleView;
@@ -40,6 +43,26 @@
         _positioningViewHeigh.constant = 0;
     }
     // Do any additional setup after loading the view.
+}
+-(void)viewWillAppear:(BOOL)animated{
+    [self getDeliveryDatas];
+}
+-(void)getDeliveryDatas{
+    [SVProgressHUD showWithStatus:@"加载中..."];
+    [[NetworkUtils shareNetworkUtils] userAddressList:^(id responseObject) {
+        NSLog(@"数据:%@",responseObject);
+        if ([[responseObject objectForKey:@"ResultType"]intValue] == 0) {
+            deliveryDatas = [responseObject objectForKey:@"AppendData"];
+            [_tableView reloadData];
+            
+        }else {
+            [SVProgressHUD showErrorWithStatus:@"请求失败，请稍后重试" maskType:SVProgressHUDMaskTypeNone];
+        }
+        [SVProgressHUD dismiss];
+    } failure:^(NSString *error) {
+        [SVProgressHUD dismiss];
+    }];
+
 }
 #pragma mark 有几组
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
@@ -80,7 +103,7 @@
             return 3;
         }
     }else{
-        return 8;
+        return deliveryDatas.count;
     }
     
 }
@@ -112,15 +135,31 @@
             cell = [[NSBundle mainBundle] loadNibNamed:@"addressManageTableViewCell" owner:self options:nil][0];
         }
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+        cell.editButton.tag = indexPath.row;
         [cell.editButton addTarget:self action:@selector(editButton:) forControlEvents:UIControlEventTouchUpInside];
+        cell.name.text = [deliveryDatas[indexPath.row] objectForKey:@"Name"];
+        cell.phoneNumber.text = [deliveryDatas[indexPath.row] objectForKey:@"Mobile"];
+        cell.address.text = [NSString stringWithFormat:@"%@%@%@",[deliveryDatas[indexPath.row] objectForKey:@"CityName"],[deliveryDatas[indexPath.row] objectForKey:@"Address"],[deliveryDatas[indexPath.row] objectForKey:@"AddressDetail"]];
+
         
         return cell;
+    }
+}
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    if (selectBool) {
+    }else{
+        [USERDEFAULTS setObject:[deliveryDatas[indexPath.row] objectForKey:@"Address"] forKey:@"CurrentAddress"];
+        [USERDEFAULTS setObject:[NSString stringWithFormat:@"%f",[[deliveryDatas[indexPath.row] objectForKey:@"Coordinate_x"] floatValue]] forKey:@"CurrentLatitude"];
+        [USERDEFAULTS setObject:[NSString stringWithFormat:@"%f",[[deliveryDatas[indexPath.row] objectForKey:@"Coordinate_y"] floatValue]] forKey:@"CurrentLongitude"];
+        [self.delegate positioningBackView:@"1"];
+        [self.navigationController popViewControllerAnimated:YES];
     }
 }
 #pragma mark 修改地址
 -(void)editButton:(UIButton *)sender{
     editAddBool = @"0";
     
+    sendAddressID = [deliveryDatas[sender.tag] objectForKey:@"Id"];
     [self performSegueWithIdentifier:@"addressManageToEditOrAddAddress" sender:self];
 }
 #pragma mark 新增地址
@@ -150,12 +189,15 @@
 }
 #pragma mark 定位倒当前位置
 - (IBAction)positioning:(id)sender {
+    [self.delegate positioningBackView:@"0"];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"addressManageToEditOrAddAddress"]) {
         editOrAddAddressViewController *editAddAddressVC = segue.destinationViewController;
         [editAddAddressVC setEditOrAddBool:editAddBool];
+        [editAddAddressVC setAddressID:sendAddressID];
     }
 }
 - (void)didReceiveMemoryWarning {

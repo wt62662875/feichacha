@@ -19,6 +19,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *ToEvaluateNumberLabel;            //待评价小圆点
 @property (weak, nonatomic) IBOutlet UILabel *afterSalesNumberLabel;            //退款/售后小圆点
 
+@property (weak, nonatomic) IBOutlet UILabel *phoneNumber;
 @end
 
 @implementation personalCenterViewController
@@ -26,6 +27,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self initNumberRound];
+    _phoneNumber.text = [USERDEFAULTS objectForKey:@"telPhoneNumber"];
     // Do any additional setup after loading the view.
 //    _forTheGoodsNumberLabel.hidden = YES;
 }

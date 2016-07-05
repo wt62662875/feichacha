@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9531" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
@@ -23,14 +23,14 @@
                                     <constraint firstAttribute="width" constant="126" id="FlL-9Q-jTY"/>
                                 </constraints>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="重庆奉节继承" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="303-hd-FIH">
-                                <rect key="frame" x="206" y="8" width="90" height="18"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="重庆奉节继承" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="303-hd-FIH">
+                                <rect key="frame" x="142" y="8" width="154" height="18"/>
                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="新鲜采摘 产地直发" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="epU-Zk-jGy">
-                                <rect key="frame" x="172" y="30" width="124" height="18"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="新鲜采摘 产地直发" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="epU-Zk-jGy">
+                                <rect key="frame" x="142" y="30" width="154" height="18"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
@@ -60,6 +60,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="bottom" secondItem="EV9-li-OdY" secondAttribute="bottom" constant="8" id="2e7-B8-VD3"/>
+                            <constraint firstItem="epU-Zk-jGy" firstAttribute="leading" secondItem="EV9-li-OdY" secondAttribute="trailing" constant="8" id="5qT-vL-swl"/>
                             <constraint firstAttribute="trailing" secondItem="epU-Zk-jGy" secondAttribute="trailing" constant="8" id="7yB-pr-ns0"/>
                             <constraint firstAttribute="trailing" secondItem="56A-1s-aaa" secondAttribute="trailing" constant="8" id="9S0-ba-RGf"/>
                             <constraint firstAttribute="trailing" secondItem="oER-l7-av9" secondAttribute="trailing" constant="8" id="ACw-Xe-f54"/>
@@ -71,6 +72,7 @@
                             <constraint firstItem="oER-l7-av9" firstAttribute="top" secondItem="epU-Zk-jGy" secondAttribute="bottom" constant="5" id="YO6-gH-Hb4"/>
                             <constraint firstItem="EV9-li-OdY" firstAttribute="leading" secondItem="hpg-zl-81c" secondAttribute="leading" constant="8" id="ZDf-nZ-Ih5"/>
                             <constraint firstAttribute="trailing" secondItem="IEc-sP-noX" secondAttribute="trailing" constant="8" id="htc-59-5lo"/>
+                            <constraint firstItem="303-hd-FIH" firstAttribute="leading" secondItem="EV9-li-OdY" secondAttribute="trailing" constant="8" id="l6f-Df-TYx"/>
                             <constraint firstItem="56A-1s-aaa" firstAttribute="top" secondItem="IEc-sP-noX" secondAttribute="bottom" constant="8" id="oe3-DO-ks6"/>
                         </constraints>
                     </view>

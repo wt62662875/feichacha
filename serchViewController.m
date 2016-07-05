@@ -194,14 +194,28 @@
     cell.goodsName.text = [datas[indexPath.row] objectForKey:@"Name"];
     cell.goodsPrice1.text = [NSString stringWithFormat:@"￥%@",[datas[indexPath.row] objectForKey:@"Price"]];
     cell.goodsMessage1.text = [datas[indexPath.row] objectForKey:@"Size"];
-    /**
-     老价格加下划线
-     **/
-    NSString *oldPrice = @"¥ 99.9";
-    NSMutableAttributedString *attri = [[NSMutableAttributedString alloc] initWithString:oldPrice];
-    [attri addAttribute:NSStrikethroughStyleAttributeName value:@(NSUnderlinePatternSolid | NSUnderlineStyleSingle) range:NSMakeRange(0, oldPrice.length)];
-    [attri addAttribute:NSStrikethroughColorAttributeName value:[UIColor lightGrayColor] range:NSMakeRange(0, oldPrice.length)];
-    [cell.goodsOldPrice1 setAttributedText:attri];
+    if (![[datas[indexPath.row] objectForKey:@"IsDirect"] boolValue]) {
+        cell.goodsDescribe1.layer.borderColor = RGBCOLORA(114, 172, 74, 1).CGColor;
+        cell.goodsDescribe1.layer.borderWidth = 1;
+        cell.goodsDescribe1.layer.cornerRadius = 8;
+        cell.goodsDescribe1.text = @"进";
+        cell.goodsDescribe1.textColor = RGBCOLORA(114, 172, 74, 1);
+        cell.goodsDescribe2.hidden = YES;
+    }
+    if (![[datas[indexPath.row]objectForKey:@"IsImport"] boolValue]) {
+        cell.goodsDescribe1.hidden = YES;
+    }
+    
+    cell.goodsDescribe3.hidden = YES;
+    cell.goodsOldPrice1.hidden = YES;
+//    /**
+//     老价格加下划线
+//     **/
+//    NSString *oldPrice = @"¥ 99.9";
+//    NSMutableAttributedString *attri = [[NSMutableAttributedString alloc] initWithString:oldPrice];
+//    [attri addAttribute:NSStrikethroughStyleAttributeName value:@(NSUnderlinePatternSolid | NSUnderlineStyleSingle) range:NSMakeRange(0, oldPrice.length)];
+//    [attri addAttribute:NSStrikethroughColorAttributeName value:[UIColor lightGrayColor] range:NSMakeRange(0, oldPrice.length)];
+//    [cell.goodsOldPrice1 setAttributedText:attri];
     return cell;
 }
 //定义每个UICollectionView 的大小

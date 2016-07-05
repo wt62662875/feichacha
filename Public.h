@@ -8,16 +8,20 @@
 //320     375   414
 #pragma    isRegister   是否登陆   1登陆   0未登录
 #pragma    shopID   当前所选店铺ID
+#pragma    telPhoneNumber   电话
 
+#pragma    CurrentAddress   当前地址
+#pragma    CurrentLongitude   当前经度
+#pragma    CurrentLatitude   当前纬度
 
 
 #import "AppUtils.h"
-#import <SVProgressHUD.h>
+#import "SVProgressHUD.h"
 #import "UIImageView+WebCache.h"
-#import <UIButton+WebCache.h>
-#import <AFNetworking.h>
+#import "UIButton+WebCache.h"
+#import "AFNetworking.h"
 #import "MJRefresh.h"
-#import <IQKeyboardManager.h>
+#import "IQKeyboardManager.h"
 #import "SDCycleScrollView.h"
 #import "UIAlertView+Blocks.h"
 
@@ -38,7 +42,7 @@
 #define RGBCOLORA(r,g,b,a) [UIColor colorWithRed:(r)/255.0f green:(g)/255.0f blue:(b)/255.0f alpha:(a)]
 
 #define TOKEN [USERDEFAULTS objectForKey:@"TOKEN"]
-#define X_CLIENT_TOKEN @"x-client-token"
+#define X_CLIENT_TOKEN @"Authorization"
 
 // 黄色/
 #define YELLOW_COLOR	RGBCOLORA(194,143,95,1

@@ -30,7 +30,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="山西红苹果" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="la0-bx-a4r">
-                                <rect key="frame" x="8" y="31" width="75" height="18"/>
+                                <rect key="frame" x="8" y="31" width="105" height="18"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
@@ -42,7 +42,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="23.5元/2500g" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wLy-ZC-J6K">
-                                <rect key="frame" x="8" y="70" width="90" height="17"/>
+                                <rect key="frame" x="8" y="70" width="104" height="17"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
@@ -86,7 +86,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="山西红苹果" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kdI-ak-AXU">
-                                <rect key="frame" x="129" y="31" width="75" height="18"/>
+                                <rect key="frame" x="129" y="31" width="100" height="18"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
@@ -98,7 +98,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="23.5元/2500g" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kwh-ss-KCD">
-                                <rect key="frame" x="129" y="70" width="90" height="17"/>
+                                <rect key="frame" x="129" y="70" width="100" height="17"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
@@ -122,7 +122,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="山西红苹果" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7Ij-qI-gD9">
-                                <rect key="frame" x="129" y="122" width="75" height="18"/>
+                                <rect key="frame" x="129" y="122" width="100" height="18"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
@@ -134,7 +134,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="23.5元/2500g" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9Tf-b3-MkS">
-                                <rect key="frame" x="129" y="161" width="90" height="17"/>
+                                <rect key="frame" x="129" y="161" width="102" height="17"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
@@ -163,20 +163,24 @@
                             <constraint firstItem="Kaw-vp-VaH" firstAttribute="leading" secondItem="3Fa-aw-hW2" secondAttribute="leading" id="81B-VR-b2r"/>
                             <constraint firstItem="egT-e7-DJ9" firstAttribute="top" secondItem="7mQ-V9-Zhu" secondAttribute="bottom" id="8U6-yB-QU9"/>
                             <constraint firstItem="la0-bx-a4r" firstAttribute="leading" secondItem="3Fa-aw-hW2" secondAttribute="leading" constant="8" id="8oe-qM-sbT"/>
+                            <constraint firstItem="f5U-IH-Iuk" firstAttribute="leading" secondItem="7Ij-qI-gD9" secondAttribute="trailing" constant="8" id="9BN-7U-LMQ"/>
                             <constraint firstItem="f5U-IH-Iuk" firstAttribute="top" secondItem="egT-e7-DJ9" secondAttribute="bottom" constant="7.5" id="AQn-Hc-Flv"/>
                             <constraint firstItem="i6A-Kf-4aF" firstAttribute="top" secondItem="kdI-ak-AXU" secondAttribute="bottom" constant="2" id="ARp-EZ-uZs"/>
                             <constraint firstItem="9Tf-b3-MkS" firstAttribute="leading" secondItem="nrV-LN-Q7R" secondAttribute="trailing" constant="8" id="Anm-f3-jB6"/>
                             <constraint firstItem="egT-e7-DJ9" firstAttribute="leading" secondItem="nrV-LN-Q7R" secondAttribute="trailing" id="Atn-B0-mCv"/>
                             <constraint firstAttribute="bottom" secondItem="Pz9-GZ-SH9" secondAttribute="bottom" constant="8" id="D3b-ea-VLX"/>
                             <constraint firstItem="7mQ-V9-Zhu" firstAttribute="leading" secondItem="nrV-LN-Q7R" secondAttribute="trailing" id="DLj-WA-AAG"/>
+                            <constraint firstItem="nrV-LN-Q7R" firstAttribute="leading" secondItem="wLy-ZC-J6K" secondAttribute="trailing" constant="8" id="DVq-co-Rw6"/>
                             <constraint firstItem="B1F-Ru-4Vv" firstAttribute="leading" secondItem="3Fa-aw-hW2" secondAttribute="leading" constant="8" id="Ej4-gg-Ajh"/>
                             <constraint firstItem="9Tf-b3-MkS" firstAttribute="top" secondItem="Kfg-QN-5TL" secondAttribute="bottom" constant="2" id="EvG-Y7-N70"/>
                             <constraint firstAttribute="bottom" secondItem="Kaw-vp-VaH" secondAttribute="bottom" id="F6o-4A-MKa"/>
                             <constraint firstAttribute="trailing" secondItem="7mQ-V9-Zhu" secondAttribute="trailing" id="Fch-p8-Bsr"/>
                             <constraint firstItem="DQp-bd-ifm" firstAttribute="top" secondItem="3Fa-aw-hW2" secondAttribute="top" constant="8" id="Net-Kp-pHl"/>
+                            <constraint firstItem="XvW-On-EMb" firstAttribute="leading" secondItem="kwh-ss-KCD" secondAttribute="trailing" constant="8" id="OCL-Hg-3lf"/>
                             <constraint firstItem="nrV-LN-Q7R" firstAttribute="centerX" secondItem="3Fa-aw-hW2" secondAttribute="centerX" constant="-39.5" id="PCK-mL-Oh3"/>
                             <constraint firstItem="kdI-ak-AXU" firstAttribute="leading" secondItem="nrV-LN-Q7R" secondAttribute="trailing" constant="8" id="Q20-mC-dCe"/>
                             <constraint firstItem="wLy-ZC-J6K" firstAttribute="leading" secondItem="3Fa-aw-hW2" secondAttribute="leading" constant="8" id="QTh-9d-oEp"/>
+                            <constraint firstItem="nrV-LN-Q7R" firstAttribute="leading" secondItem="la0-bx-a4r" secondAttribute="trailing" constant="7" id="Qfh-Cg-HQN"/>
                             <constraint firstItem="sv7-X5-Z4E" firstAttribute="top" secondItem="3Fa-aw-hW2" secondAttribute="top" constant="8" id="UWg-KI-FYv"/>
                             <constraint firstAttribute="height" constant="181.5" id="VAF-k5-nFk"/>
                             <constraint firstItem="nrV-LN-Q7R" firstAttribute="leading" secondItem="Pz9-GZ-SH9" secondAttribute="trailing" constant="8" id="VXz-NF-aMP"/>
@@ -187,12 +191,14 @@
                             <constraint firstItem="q4L-Og-hen" firstAttribute="leading" secondItem="nrV-LN-Q7R" secondAttribute="trailing" id="Xgy-6g-YvY"/>
                             <constraint firstItem="Kfg-QN-5TL" firstAttribute="top" secondItem="7Ij-qI-gD9" secondAttribute="bottom" constant="2" id="YFM-2V-SZP"/>
                             <constraint firstAttribute="trailing" secondItem="XvW-On-EMb" secondAttribute="trailing" constant="8" id="YIP-Tv-FA3"/>
+                            <constraint firstItem="XvW-On-EMb" firstAttribute="leading" secondItem="kdI-ak-AXU" secondAttribute="trailing" constant="8" id="Z7g-CP-N8d"/>
                             <constraint firstAttribute="trailing" secondItem="f5U-IH-Iuk" secondAttribute="trailing" constant="8" id="ZaA-fo-EJh"/>
                             <constraint firstItem="DQp-bd-ifm" firstAttribute="leading" secondItem="nrV-LN-Q7R" secondAttribute="trailing" constant="8" id="bLy-62-85b"/>
                             <constraint firstItem="sv7-X5-Z4E" firstAttribute="leading" secondItem="3Fa-aw-hW2" secondAttribute="leading" constant="8" id="bOh-rx-a0R"/>
                             <constraint firstItem="Kaw-vp-VaH" firstAttribute="top" secondItem="3Fa-aw-hW2" secondAttribute="top" id="g1T-bl-Php"/>
                             <constraint firstItem="7Ij-qI-gD9" firstAttribute="top" secondItem="UTJ-ga-fib" secondAttribute="bottom" constant="2" id="gH4-qZ-CRb"/>
                             <constraint firstItem="nrV-LN-Q7R" firstAttribute="leading" secondItem="Kaw-vp-VaH" secondAttribute="trailing" id="h3G-Y5-7eC"/>
+                            <constraint firstItem="f5U-IH-Iuk" firstAttribute="leading" secondItem="9Tf-b3-MkS" secondAttribute="trailing" constant="6" id="kzR-o9-OHc"/>
                             <constraint firstItem="kwh-ss-KCD" firstAttribute="top" secondItem="i6A-Kf-4aF" secondAttribute="bottom" constant="2" id="l5G-Wy-A2L"/>
                             <constraint firstAttribute="bottom" secondItem="nrV-LN-Q7R" secondAttribute="bottom" id="lvh-t5-TfD"/>
                             <constraint firstItem="kwh-ss-KCD" firstAttribute="leading" secondItem="nrV-LN-Q7R" secondAttribute="trailing" constant="8" id="oY3-UA-iy7"/>

@@ -46,9 +46,13 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(initFiveButton:) name:@"initFiveButton"object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(initFourButton:) name:@"initFourButton"object:nil];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(jumpToFlashSmallSupper:) name:@"jumpToFlashSmallSupper"object:nil];
+    
 }
 
-
+-(void)jumpToFlashSmallSupper:(NSNotification*)notification{
+    [self btn2click:nil];
+}
 -(void)initFiveButton:(NSNotification*)notification{
     [tabbarView removeFromSuperview];
     [self initFiveButton];
@@ -227,22 +231,33 @@
     [self toMakeAnApp:image3];
 }
 -(void)btn4click:(UIButton*)sender{
-    self.selectedIndex = 3;
-    [image1 setImage:[UIImage imageNamed:@"footer_nav1"]];
-    [image2 setImage:[UIImage imageNamed:@"footer_nav2"]];
-    [image3 setImage:[UIImage imageNamed:@"footer_nav3"]];
-    [image4 setImage:[UIImage imageNamed:@"footer_nav4_1"]];
-    [image5 setImage:[UIImage imageNamed:@"footer_nav5"]];
-    [self toMakeAnApp:image4];
+    if ([[USERDEFAULTS objectForKey:@"isRegister"] integerValue]) {
+        self.selectedIndex = 3;
+        [image1 setImage:[UIImage imageNamed:@"footer_nav1"]];
+        [image2 setImage:[UIImage imageNamed:@"footer_nav2"]];
+        [image3 setImage:[UIImage imageNamed:@"footer_nav3"]];
+        [image4 setImage:[UIImage imageNamed:@"footer_nav4_1"]];
+        [image5 setImage:[UIImage imageNamed:@"footer_nav5"]];
+        [self toMakeAnApp:image4];
+    }else{
+        VerifyTheMobilePhoneViewController *VerifyTheMobilePhoneVC = [[VerifyTheMobilePhoneViewController alloc] initWithNibName:@"VerifyTheMobilePhoneViewController"   bundle:nil];
+        [self.navigationController pushViewController:VerifyTheMobilePhoneVC animated:YES];
+    }
 }
 -(void)btn5click:(UIButton*)sender{
-    self.selectedIndex = 4;
-    [image1 setImage:[UIImage imageNamed:@"footer_nav1"]];
-    [image2 setImage:[UIImage imageNamed:@"footer_nav2"]];
-    [image3 setImage:[UIImage imageNamed:@"footer_nav3"]];
-    [image4 setImage:[UIImage imageNamed:@"footer_nav4"]];
-    [image5 setImage:[UIImage imageNamed:@"footer_nav5_1"]];
-    [self toMakeAnApp:image5];
+    if ([[USERDEFAULTS objectForKey:@"isRegister"] integerValue]) {
+        self.selectedIndex = 4;
+        [image1 setImage:[UIImage imageNamed:@"footer_nav1"]];
+        [image2 setImage:[UIImage imageNamed:@"footer_nav2"]];
+        [image3 setImage:[UIImage imageNamed:@"footer_nav3"]];
+        [image4 setImage:[UIImage imageNamed:@"footer_nav4"]];
+        [image5 setImage:[UIImage imageNamed:@"footer_nav5_1"]];
+        [self toMakeAnApp:image5];
+    }else{
+        VerifyTheMobilePhoneViewController *VerifyTheMobilePhoneVC = [[VerifyTheMobilePhoneViewController alloc] initWithNibName:@"VerifyTheMobilePhoneViewController"   bundle:nil];
+        [self.navigationController pushViewController:VerifyTheMobilePhoneVC animated:YES];
+    }
+
 }
 - (void)toMakeAnApp:(UIImageView *)view {
     /* 放大缩小 */

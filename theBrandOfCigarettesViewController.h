@@ -9,5 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @interface theBrandOfCigarettesViewController : UIViewController
+@property (weak, nonatomic) id getDatas;
 
 @end

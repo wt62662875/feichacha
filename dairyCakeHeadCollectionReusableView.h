@@ -9,5 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @interface dairyCakeHeadCollectionReusableView : UICollectionReusableView
+@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 
 @end

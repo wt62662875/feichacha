@@ -11,4 +11,8 @@
 @interface editOrAddAddressViewController : UIViewController
 @property (retain, nonatomic) NSString *editOrAddBool;
 
+@property (retain, nonatomic) NSString *addressID;
+
+@property (retain, nonatomic) id sendDatas;
+
 @end

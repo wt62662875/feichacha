@@ -10,7 +10,7 @@
 #import "AppDelegate.h"
 #import <QuartzCore/QuartzCore.h>
 #import <CoreImage/CoreImage.h>
-#import <Reachability.h>
+#import "Reachability.h"
 
 @interface AppUtils : NSObject
 + (void) callPhone:(NSString *)number;

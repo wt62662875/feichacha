@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9531" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
@@ -34,8 +34,8 @@
                                     <constraint firstAttribute="height" constant="1" id="UGb-rk-MrS"/>
                                 </constraints>
                             </view>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="重庆奉节继承" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ziq-Hl-knd">
-                                <rect key="frame" x="38" y="144" width="72" height="14.5"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="重庆奉节继承" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ziq-Hl-knd">
+                                <rect key="frame" x="8" y="144" width="132" height="14.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                 <color key="textColor" red="0.50980392159999999" green="0.50980392159999999" blue="0.50980392159999999" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
@@ -89,8 +89,10 @@
                             <constraint firstItem="YR4-9V-92M" firstAttribute="top" secondItem="FUR-Vx-9Q3" secondAttribute="bottom" constant="4" id="YVH-dk-22N"/>
                             <constraint firstItem="9mf-eV-Xvo" firstAttribute="centerX" secondItem="Ziq-Hl-knd" secondAttribute="centerX" id="Z5B-0n-KSR"/>
                             <constraint firstAttribute="bottom" secondItem="x0P-t7-iOh" secondAttribute="bottom" constant="111.5" id="Zap-a8-yKu"/>
+                            <constraint firstAttribute="trailing" secondItem="Ziq-Hl-knd" secondAttribute="trailing" constant="8" id="bv1-5I-obE"/>
                             <constraint firstItem="oF6-gW-avp" firstAttribute="top" secondItem="YR4-9V-92M" secondAttribute="bottom" constant="2" id="ezJ-Zi-ds9"/>
                             <constraint firstItem="Ziq-Hl-knd" firstAttribute="top" secondItem="x0P-t7-iOh" secondAttribute="bottom" constant="4" id="gmV-xE-U3y"/>
+                            <constraint firstItem="Ziq-Hl-knd" firstAttribute="leading" secondItem="XVZ-W1-c6Z" secondAttribute="leading" constant="8" id="kRz-DR-7Uc"/>
                             <constraint firstItem="oVP-aH-RY6" firstAttribute="top" secondItem="YR4-9V-92M" secondAttribute="bottom" constant="7" id="lKm-uy-xUk"/>
                             <constraint firstItem="Ziq-Hl-knd" firstAttribute="centerX" secondItem="x0P-t7-iOh" secondAttribute="centerX" id="nko-g7-g7p"/>
                             <constraint firstItem="oVP-aH-RY6" firstAttribute="centerX" secondItem="x0P-t7-iOh" secondAttribute="centerX" constant="-19.25" id="pyc-S4-hxL"/>
@@ -112,8 +114,8 @@
                                     <constraint firstAttribute="height" constant="1" id="rm9-b0-9Zn"/>
                                 </constraints>
                             </view>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="重庆奉节继承" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vBo-CA-K1z">
-                                <rect key="frame" x="38" y="144" width="72" height="14.5"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="重庆奉节继承" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vBo-CA-K1z">
+                                <rect key="frame" x="8" y="144" width="132" height="14.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                 <color key="textColor" red="0.50980392159999999" green="0.50980392159999999" blue="0.50980392159999999" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
@@ -162,6 +164,7 @@
                             <constraint firstAttribute="trailing" secondItem="JOS-09-hfh" secondAttribute="trailing" constant="8" id="5FJ-h7-rbH"/>
                             <constraint firstItem="1BC-1l-q9b" firstAttribute="top" secondItem="vBo-CA-K1z" secondAttribute="bottom" constant="4" id="5Zp-np-MIE"/>
                             <constraint firstItem="yP8-hY-Yra" firstAttribute="top" secondItem="K0Z-d7-ZOD" secondAttribute="bottom" constant="7" id="9F6-bx-u4X"/>
+                            <constraint firstItem="vBo-CA-K1z" firstAttribute="leading" secondItem="T8s-pL-8MP" secondAttribute="leading" constant="8" id="9tm-RP-apH"/>
                             <constraint firstAttribute="bottom" secondItem="JOS-09-hfh" secondAttribute="bottom" constant="111.5" id="A2t-Ih-pXX"/>
                             <constraint firstItem="y5C-qN-n4H" firstAttribute="leading" secondItem="T8s-pL-8MP" secondAttribute="leading" id="Fwh-iM-Kod"/>
                             <constraint firstItem="JOS-09-hfh" firstAttribute="leading" secondItem="T8s-pL-8MP" secondAttribute="leading" constant="8" id="MeU-HY-o4L"/>
@@ -169,6 +172,7 @@
                             <constraint firstAttribute="bottom" secondItem="Az6-dv-ugr" secondAttribute="bottom" constant="4.5" id="VOC-aY-P3E"/>
                             <constraint firstItem="1BC-1l-q9b" firstAttribute="centerX" secondItem="vBo-CA-K1z" secondAttribute="centerX" id="WJS-Ay-iSX"/>
                             <constraint firstItem="vBo-CA-K1z" firstAttribute="centerX" secondItem="JOS-09-hfh" secondAttribute="centerX" id="Wk9-Vx-ofO"/>
+                            <constraint firstAttribute="trailing" secondItem="vBo-CA-K1z" secondAttribute="trailing" constant="8" id="ZK4-Ho-ucl"/>
                             <constraint firstItem="Rhu-oR-Xew" firstAttribute="top" secondItem="K0Z-d7-ZOD" secondAttribute="bottom" constant="2" id="Zq9-nY-l3I"/>
                             <constraint firstItem="y5C-qN-n4H" firstAttribute="top" secondItem="1BC-1l-q9b" secondAttribute="bottom" constant="4" id="dhv-2a-MwA"/>
                             <constraint firstItem="JOS-09-hfh" firstAttribute="centerX" secondItem="T8s-pL-8MP" secondAttribute="centerX" id="f3W-SG-SyT"/>

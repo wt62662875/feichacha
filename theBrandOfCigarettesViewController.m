@@ -27,6 +27,11 @@
     UIButton *navButton3;
     UIButton *navButton4;
 
+    NSArray *allDatas;
+    NSArray * datas1;
+    NSArray * datas2;
+    NSArray * datas3;
+    NSArray * datas4;
 }
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 @property (weak, nonatomic) IBOutlet UILabel *badgeLabel;
@@ -43,20 +48,49 @@
     
     [self.collectionView registerClass:[theBrandOfCigarettesBannerCollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"theBrandOfCigarettesBannerCollectionReusableView"];
 
-    classHeadViewY1 = SCREENWIDTH*0.417;
-    if (12 % 2 == 0) {
-        classHeadViewY2 = classHeadViewY1 +78+(SCREENWIDTH/2+102)*(4/2);
-        classHeadViewY3 = classHeadViewY2 +78+(SCREENWIDTH/2+102)*(4/2);
-        classHeadViewY4 = classHeadViewY3 +78+(SCREENWIDTH/2+102)*(4/2);
-        
-    }else{
-        classHeadViewY2 = classHeadViewY1 +44+187+(SCREENWIDTH/2+74)*(12/2+1)+4;
-        classHeadViewY3 = classHeadViewY2 +44+187+(SCREENWIDTH/2+74)*(12/2+1)+4;
-        classHeadViewY4 = classHeadViewY3 +44+187+(SCREENWIDTH/2+74)*(12/2+1)+4;
-        
-    }
+
+    [self ActivityListDatas];
 
     // Do any additional setup after loading the view.
+}
+-(void)ActivityListDatas{
+    [SVProgressHUD showWithStatus:@"加载中..."];
+    
+    [[NetworkUtils shareNetworkUtils] ActivityList:[_getDatas objectForKey:@"Id"] ActType:[_getDatas objectForKey:@"ActType"] success:^(id responseObject) {
+        NSLog(@"数据:%@",responseObject);
+        if ([[responseObject objectForKey:@"ResultType"]intValue] == 0) {
+            allDatas = [[responseObject objectForKey:@"AppendData"] objectForKey:@"ActivityProductClass"];
+            datas1 = [allDatas[0] objectForKey:@"ActivityProduct"];
+            datas2 = [allDatas[1] objectForKey:@"ActivityProduct"];
+            datas3 = [allDatas[2] objectForKey:@"ActivityProduct"];
+            datas4 = [allDatas[3] objectForKey:@"ActivityProduct"];
+
+            classHeadViewY1 = SCREENWIDTH*0.417;
+            if (datas1.count %2 == 0) {
+                classHeadViewY2 = classHeadViewY1 +78+(SCREENWIDTH/2+102)*(datas1.count/2);
+            }else{
+                classHeadViewY2 = classHeadViewY1 +78+(SCREENWIDTH/2+102)*(datas1.count/2+1);
+            }
+            if (datas2.count %2 == 0) {
+                classHeadViewY3 = classHeadViewY2 +78+(SCREENWIDTH/2+102)*(datas2.count/2);
+            }else{
+                classHeadViewY3 = classHeadViewY2 +78+(SCREENWIDTH/2+102)*(datas2.count/2+1);
+            }
+            if (datas3.count %2 == 0) {
+                classHeadViewY4 = classHeadViewY3 +78+(SCREENWIDTH/2+102)*(datas3.count/2);
+            }else{
+                classHeadViewY4 = classHeadViewY3 +78+(SCREENWIDTH/2+102)*(datas3.count/2+1);
+            }
+            
+            [_collectionView reloadData];
+        }else {
+            
+            [SVProgressHUD showErrorWithStatus:@"请求失败，请稍后重试" maskType:SVProgressHUDMaskTypeNone];
+        }
+        [SVProgressHUD dismiss];
+    } failure:^(NSString *error) {
+        [SVProgressHUD dismiss];
+    }];
 }
 //定义展示的UICollectionViewCell的个数
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
@@ -64,8 +98,8 @@
     if (section == 0) {
         return 0;
     }else{
-        return 4;
-    }
+        NSArray *tempArray = [allDatas[section-1] objectForKey:@"ActivityProduct"];
+        return tempArray.count;    }
 }
 //每个UICollectionView展示的内容
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
@@ -76,9 +110,13 @@
     cell.layer.borderColor = [UIColor redColor].CGColor;
     cell.buyButton.layer.cornerRadius = 4;
     
-    [cell.iamge sd_setImageWithURL:[NSURL URLWithString:@"http://manage.feichacha.com/html/shop/images/xy_img1.jpg"]];
-    [cell.buyButton addTarget:self action:@selector(buyButton:) forControlEvents:UIControlEventTouchUpInside];
+    [cell.iamge sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[[allDatas[indexPath.section-1] objectForKey:@"ActivityProduct"][indexPath.row]objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"loading_default"]];
+    cell.name.text = [[allDatas[indexPath.section-1] objectForKey:@"ActivityProduct"][indexPath.row]objectForKey:@"Name"];
+    cell.specifications.text = [[allDatas[indexPath.section-1] objectForKey:@"ActivityProduct"][indexPath.row]objectForKey:@"Size"];
+    cell.price.text = [NSString stringWithFormat:@"￥%@",[[allDatas[indexPath.section-1] objectForKey:@"ActivityProduct"][indexPath.row]objectForKey:@"Price"]];
+    cell.oldPrice.hidden = YES;
     
+    [cell.buyButton addTarget:self action:@selector(buyButton:) forControlEvents:UIControlEventTouchUpInside];
     return cell;
 }
 //定义展示的Section的个数
@@ -109,6 +147,7 @@
             reusableview = headView;
         }else{
             theBrandOfCigarettesHeadCollectionReusableView * headView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"theBrandOfCigarettesHeadCollectionReusableView" forIndexPath:indexPath];
+            headView.titleLabel.text = [allDatas[indexPath.section-1] objectForKey:@"Name"];
             
             reusableview = headView;
             
@@ -174,7 +213,7 @@
     [navButton1.titleLabel setFont:[UIFont systemFontOfSize:15]];
     [navButton1 setBackgroundColor:RGBCOLORA(214, 14, 24, 1)];
     [navButton1 setFrame:CGRectMake(0, 0, SCREENWIDTH/4, 39)];
-    [navButton1 setTitle:@"小编热荐" forState:UIControlStateNormal];
+    [navButton1 setTitle:@"小编力荐" forState:UIControlStateNormal];
     
     navButton2 = [UIButton buttonWithType:UIButtonTypeCustom];
     [navButton2 setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];

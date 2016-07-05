@@ -9,5 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @interface ChenHempViewController : UIViewController
+@property (weak, nonatomic) id getDatas;
 
 @end

@@ -11,6 +11,10 @@
 #import "taiwaneseFoodTableViewCell.h"
 
 @interface taiwaneseFoodViewController ()<UITableViewDataSource,UITableViewDelegate>
+{
+    NSArray *datas;
+    NSMutableArray *lastDatas;
+}
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UILabel *badgeLabel;
 
@@ -29,12 +33,40 @@
     [tableHeadView addSubview:imageView];
     _tableView.tableHeaderView = tableHeadView;
     
-    
+    [self ActivityListDatas];
 }
+-(void)ActivityListDatas{
+    [SVProgressHUD showWithStatus:@"加载中..."];
+    
+    [[NetworkUtils shareNetworkUtils] ActivityList:[_getDatas objectForKey:@"Id"] ActType:[_getDatas objectForKey:@"ActType"] success:^(id responseObject) {
+        NSLog(@"数据:%@",responseObject);
+        if ([[responseObject objectForKey:@"ResultType"]intValue] == 0) {
+            datas = [[NSMutableArray alloc]init];
+            datas = [[responseObject objectForKey:@"AppendData"] objectForKey:@"ActivityProduct"];
+            lastDatas = [datas mutableCopy];
+            [lastDatas removeObjectsInRange:NSMakeRange(0, 2)];
+            
+            [_tableView reloadData];
 
+        }else {
+            
+            [SVProgressHUD showErrorWithStatus:@"请求失败，请稍后重试" maskType:SVProgressHUDMaskTypeNone];
+        }
+        [SVProgressHUD dismiss];
+    } failure:^(NSString *error) {
+        [SVProgressHUD dismiss];
+    }];
+}
 #pragma mark CELL的row数量
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 3;
+    if (section == 1) {
+        if ((lastDatas.count)%2 == 0) {
+            return lastDatas.count/2;
+        }else{
+            return lastDatas.count/2+1;
+        }
+    }
+    return 1;
 }
 #pragma mark CELL的高度
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -50,23 +82,42 @@
         cell = [[NSBundle mainBundle] loadNibNamed:@"taiwaneseFoodTableViewCell" owner:self options:nil][0];
     }
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
-    
-    [cell.image1 sd_setImageWithURL:[NSURL URLWithString:@"http://manage.feichacha.com/html/shop/images/twms_img1.png"]];
-    [cell.image2 sd_setImageWithURL:[NSURL URLWithString:@"http://manage.feichacha.com/html/shop/images/twms_img2.png"]];
-
-    if (indexPath.row == 0) {
-        UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, SCREENWIDTH-16, SCREENWIDTH/2+37-8) byRoundingCorners:UIRectCornerTopLeft|UIRectCornerTopRight cornerRadii:CGSizeMake(7, 7)];
-        CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];
-        maskLayer.frame = cell.roundView.bounds;
-        maskLayer.path = maskPath.CGPath;
-        cell.roundView.layer.mask  = maskLayer;
-    }else if (indexPath.row == 2) {
-        UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, SCREENWIDTH-16, SCREENWIDTH/2+37-8) byRoundingCorners:UIRectCornerBottomLeft|UIRectCornerBottomRight cornerRadii:CGSizeMake(7, 7)];
-        CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];
-        maskLayer.frame = cell.roundView.bounds;
-        maskLayer.path = maskPath.CGPath;
-        cell.roundView.layer.mask  = maskLayer;
+    if (indexPath.section == 0) {
+        [cell.image1 sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[datas[0] objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"loading_default"]];
+        cell.name1.text = [datas[0] objectForKey:@"Name"];
+        cell.price1.text = [NSString stringWithFormat:@"￥%@",[datas[0] objectForKey:@"Price"]];
+        [cell.image2 sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[datas[1] objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"loading_default"]];
+        cell.name2.text = [datas[1] objectForKey:@"Name"];
+        cell.price2.text = [NSString stringWithFormat:@"￥%@",[datas[1] objectForKey:@"Price"]];
+        cell.roundView.layer.cornerRadius = 7;
+    }else{
+        [cell.image1 sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[lastDatas[indexPath.row*2] objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"loading_default"]];
+        cell.name1.text = [lastDatas[indexPath.row*2] objectForKey:@"Name"];
+        cell.price1.text = [NSString stringWithFormat:@"￥%@",[lastDatas[indexPath.row*2] objectForKey:@"Price"]];
+        if (lastDatas.count %2 != 0 && lastDatas.count/2 == indexPath.row) {
+            cell.backView2.hidden = YES;
+            UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, SCREENWIDTH-16, SCREENWIDTH/2+37-8) byRoundingCorners:UIRectCornerBottomLeft|UIRectCornerBottomRight cornerRadii:CGSizeMake(7, 7)];
+            CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];
+            maskLayer.frame = cell.roundView.bounds;
+            maskLayer.path = maskPath.CGPath;
+            cell.roundView.layer.mask  = maskLayer;
+        }else{
+            [cell.image2 sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[lastDatas[indexPath.row*2+1] objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"loading_default"]];
+            cell.name2.text = [lastDatas[indexPath.row*2+1] objectForKey:@"Name"];
+            cell.price2.text = [NSString stringWithFormat:@"￥%@",[lastDatas[indexPath.row*2+1] objectForKey:@"Price"]];
+            
+            if (indexPath.row == 0) {
+                UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, SCREENWIDTH-16, SCREENWIDTH/2+37-8) byRoundingCorners:UIRectCornerTopLeft|UIRectCornerTopRight cornerRadii:CGSizeMake(7, 7)];
+                CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];
+                maskLayer.frame = cell.roundView.bounds;
+                maskLayer.path = maskPath.CGPath;
+                cell.roundView.layer.mask  = maskLayer;
+            }
+        }
     }
+    
+
+    
     
     [cell.buyButton addTarget:self action:@selector(buyButton:) forControlEvents:UIControlEventTouchUpInside];
     [cell.buyButton2 addTarget:self action:@selector(buyButton2:) forControlEvents:UIControlEventTouchUpInside];

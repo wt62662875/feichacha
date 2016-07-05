@@ -10,5 +10,6 @@
 
 @interface deliciousIceCreamHeadCollectionReusableView : UICollectionReusableView
 @property (weak, nonatomic) IBOutlet UIView *backView;
+@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 
 @end

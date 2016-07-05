@@ -7,6 +7,7 @@
 //
 
 #import "VerifyTheMobilePhoneViewController.h"
+#import "JPUSHService.h"
 
 @interface VerifyTheMobilePhoneViewController ()<UITextFieldDelegate>
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *bannerHeigh;
@@ -25,7 +26,7 @@
     _bannerHeigh.constant = SCREENWIDTH*0.327;
     _getVerificationCode.layer.cornerRadius = 4;
     _determine.layer.cornerRadius = 4;
-    
+    NSLog(@"registrationID:%@",[JPUSHService registrationID]) ;
     // Do any additional setup after loading the view from its nib.
 }
 
@@ -112,8 +113,10 @@
         [[NetworkUtils shareNetworkUtils] login:_phoneNumberTextField.text code:_VerificationCodeTextField.text success:^(id responseObject) {
             NSLog(@"数据:%@",responseObject);
             if ([[responseObject objectForKey:@"ResultType"]intValue] == 0) {
-
-            
+                [USERDEFAULTS setObject:[[responseObject objectForKey:@"AppendData"] objectForKey:@"token"] forKey:@"TOKEN"];
+                [USERDEFAULTS setObject:@"1" forKey:@"isRegister"];
+                [USERDEFAULTS setObject:_phoneNumberTextField.text forKey:@"telPhoneNumber"];
+                [self.navigationController popViewControllerAnimated:YES];
             }else {
                 [SVProgressHUD showErrorWithStatus:@"请求失败，请稍后重试" maskType:SVProgressHUDMaskTypeNone];
             }

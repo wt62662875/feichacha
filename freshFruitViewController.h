@@ -12,5 +12,6 @@
 
 @interface freshFruitViewController : UIViewController
 
+@property (weak, nonatomic) id getDatas;
 
 @end
