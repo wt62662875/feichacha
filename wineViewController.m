@@ -79,9 +79,9 @@
                 classHeadViewY3 = classHeadViewY2 +148+(SCREENWIDTH/2+102)*((datas2.count/2-1)+1);
             }
             if ((datas3.count-1 %2) == 0) {
-                classHeadViewY4 = classHeadViewY3 +148+(SCREENWIDTH/2+102)*((datas2.count-1)/2);
+                classHeadViewY4 = classHeadViewY3 +148+(SCREENWIDTH/2+102)*((datas3.count-1)/2);
             }else{
-                classHeadViewY4 = classHeadViewY3 +148+(SCREENWIDTH/2+102)*((datas2.count/2-1)+1);
+                classHeadViewY4 = classHeadViewY3 +148+(SCREENWIDTH/2+102)*((datas3.count/2-1)+1);
             }
             
             
