@@ -31,6 +31,7 @@
 #import "cocktailViewController.h"
 #import "snackFoodCarnivalSeasonViewController.h"
 #import "articlesForDailyUseViewController.h"
+#import "tabBarViewController.h"
 
 @interface baseViewController : UIViewController
 

@@ -9,12 +9,21 @@
 #import "FreshBookingViewController.h"
 #import "freshBookingTableViewCell.h"
 #import "bookClassificationViewController.h"
+#import "flowersCakeViewController.h"
+#import "sangariaViewController.h"
+#import "FCLpurchaseViewController.h"
+#import "KopiLuwakViewController.h"
+#import "FiletMignonViewController.h"
+#import "redWineViewController.h"
+#import "goodsDetailsViewController.h"
 
 
 @interface FreshBookingViewController ()<SDCycleScrollViewDelegate>
 {
     NSArray *topDatas;
     NSArray *midDatas;
+    
+    NSInteger selectTag;
 }
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
@@ -24,6 +33,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
     
 }
 -(void)viewWillAppear:(BOOL)animated{
@@ -53,7 +63,7 @@
 //    [SVProgressHUD showWithStatus:@"加载中..."];
     
     [[NetworkUtils shareNetworkUtils] FreshList:[USERDEFAULTS objectForKey:@"shopID"] success:^(id responseObject) {
-                NSLog(@"数据:%@",responseObject);
+            NSLog(@"数据:%@",responseObject);
         if ([[responseObject objectForKey:@"ResultType"]intValue] == 0) {
             midDatas = [[NSArray alloc]init];
             midDatas = [responseObject objectForKey:@"AppendData"];
@@ -170,19 +180,49 @@
 #pragma mark - SDCycleScrollViewDelegate 点击轮播图
 - (void)cycleScrollView:(SDCycleScrollView *)cycleScrollView didSelectItemAtIndex:(NSInteger)index
 {
+    UIStoryboard *stroyBoard = GetStoryboard(@"Main");
+    flowersCakeViewController *flowersCakeVC = [stroyBoard instantiateViewControllerWithIdentifier:@"flowersCakeViewController"];
+    sangariaViewController *sangariaVC = [[sangariaViewController alloc] initWithNibName:@"sangariaViewController"   bundle:nil];
+    FCLpurchaseViewController *FCLpurchaseVC = [stroyBoard instantiateViewControllerWithIdentifier:@"FCLpurchaseViewController"];
+
+    switch (index) {
+        case 0:
+            [flowersCakeVC setGetDatas:topDatas[0]];
+            [self.navigationController pushViewController:flowersCakeVC animated:YES];
+            break;
+        case 1:
+            [sangariaVC setGetDatas:topDatas[1]];
+            [self.navigationController pushViewController:sangariaVC animated:YES];
+            break;
+        case 2:
+            [FCLpurchaseVC setGetDatas:topDatas[2]];
+            [self.navigationController pushViewController:FCLpurchaseVC animated:YES];
+            break;
+            
+
+        default:
+            break;
+    }
       NSLog(@"%ld",(long)index);
 }
 #pragma mark 点击3个分类
 -(void)classButton:(UIButton *)sender{
+    KopiLuwakViewController *KopiLuwakVC = [[KopiLuwakViewController alloc] initWithNibName:@"KopiLuwakViewController"   bundle:nil];
+    FiletMignonViewController *FiletMignonVC = [[FiletMignonViewController alloc] initWithNibName:@"FiletMignonViewController"   bundle:nil];
+    redWineViewController *redWineVC = [[redWineViewController alloc] initWithNibName:@"redWineViewController"   bundle:nil];
+
     switch (sender.tag) {
         case 1711:
-            NSLog(@"1");
+            [KopiLuwakVC setGetDatas:topDatas[3]];
+            [self.navigationController pushViewController:KopiLuwakVC animated:YES];
             break;
         case 1712:
-            NSLog(@"2");
+            [redWineVC setGetDatas:topDatas[4]];
+            [self.navigationController pushViewController:redWineVC animated:YES];
             break;
         case 1713:
-            NSLog(@"3");
+            [FiletMignonVC setGetDatas:topDatas[5]];
+            [self.navigationController pushViewController:FiletMignonVC animated:YES];
             break;
         default:
             break;
@@ -191,19 +231,33 @@
 
 #pragma mark cell banner点击
 -(void)onClickbannerImage:(UIButton *)sender{
+    selectTag = sender.tag;
     [self performSegueWithIdentifier:@"freshBookingToBookClassificationViewController" sender:self];
-    
-    NSLog(@"%d",sender.tag);
 }
 #pragma mark cell 商品点击
 -(void)goodsButtonClick1:(UIButton *)sender{
-    NSLog(@"%d",sender.tag);
+    UIStoryboard *stroyBoard = GetStoryboard(@"Main");
+    goodsDetailsViewController *goodsDetailsVC = [stroyBoard instantiateViewControllerWithIdentifier:@"goodsDetailsViewController"];
+    [goodsDetailsVC setGetID:[midDatas[sender.tag] objectForKey:@"FreshCompany"][0]];
+    [self.navigationController pushViewController:goodsDetailsVC animated:YES];
 }
 -(void)goodsButtonClick2:(UIButton *)sender{
-    NSLog(@"%d",sender.tag);
+    UIStoryboard *stroyBoard = GetStoryboard(@"Main");
+    goodsDetailsViewController *goodsDetailsVC = [stroyBoard instantiateViewControllerWithIdentifier:@"goodsDetailsViewController"];
+    [goodsDetailsVC setGetID:[midDatas[sender.tag] objectForKey:@"FreshCompany"][1]];
+    [self.navigationController pushViewController:goodsDetailsVC animated:YES];
 }
 -(void)goodsButtonClick3:(UIButton *)sender{
-    NSLog(@"%d",sender.tag);
+    UIStoryboard *stroyBoard = GetStoryboard(@"Main");
+    goodsDetailsViewController *goodsDetailsVC = [stroyBoard instantiateViewControllerWithIdentifier:@"goodsDetailsViewController"];
+    [goodsDetailsVC setGetID:[midDatas[sender.tag] objectForKey:@"FreshCompany"][2]];
+    [self.navigationController pushViewController:goodsDetailsVC animated:YES];
+}
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([segue.identifier isEqualToString:@"freshBookingToBookClassificationViewController"]) {
+        bookClassificationViewController *bookClassificationVC = segue.destinationViewController;
+        [bookClassificationVC setGetDatas:midDatas[selectTag]];
+    }
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

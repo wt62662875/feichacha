@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9531" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
@@ -11,10 +11,10 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="137"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="shop_cart_shang.png" translatesAutoresizingMaskIntoConstraints="NO" id="V7X-LM-IOe">
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="shop_cart_shang.png" translatesAutoresizingMaskIntoConstraints="NO" id="V7X-LM-IOe">
                     <rect key="frame" x="8" y="8" width="17" height="17"/>
                 </imageView>
-                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fjr-6b-xEm">
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fjr-6b-xEm">
                     <rect key="frame" x="33" y="8" width="60" height="18"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="18" id="xJZ-ft-LOx"/>
@@ -30,7 +30,7 @@
                     <color key="textColor" red="0.60784313729999995" green="0.60784313729999995" blue="0.60784313729999995" alpha="1" colorSpace="calibratedRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="arrow_down.png" translatesAutoresizingMaskIntoConstraints="NO" id="5C5-gn-2ij">
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="arrow_down.png" translatesAutoresizingMaskIntoConstraints="NO" id="5C5-gn-2ij">
                     <rect key="frame" x="101" y="15" width="7" height="4"/>
                 </imageView>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Y24-5F-cOo">
@@ -44,7 +44,7 @@
                         <color key="titleColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                     </state>
                 </button>
-                <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="z3o-dr-rir">
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="z3o-dr-rir">
                     <rect key="frame" x="14" y="36" width="8" height="8"/>
                     <color key="backgroundColor" red="0.97647058823529409" green="0.46274509803921571" blue="0.39215686274509803" alpha="1" colorSpace="calibratedRGB"/>
                     <constraints>
@@ -106,9 +106,16 @@
                     <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="万达店" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2tz-Ih-8kr">
+                    <rect key="frame" x="116" y="9" width="140" height="16"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                    <color key="textColor" red="0.60784313729999995" green="0.60784313729999995" blue="0.60784313729999995" alpha="1" colorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
             <constraints>
+                <constraint firstAttribute="trailing" secondItem="2tz-Ih-8kr" secondAttribute="trailing" constant="64" id="0Q7-bq-efk"/>
                 <constraint firstItem="ovM-8B-YHk" firstAttribute="top" secondItem="QUx-Kf-VYw" secondAttribute="bottom" constant="8" id="1UK-lu-qt0"/>
                 <constraint firstAttribute="trailing" secondItem="QUx-Kf-VYw" secondAttribute="trailing" constant="8" id="2il-zV-UwX"/>
                 <constraint firstItem="Ef8-nT-Iio" firstAttribute="top" secondItem="kOy-QI-snR" secondAttribute="bottom" id="5xX-ik-onV"/>
@@ -120,6 +127,7 @@
                 <constraint firstItem="kOy-QI-snR" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="D5w-rP-kFw"/>
                 <constraint firstItem="5C5-gn-2ij" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="15" id="GUY-Xm-ZNb"/>
                 <constraint firstItem="nez-oV-Yz9" firstAttribute="top" secondItem="Ef8-nT-Iio" secondAttribute="bottom" constant="8" id="HL1-rC-nhO"/>
+                <constraint firstItem="2tz-Ih-8kr" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="116" id="HS6-Ab-CX6"/>
                 <constraint firstAttribute="trailing" secondItem="nez-oV-Yz9" secondAttribute="trailing" constant="8" id="I9I-lM-wMP"/>
                 <constraint firstItem="V7X-LM-IOe" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="8" id="KKe-m1-vAW"/>
                 <constraint firstItem="b0d-lJ-UCl" firstAttribute="top" secondItem="ovM-8B-YHk" secondAttribute="bottom" constant="13" id="NMH-cn-Oyd"/>
@@ -138,7 +146,9 @@
                 <constraint firstAttribute="trailing" secondItem="Ef8-nT-Iio" secondAttribute="trailing" id="amW-Ii-3fh"/>
                 <constraint firstItem="fzd-rH-gp4" firstAttribute="leading" secondItem="yF6-my-LLi" secondAttribute="trailing" constant="8" id="bzf-1e-x1M"/>
                 <constraint firstAttribute="trailing" secondItem="b0d-lJ-UCl" secondAttribute="trailing" constant="8" id="dfq-X4-OM7"/>
+                <constraint firstItem="2tz-Ih-8kr" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="9" id="efA-QC-YM9"/>
                 <constraint firstItem="vZP-as-eGY" firstAttribute="top" secondItem="ovM-8B-YHk" secondAttribute="bottom" constant="8" id="evh-ge-4Yf"/>
+                <constraint firstItem="2tz-Ih-8kr" firstAttribute="leading" secondItem="5C5-gn-2ij" secondAttribute="trailing" constant="8" id="gxI-Bu-avf"/>
                 <constraint firstItem="b0d-lJ-UCl" firstAttribute="leading" secondItem="vZP-as-eGY" secondAttribute="trailing" constant="8" id="h8u-GZ-XFA"/>
                 <constraint firstItem="kOy-QI-snR" firstAttribute="top" secondItem="ovM-8B-YHk" secondAttribute="bottom" id="jJx-Ku-4Fi"/>
                 <constraint firstItem="V7X-LM-IOe" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="8" id="ko1-Ue-YoH"/>
@@ -151,12 +161,18 @@
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <variation key="default">
+                <mask key="constraints">
+                    <exclude reference="gxI-Bu-avf"/>
+                </mask>
+            </variation>
             <connections>
                 <outlet property="arrowImage" destination="5C5-gn-2ij" id="6aA-U2-uVV"/>
                 <outlet property="flashButton" destination="fjr-6b-xEm" id="9S7-JX-1PZ"/>
                 <outlet property="flashImage" destination="V7X-LM-IOe" id="H4X-u3-1ZD"/>
                 <outlet property="noteTextField" destination="nez-oV-Yz9" id="e6P-ia-oQK"/>
                 <outlet property="roundView" destination="z3o-dr-rir" id="Q0h-3J-1CQ"/>
+                <outlet property="shopName" destination="2tz-Ih-8kr" id="sSG-4w-CpE"/>
                 <outlet property="theRulesLbael" destination="QUx-Kf-VYw" id="ne8-rA-7mH"/>
                 <outlet property="timeButton" destination="kOy-QI-snR" id="Akd-ac-IGQ"/>
                 <outlet property="timeLabel1" destination="fzd-rH-gp4" id="LDm-dr-Y5e"/>

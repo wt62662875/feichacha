@@ -9,5 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @interface orderDetailsViewController : UIViewController
+@property (retain, nonatomic) id getDatas;
 
 @end

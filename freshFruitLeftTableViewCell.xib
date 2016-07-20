@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9531" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
@@ -61,14 +61,22 @@
                         <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gWC-ei-Y1T">
+                        <rect key="frame" x="8" y="8" width="120" height="99.5"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="120" id="SdR-Xw-BFs"/>
+                        </constraints>
+                    </button>
                 </subviews>
                 <constraints>
                     <constraint firstItem="gDa-LI-n1p" firstAttribute="top" secondItem="U86-iJ-7AR" secondAttribute="bottom" constant="4" id="1zT-VN-CZT"/>
                     <constraint firstAttribute="bottom" secondItem="gDa-LI-n1p" secondAttribute="bottom" constant="7.5" id="52I-vP-b6L"/>
+                    <constraint firstItem="gWC-ei-Y1T" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="8" id="8pg-Yt-0zk"/>
                     <constraint firstAttribute="trailing" secondItem="XfB-Hm-rER" secondAttribute="trailing" constant="8" id="9hd-22-qyi"/>
                     <constraint firstItem="x4g-2r-qbp" firstAttribute="top" secondItem="Aia-SR-PqK" secondAttribute="bottom" constant="3" id="C8b-c6-sgE"/>
                     <constraint firstItem="Aia-SR-PqK" firstAttribute="leading" secondItem="Tf9-fR-pum" secondAttribute="trailing" constant="8" id="CtS-eZ-L14"/>
                     <constraint firstItem="Aia-SR-PqK" firstAttribute="top" secondItem="XfB-Hm-rER" secondAttribute="bottom" constant="4" id="MQz-HV-DeA"/>
+                    <constraint firstItem="gWC-ei-Y1T" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="8" id="QaW-md-eZn"/>
                     <constraint firstItem="XfB-Hm-rER" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="8" id="Qs7-PB-LY2"/>
                     <constraint firstItem="0ti-tO-jNe" firstAttribute="leading" secondItem="U86-iJ-7AR" secondAttribute="trailing" constant="8" id="Ruk-hL-JLw"/>
                     <constraint firstItem="XfB-Hm-rER" firstAttribute="leading" secondItem="Tf9-fR-pum" secondAttribute="trailing" constant="8" id="Sud-Ka-Ji2"/>
@@ -79,11 +87,13 @@
                     <constraint firstItem="0ti-tO-jNe" firstAttribute="top" secondItem="x4g-2r-qbp" secondAttribute="bottom" constant="1" id="ki0-Up-y2d"/>
                     <constraint firstAttribute="bottom" secondItem="Tf9-fR-pum" secondAttribute="bottom" constant="7.5" id="oWS-IP-Rfl"/>
                     <constraint firstItem="Tf9-fR-pum" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="8" id="tUn-It-5gd"/>
+                    <constraint firstAttribute="bottom" secondItem="gWC-ei-Y1T" secondAttribute="bottom" constant="8" id="u64-0N-86U"/>
                 </constraints>
             </tableViewCellContentView>
             <color key="backgroundColor" red="0.98431372549019602" green="1" blue="0.93725490196078431" alpha="1" colorSpace="calibratedRGB"/>
             <connections>
                 <outlet property="buyButton" destination="gDa-LI-n1p" id="cYU-Ru-Y7F"/>
+                <outlet property="goodsClick" destination="gWC-ei-Y1T" id="MNn-Tg-ORf"/>
                 <outlet property="image" destination="Tf9-fR-pum" id="Sv9-CE-MNb"/>
                 <outlet property="name" destination="XfB-Hm-rER" id="OgA-zR-Gw2"/>
                 <outlet property="oldPrice" destination="x4g-2r-qbp" id="GqF-OU-29V"/>

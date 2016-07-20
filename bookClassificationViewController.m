@@ -12,8 +12,12 @@
 #import "baseViewController.h"
 
 @interface bookClassificationViewController ()
+{
+    id datas;
+}
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 @property (weak, nonatomic) IBOutlet UILabel *badgeLabel;
+@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 
 @end
 
@@ -24,11 +28,31 @@
     _badgeLabel.layer.cornerRadius = 8;
     _badgeLabel.layer.masksToBounds = YES;
     // Do any additional setup after loading the view.
+    _titleLabel.text = [_getDatas objectForKey:@"Name"];
+    [self ActivityListDatas];
+}
+-(void)ActivityListDatas{
+    [SVProgressHUD showWithStatus:@"加载中..."];
+    
+    [[NetworkUtils shareNetworkUtils] ActivityList:[_getDatas objectForKey:@"Id"] ActType:[_getDatas objectForKey:@"ActType"] success:^(id responseObject) {
+        NSLog(@"数据:%@",responseObject);
+        if ([[responseObject objectForKey:@"ResultType"]intValue] == 0) {
+            datas = [responseObject objectForKey:@"AppendData"];
+            [_collectionView reloadData];
+        }else {
+            
+            [SVProgressHUD showErrorWithStatus:@"请求失败，请稍后重试" maskType:SVProgressHUDMaskTypeNone];
+        }
+        [SVProgressHUD dismiss];
+    } failure:^(NSString *error) {
+        [SVProgressHUD dismiss];
+    }];
 }
 //定义展示的UICollectionViewCell的个数
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return 8;
+    NSArray *tempArray = [datas objectForKey:@"ActivityProduct"];
+    return tempArray.count;
 }
 //每个UICollectionView展示的内容
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
@@ -37,9 +61,16 @@
     bookClassificationCollectionViewCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:CellIdentifier forIndexPath:indexPath];
     cell.buyButton.layer.cornerRadius = 4;
     
-    [cell.image sd_setImageWithURL:[NSURL URLWithString:@"http://manage.feichacha.com/html/shop/images/sg_img1.jpg"]];
-    [cell.buyButton addTarget:self action:@selector(buyButton:) forControlEvents:UIControlEventTouchUpInside];
+    [cell.image sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[[datas objectForKey:@"ActivityProduct"][indexPath.row] objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"loading_default"]];
+    cell.name.text = [[datas objectForKey:@"ActivityProduct"][indexPath.row] objectForKey:@"Name"];
+    cell.specifications.text = [[datas objectForKey:@"ActivityProduct"][indexPath.row] objectForKey:@"Size"];
+    cell.price.text = [NSString stringWithFormat:@"￥%@",[[datas objectForKey:@"ActivityProduct"][indexPath.row] objectForKey:@"Price"]];
+    cell.oldPrice.hidden = YES;
+
     
+    [cell.buyButton addTarget:self action:@selector(buyButton:) forControlEvents:UIControlEventTouchUpInside];
+    [cell.goodsClick addTarget:self action:@selector(goodsClick:) forControlEvents:UIControlEventTouchUpInside];
+
     return cell;
 }
 //定义展示的Section的个数
@@ -63,7 +94,7 @@
     if (kind == UICollectionElementKindSectionHeader){
         bookClassificationHeadCollectionReusableView * headView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"bookClassificationHeadCollectionReusableView" forIndexPath:indexPath];
         UIImageView * image = [[UIImageView alloc]initWithFrame:CGRectMake(SCREENWIDTH/2-40, 20, 80, 80)];
-        [image sd_setImageWithURL:[NSURL URLWithString:@"http://manage.feichacha.com/html/shop/images/sg_banner.jpg"]];
+        [image sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[datas objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"loading_default"]];
         image.layer.cornerRadius = 40;
         image.layer.masksToBounds = YES;
         [headView addSubview:image];
@@ -101,9 +132,22 @@
     NSIndexPath *indexpath = [self.collectionView indexPathForCell:tempcell];//获取cell对应的indexpath;
     bookClassificationCollectionViewCell *cell = (bookClassificationCollectionViewCell *)[_collectionView cellForItemAtIndexPath:indexpath];
     [baseVC addProductsAnimation:cell.image selfView:self.view pointX:SCREENWIDTH-44 pointY:SCREENHTIGHT-44];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"ReservationShoppingCartGoodsAdd" object:[datas objectForKey:@"ActivityProduct"][indexpath.row]];
+    _badgeLabel.hidden = NO;
+    _badgeLabel.text = [NSString stringWithFormat:@"%@",[USERDEFAULTS objectForKey:@"PurchaseQuantity"]];
     
 }
-
+-(void)goodsClick:(UIButton *)sender{
+    UIView *v = [sender superview];//获取父类view
+    UICollectionViewCell *tempcell = (UICollectionViewCell *)[v superview];//获取cell
+    NSIndexPath *indexpath = [self.collectionView indexPathForCell:tempcell];//获取cell对应的indexpath;
+    
+    UIStoryboard *stroyBoard = GetStoryboard(@"Main");
+    goodsDetailsViewController *goodsDetailsVC = [stroyBoard instantiateViewControllerWithIdentifier:@"goodsDetailsViewController"];
+    [goodsDetailsVC setIsAct:@"1"];
+    [goodsDetailsVC setGetID:[datas objectForKey:@"ActivityProduct"][indexpath.row]];
+    [self.navigationController pushViewController:goodsDetailsVC animated:YES];
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

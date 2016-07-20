@@ -9,5 +9,17 @@
 #import <UIKit/UIKit.h>
 
 @interface submitOrdersViewController : UIViewController
+@property (weak, nonatomic) NSArray* getDatas;
+@property (weak, nonatomic) NSString* getFreight;
+@property (weak, nonatomic) NSString* OrderType;
+@property (weak, nonatomic) NSString* Remark;
 
+/**
+ *  设置失败界面
+ */
+-(void) setFalseFor_Pay;
+/**
+ *  设置成功界面
+ */
+-(void) setSuccessFor_pay;
 @end

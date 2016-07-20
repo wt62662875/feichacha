@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9531" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
@@ -61,6 +61,12 @@
                         <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="utI-GX-Pw6">
+                        <rect key="frame" x="192" y="8" width="120" height="99.5"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="120" id="IUC-af-WOF"/>
+                        </constraints>
+                    </button>
                 </subviews>
                 <constraints>
                     <constraint firstItem="1Wd-d5-sPj" firstAttribute="top" secondItem="uRt-hr-JDP" secondAttribute="bottom" constant="3" id="4Mc-c7-d3w"/>
@@ -72,10 +78,13 @@
                     <constraint firstItem="aPD-6t-HeD" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="8" id="I0n-za-Fea"/>
                     <constraint firstItem="Kpw-K1-tGa" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="8" id="KkC-60-Vyw"/>
                     <constraint firstItem="tOZ-We-MvC" firstAttribute="leading" secondItem="Kpw-K1-tGa" secondAttribute="trailing" constant="8" id="Lg8-ex-Zbf"/>
+                    <constraint firstItem="utI-GX-Pw6" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="8" id="NB0-Wb-AwD"/>
+                    <constraint firstAttribute="trailing" secondItem="utI-GX-Pw6" secondAttribute="trailing" constant="8" id="ODT-pa-VLf"/>
                     <constraint firstItem="A0j-Kn-fam" firstAttribute="top" secondItem="aPD-6t-HeD" secondAttribute="bottom" constant="4" id="PHF-fo-bw3"/>
                     <constraint firstItem="WSP-hg-F16" firstAttribute="leading" secondItem="aPD-6t-HeD" secondAttribute="trailing" constant="8" id="Qkm-aL-8Yk"/>
                     <constraint firstItem="uRt-hr-JDP" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="8" id="Tal-VT-CQZ"/>
                     <constraint firstItem="uRt-hr-JDP" firstAttribute="top" secondItem="Kpw-K1-tGa" secondAttribute="bottom" constant="4" id="Yza-Dm-Sch"/>
+                    <constraint firstAttribute="bottom" secondItem="utI-GX-Pw6" secondAttribute="bottom" constant="8" id="ep3-Ra-hf2"/>
                     <constraint firstItem="Kpw-K1-tGa" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="8" id="gkl-sH-veS"/>
                     <constraint firstAttribute="bottom" secondItem="A0j-Kn-fam" secondAttribute="bottom" constant="7.5" id="si1-hp-jMQ"/>
                     <constraint firstAttribute="trailing" secondItem="tOZ-We-MvC" secondAttribute="trailing" constant="8" id="wYt-Xy-cq0"/>
@@ -84,6 +93,7 @@
             <color key="backgroundColor" red="0.98431372549999996" green="1" blue="0.93725490199999995" alpha="1" colorSpace="calibratedRGB"/>
             <connections>
                 <outlet property="buyButton" destination="A0j-Kn-fam" id="wvX-Cp-J1U"/>
+                <outlet property="goodsClick" destination="utI-GX-Pw6" id="VjH-cz-I0U"/>
                 <outlet property="image" destination="tOZ-We-MvC" id="FnD-DF-zuo"/>
                 <outlet property="name" destination="Kpw-K1-tGa" id="3Py-7J-6RC"/>
                 <outlet property="oldPrice" destination="1Wd-d5-sPj" id="kwz-xM-SrW"/>

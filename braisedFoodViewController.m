@@ -40,7 +40,11 @@
     [super viewDidLoad];
     _badgeLabel.layer.cornerRadius = 8;
     _badgeLabel.layer.masksToBounds = YES;
-    
+    if ([[USERDEFAULTS objectForKey:@"PurchaseQuantity"] intValue] == 0) {
+        _badgeLabel.hidden = YES;
+    }else{
+        _badgeLabel.text = [NSString stringWithFormat:@"%@",[USERDEFAULTS objectForKey:@"PurchaseQuantity"]];
+    }
     [self initNavigationView];
     [self ActivityListDatas];
     // Do any additional setup after loading the view from its nib.
@@ -118,6 +122,8 @@
         cell.oldPrice.hidden = YES;
         cell.buyButton.tag = indexPath.row;
         [cell.buyButton addTarget:self action:@selector(buyButton:) forControlEvents:UIControlEventTouchUpInside];
+        cell.goodsClick.tag = indexPath.row;
+        [cell.goodsClick addTarget:self action:@selector(goodsClick:) forControlEvents:UIControlEventTouchUpInside];
         return cell;
 
     }else{
@@ -161,6 +167,8 @@
         cell.goodsOldPrice2.hidden = YES;
         [cell.buyButton1 addTarget:self action:@selector(buyButton1:) forControlEvents:UIControlEventTouchUpInside];
         [cell.buyButton2 addTarget:self action:@selector(buyButton2:) forControlEvents:UIControlEventTouchUpInside];
+        [cell.goodsClick1 addTarget:self action:@selector(goodsClick1:) forControlEvents:UIControlEventTouchUpInside];
+        [cell.goodsClick2 addTarget:self action:@selector(goodsClick2:) forControlEvents:UIControlEventTouchUpInside];
         return cell;
     }
     
@@ -199,6 +207,9 @@
     baseViewController *baseVC = [stroyBoard instantiateViewControllerWithIdentifier:@"baseViewController"];
     braisedFoodTableViewCell1 *cell = (braisedFoodTableViewCell1 *)[_tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:sender.tag inSection:0]];
     [baseVC addProductsAnimation:cell.image selfView:self.view pointX:SCREENWIDTH-44 pointY:SCREENHTIGHT-44];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"FlashShoppingCartGoodsAdd" object:datas1[sender.tag]];
+    _badgeLabel.hidden = NO;
+    _badgeLabel.text = [NSString stringWithFormat:@"%@",[USERDEFAULTS objectForKey:@"PurchaseQuantity"]];
 }
 #pragma mark 竖排购买1
 -(void)buyButton1:(UIButton *)sender{
@@ -211,7 +222,13 @@
     baseViewController *baseVC = [stroyBoard instantiateViewControllerWithIdentifier:@"baseViewController"];
     braisedFoodTableViewCell2 *cell = (braisedFoodTableViewCell2 *)[_tableView cellForRowAtIndexPath:indexPath];
     [baseVC addProductsAnimation:cell.goodsImage1 selfView:self.view pointX:SCREENWIDTH-44 pointY:SCREENHTIGHT-44];
-    
+    if (indexPath.section == 1) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"FlashShoppingCartGoodsAdd" object:datas2[indexPath.row*2]];
+    }else{
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"FlashShoppingCartGoodsAdd" object:datas3[indexPath.row*2]];
+    }
+    _badgeLabel.hidden = NO;
+    _badgeLabel.text = [NSString stringWithFormat:@"%@",[USERDEFAULTS objectForKey:@"PurchaseQuantity"]];
 }
 #pragma mark 竖排购买2
 -(void)buyButton2:(UIButton *)sender{
@@ -224,8 +241,55 @@
     baseViewController *baseVC = [stroyBoard instantiateViewControllerWithIdentifier:@"baseViewController"];
     braisedFoodTableViewCell2 *cell = (braisedFoodTableViewCell2 *)[_tableView cellForRowAtIndexPath:indexPath];
     [baseVC addProductsAnimation:cell.goodsImage2 selfView:self.view pointX:SCREENWIDTH-44 pointY:SCREENHTIGHT-44];
+    if (indexPath.section == 1) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"FlashShoppingCartGoodsAdd" object:datas2[indexPath.row*2+1]];
+    }else{
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"FlashShoppingCartGoodsAdd" object:datas3[indexPath.row*2+1]];
+    }
+    _badgeLabel.hidden = NO;
+    _badgeLabel.text = [NSString stringWithFormat:@"%@",[USERDEFAULTS objectForKey:@"PurchaseQuantity"]];
 }
+-(void)goodsClick:(UIButton *)sender{
+    UIStoryboard *stroyBoard = GetStoryboard(@"Main");
+    goodsDetailsViewController *goodsDetailsVC = [stroyBoard instantiateViewControllerWithIdentifier:@"goodsDetailsViewController"];
+    [goodsDetailsVC setIsAct:@"1"];
+    [goodsDetailsVC setGetID:datas1[sender.tag]];
+    [self.navigationController pushViewController:goodsDetailsVC animated:YES];
+}
+-(void)goodsClick1:(UIButton *)sender{
+    UIView *temp = [sender superview];
+    UIView *temp1 = [temp superview];
+    UITableViewCell *tempCell = (UITableViewCell *)[temp1 superview];//获取cell
+    NSIndexPath *indexPath = [_tableView indexPathForCell:tempCell];//获取cell对应的section
 
+    UIStoryboard *stroyBoard = GetStoryboard(@"Main");
+    goodsDetailsViewController *goodsDetailsVC = [stroyBoard instantiateViewControllerWithIdentifier:@"goodsDetailsViewController"];
+     [goodsDetailsVC setIsAct:@"1"];
+    if (indexPath.section == 1) {
+        [goodsDetailsVC setGetID:datas2[indexPath.row*2]];
+    }else{
+        [goodsDetailsVC setGetID:datas3[indexPath.row*2]];
+    }
+    [self.navigationController pushViewController:goodsDetailsVC animated:YES];
+    
+}
+-(void)goodsClick2:(UIButton *)sender{
+    UIView *temp = [sender superview];
+    UIView *temp1 = [temp superview];
+    UITableViewCell *tempCell = (UITableViewCell *)[temp1 superview];//获取cell
+    NSIndexPath *indexPath = [_tableView indexPathForCell:tempCell];//获取cell对应的section
+    
+    UIStoryboard *stroyBoard = GetStoryboard(@"Main");
+    goodsDetailsViewController *goodsDetailsVC = [stroyBoard instantiateViewControllerWithIdentifier:@"goodsDetailsViewController"];
+     [goodsDetailsVC setIsAct:@"1"];
+    if (indexPath.section == 1) {
+        [goodsDetailsVC setGetID:datas2[indexPath.row*2+1]];
+    }else{
+        [goodsDetailsVC setGetID:datas3[indexPath.row*2+1]];
+    }
+    [self.navigationController pushViewController:goodsDetailsVC animated:YES];
+    
+}
 
 
 
@@ -336,6 +400,10 @@
         default:
             break;
     }
+}
+- (IBAction)goShoppingCart:(id)sender {
+    [self.navigationController popViewControllerAnimated:YES];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"jumpToShoppingCart" object:nil];
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

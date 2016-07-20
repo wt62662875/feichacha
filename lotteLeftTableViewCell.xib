@@ -51,6 +51,13 @@
                                 <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="P3C-x3-0bw">
+                                <rect key="frame" x="8" y="5" width="100" height="100"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="100" id="ImL-it-vOb"/>
+                                    <constraint firstAttribute="width" constant="100" id="irK-16-oQx"/>
+                                </constraints>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -59,7 +66,9 @@
                             <constraint firstAttribute="bottom" secondItem="mDu-Kz-iex" secondAttribute="bottom" constant="4.5" id="FYd-vl-hmS"/>
                             <constraint firstItem="7FM-Bk-qrE" firstAttribute="leading" secondItem="Dkg-m5-J84" secondAttribute="trailing" constant="8" id="Hyy-bI-6jq"/>
                             <constraint firstItem="Std-CH-79K" firstAttribute="leading" secondItem="Dkg-m5-J84" secondAttribute="trailing" constant="8" id="NDn-te-NNr"/>
+                            <constraint firstItem="P3C-x3-0bw" firstAttribute="leading" secondItem="Ewd-SS-TmX" secondAttribute="leading" constant="8" id="PwZ-YT-Opq"/>
                             <constraint firstItem="PgI-5x-P0g" firstAttribute="leading" secondItem="Dkg-m5-J84" secondAttribute="trailing" constant="8" id="Q1h-w3-voZ"/>
+                            <constraint firstItem="P3C-x3-0bw" firstAttribute="top" secondItem="Ewd-SS-TmX" secondAttribute="top" constant="5" id="WUN-s4-ZuC"/>
                             <constraint firstItem="Dkg-m5-J84" firstAttribute="leading" secondItem="Ewd-SS-TmX" secondAttribute="leading" constant="8" id="cks-kG-FPZ"/>
                             <constraint firstItem="PgI-5x-P0g" firstAttribute="top" secondItem="7FM-Bk-qrE" secondAttribute="bottom" constant="4" id="hhK-NP-6qf"/>
                             <constraint firstItem="Dkg-m5-J84" firstAttribute="top" secondItem="Ewd-SS-TmX" secondAttribute="top" constant="5" id="j3j-QR-PXO"/>
@@ -79,6 +88,7 @@
             <connections>
                 <outlet property="backView" destination="Ewd-SS-TmX" id="3M6-fs-KNi"/>
                 <outlet property="buyButton" destination="mDu-Kz-iex" id="0RH-5H-7Bx"/>
+                <outlet property="goodsClick" destination="P3C-x3-0bw" id="Pdf-sD-VWQ"/>
                 <outlet property="image" destination="Dkg-m5-J84" id="K3F-Es-WYd"/>
                 <outlet property="name" destination="7FM-Bk-qrE" id="BUF-hg-haO"/>
                 <outlet property="price" destination="Std-CH-79K" id="Pt6-Is-Kiz"/>

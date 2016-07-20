@@ -16,10 +16,13 @@
 
 @interface flashSmallSuperViewController ()<UITableViewDataSource,UITableViewDelegate,positioningDelegate,BMKLocationServiceDelegate,BMKGeoCodeSearchDelegate>
 {
+    int page;
+    NSString *defaultRightStr;
+    
     NSInteger selectCellTag;                //选中cell
     
     NSArray *leftDatas;
-    NSArray *rightDatas;
+    NSMutableArray *rightDatas;
 
     BMKLocationService *_locService;
     BMKGeoCodeSearch * _searcher;
@@ -177,10 +180,14 @@
     [[NetworkUtils shareNetworkUtils] listProClass:^(id responseObject) {
         NSLog(@"数据:%@",responseObject);
         if ([[responseObject objectForKey:@"ResultType"]intValue] == 0) {
+            page = 1;
+            rightDatas = [[NSMutableArray alloc]init];
+
             leftDatas = [[NSArray alloc]init];
             leftDatas = [responseObject objectForKey:@"AppendData"];
             [_leftTableView reloadData];
-            [self getRightDatas:[leftDatas[0] objectForKey:@"StringId"]];
+            defaultRightStr = [leftDatas[0] objectForKey:@"StringId"];
+            [self getRightDatas:[leftDatas[0] objectForKey:@"StringId"] page:1];
         }else {
             [SVProgressHUD showErrorWithStatus:@"请求失败，请稍后重试" maskType:SVProgressHUDMaskTypeNone];
         }
@@ -189,19 +196,27 @@
         [SVProgressHUD dismiss];
     }];
 }
--(void)getRightDatas:(NSString *)classId{
-    [SVProgressHUD showWithStatus:@"加载中..."];
-    [[NetworkUtils shareNetworkUtils] ClassProductList:[USERDEFAULTS objectForKey:@"shopID"] classId:classId success:^(id responseObject) {
+-(void)getRightDatas:(NSString *)classId page:(int)pages{
+    if (pages == 1) {
+        [SVProgressHUD showWithStatus:@"加载中..."];
+        rightDatas = [[NSMutableArray alloc]init];
+    }
+    [[NetworkUtils shareNetworkUtils] ClassProductList:[USERDEFAULTS objectForKey:@"shopID"] classId:classId page:[NSString stringWithFormat:@"%d",pages] success:^(id responseObject) {
         NSLog(@"数据:%@",responseObject);
         if ([[responseObject objectForKey:@"ResultType"]intValue] == 0) {
-            rightDatas = [[NSArray alloc]init];
-            rightDatas = [responseObject objectForKey:@"AppendData"];
+            NSMutableArray *tempArray =[responseObject objectForKey:@"AppendData"];
+            for (int i = 0; i<tempArray.count; i++) {
+                [rightDatas addObject:tempArray[i]];
+            }
+
+            if (pages == 1) {
+                [_rightTableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
+            }
             [_rightTableView reloadData];
-            
         }else {
-            rightDatas = [[NSArray alloc]init];
+//            rightDatas = [[NSMutableArray alloc]init];
             [_rightTableView reloadData];
-            [SVProgressHUD showErrorWithStatus:@"请求失败，请稍后重试" maskType:SVProgressHUDMaskTypeNone];
+//            [SVProgressHUD showErrorWithStatus:@"请求失败，请稍后重试" maskType:SVProgressHUDMaskTypeNone];
         }
         [SVProgressHUD dismiss];
     } failure:^(NSString *error) {
@@ -278,34 +293,53 @@
         }
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
         cell.addShoppingCartButton.tag = indexPath.row;
-        NSString *imageURL = [IMGURL stringByAppendingString:[rightDatas[indexPath.row-1] objectForKey:@"ImageUrl"]];
-        [cell.goodsImage sd_setImageWithURL:[NSURL URLWithString:imageURL]];
-        [cell.addShoppingCartButton addTarget:self action:@selector(addShoppingCartButton:) forControlEvents:UIControlEventTouchUpInside];
-        cell.goodsName.text = [rightDatas[indexPath.row-1] objectForKey:@"Name"];
-        cell.goodsPrice.text = [NSString stringWithFormat:@"￥%@",[rightDatas[indexPath.row-1] objectForKey:@"Price"]];
-//        cell.goodsMessage.text = [rightDatas[indexPath.row-1] objectForKey:@"Size"];
-        
+
+        if (page == 1 && indexPath.row > 15) {
+            
+        }else{
+            NSString *imageURL = [IMGURL stringByAppendingString:[rightDatas[indexPath.row-1] objectForKey:@"ImageUrl"]];
+            [cell.goodsImage sd_setImageWithURL:[NSURL URLWithString:imageURL]];
+            [cell.addShoppingCartButton addTarget:self action:@selector(addShoppingCartButton:) forControlEvents:UIControlEventTouchUpInside];
+            cell.goodsName.text = [rightDatas[indexPath.row-1] objectForKey:@"Name"];
+            cell.goodsPrice.text = [NSString stringWithFormat:@"￥%@",[rightDatas[indexPath.row-1] objectForKey:@"Price"]];
+            if ([[rightDatas[indexPath.row-1] objectForKey:@"IsDirect"] boolValue]) {
+                cell.goodsDescribe.hidden = YES;
+            }else{
+                cell.goodsDescribe.hidden = NO;
+            }
+            if ([[rightDatas[indexPath.row-1] objectForKey:@"IsImport"] boolValue]) {
+                cell.goodsDescribe2.hidden = NO;
+            }else{
+                cell.goodsDescribe2.hidden = YES;
+            }
+            cell.goodsDescribe3.hidden = YES;
+        }
         /**
          老价格加下划线
          **/
-        NSString *oldPrice = [NSString stringWithFormat:@"￥%@",[rightDatas[indexPath.row-1] objectForKey:@"Price"]];
-        NSMutableAttributedString *attri = [[NSMutableAttributedString alloc] initWithString:oldPrice];
-        [attri addAttribute:NSStrikethroughStyleAttributeName value:@(NSUnderlinePatternSolid | NSUnderlineStyleSingle) range:NSMakeRange(0, oldPrice.length)];
-        [attri addAttribute:NSStrikethroughColorAttributeName value:[UIColor lightGrayColor] range:NSMakeRange(0, oldPrice.length)];
-        [cell.goodsOldPrice setAttributedText:attri];
+        cell.goodsOldPrice.hidden = YES;
         
         return cell;
     }
     
 }
+#pragma mark 处理加载更多
+-(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
+
+    if (page*10 == indexPath.row) {
+        page ++;
+        [self getRightDatas:defaultRightStr page:page];
+    }
+}
+
 #pragma mark 加入购物车
 -(void)addShoppingCartButton:(UIButton *)sender{
     UIStoryboard *stroyBoard = GetStoryboard(@"Main");
     baseViewController *baseVC = [stroyBoard instantiateViewControllerWithIdentifier:@"baseViewController"];
      flashGoodsTableViewCell *cell = (flashGoodsTableViewCell *)[_rightTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:sender.tag inSection:0]];
     [baseVC addProductsAnimation:cell.goodsImage selfView:self.view pointX:SCREENWIDTH/10*7 pointY:SCREENHTIGHT-40];
-
-}
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"FlashShoppingCartGoodsAdd" object:rightDatas[sender.tag-1]];
+ }
 #pragma mark 重置titleAddress宽度
 -(void)initAddressTitleWidth:(NSString *)str{
     CGSize titleSize =[str  boundingRectWithSize:CGSizeMake(MAXFLOAT, MAXFLOAT) options:NSStringDrawingTruncatesLastVisibleLine | NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading attributes:@{NSFontAttributeName: [UIFont systemFontOfSize:15]} context:nil].size;
@@ -319,7 +353,10 @@
     if (tableView == _leftTableView) {
         selectCellTag = indexPath.row;
         [_leftTableView reloadData];
-        [self getRightDatas:[leftDatas[indexPath.row] objectForKey:@"StringId"]];
+        page = 1;
+        defaultRightStr = [leftDatas[indexPath.row] objectForKey:@"StringId"];
+        NSLog(@"%@",[leftDatas[indexPath.row] objectForKey:@"StringId"]);
+        [self getRightDatas:[leftDatas[indexPath.row] objectForKey:@"StringId"] page:page];
     }else{
         UIStoryboard *stroyBoard = GetStoryboard(@"Main");
         goodsDetailsViewController *goodsDetailsVC = [stroyBoard instantiateViewControllerWithIdentifier:@"goodsDetailsViewController"];

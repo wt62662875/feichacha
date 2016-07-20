@@ -46,7 +46,11 @@
     // Do any additional setup after loading the view.
     _badgeLabel.layer.cornerRadius = 8;
     _badgeLabel.layer.masksToBounds = YES;
-    
+    if ([[USERDEFAULTS objectForKey:@"PurchaseQuantity"] intValue] == 0) {
+        _badgeLabel.hidden = YES;
+    }else{
+        _badgeLabel.text = [NSString stringWithFormat:@"%@",[USERDEFAULTS objectForKey:@"PurchaseQuantity"]];
+    }
     
     [self initNavigationView];
     
@@ -120,7 +124,8 @@
     cell.oldPrice.hidden = YES;
     
     [cell.buyButton addTarget:self action:@selector(buyButton:) forControlEvents:UIControlEventTouchUpInside];
-    
+    [cell.goodsClick addTarget:self action:@selector(goodsClick:) forControlEvents:UIControlEventTouchUpInside];
+
     return cell;
 }
 //定义展示的Section的个数
@@ -158,7 +163,9 @@
 
             wineHeadView.buyButton.tag = indexPath.section;
             [wineHeadView.buyButton addTarget:self action:@selector(SectionBuyButton:) forControlEvents:UIControlEventTouchUpInside];
-            
+            wineHeadView.goodsClick.tag = indexPath.section;
+            [wineHeadView.goodsClick addTarget:self action:@selector(goodsClick2:) forControlEvents:UIControlEventTouchUpInside];
+
             reusableview = wineHeadView;
         }
     }
@@ -231,28 +238,28 @@
     [navButton1.titleLabel setFont:[UIFont systemFontOfSize:15]];
     [navButton1 setBackgroundColor:RGBCOLORA(238, 118, 156, 1)];
     [navButton1 setFrame:CGRectMake(0, 0, SCREENWIDTH/4, 39)];
-    [navButton1 setTitle:@"小编热荐" forState:UIControlStateNormal];
+    [navButton1 setTitle:@"婚宴用酒" forState:UIControlStateNormal];
     
     navButton2 = [UIButton buttonWithType:UIButtonTypeCustom];
     [navButton2 setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [navButton2.titleLabel setFont:[UIFont systemFontOfSize:15]];
     [navButton2 setBackgroundColor:RGBCOLORA(238, 118, 156, 1)];
     [navButton2 setFrame:CGRectMake(SCREENWIDTH/4, 0, SCREENWIDTH/4, 39)];
-    [navButton2 setTitle:@"热门香烟" forState:UIControlStateNormal];
+    [navButton2 setTitle:@"欢庆用酒" forState:UIControlStateNormal];
     
     navButton3 = [UIButton buttonWithType:UIButtonTypeCustom];
     [navButton3 setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [navButton3.titleLabel setFont:[UIFont systemFontOfSize:15]];
     [navButton3 setBackgroundColor:RGBCOLORA(238, 118, 156, 1)];
     [navButton3 setFrame:CGRectMake(SCREENWIDTH/2, 0, SCREENWIDTH/4, 39)];
-    [navButton3 setTitle:@"整条批发" forState:UIControlStateNormal];
+    [navButton3 setTitle:@"款待用酒" forState:UIControlStateNormal];
     
     navButton4 = [UIButton buttonWithType:UIButtonTypeCustom];
     [navButton4 setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [navButton4.titleLabel setFont:[UIFont systemFontOfSize:15]];
     [navButton4 setBackgroundColor:RGBCOLORA(238, 118, 156, 1)];
     [navButton4 setFrame:CGRectMake(SCREENWIDTH/4*3, 0, SCREENWIDTH/4, 39)];
-    [navButton4 setTitle:@"香烟周边" forState:UIControlStateNormal];
+    [navButton4 setTitle:@"节日用酒" forState:UIControlStateNormal];
     
     navButton1.tag = 1;
     navButton2.tag = 2;
@@ -311,8 +318,21 @@
     NSIndexPath *indexpath = [self.collectionView indexPathForCell:tempcell];//获取cell对应的indexpath;
     wineCollectionViewCell *cell = (wineCollectionViewCell *)[_collectionView cellForItemAtIndexPath:indexpath];
     [baseVC addProductsAnimation:cell.image selfView:self.view pointX:SCREENWIDTH-44 pointY:SCREENHTIGHT-44];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"FlashShoppingCartGoodsAdd" object:[allDatas[indexpath.section-1] objectForKey:@"ActivityProduct"][indexpath.row+1]];
+    _badgeLabel.hidden = NO;
+    _badgeLabel.text = [NSString stringWithFormat:@"%@",[USERDEFAULTS objectForKey:@"PurchaseQuantity"]];
     
+}
+-(void)goodsClick:(UIButton *)sender{
+    UIView *v = [sender superview];//获取父类view
+    UICollectionViewCell *tempcell = (UICollectionViewCell *)[v superview];//获取cell
+    NSIndexPath *indexpath = [self.collectionView indexPathForCell:tempcell];//获取cell对应的indexpath;
     
+    UIStoryboard *stroyBoard = GetStoryboard(@"Main");
+    goodsDetailsViewController *goodsDetailsVC = [stroyBoard instantiateViewControllerWithIdentifier:@"goodsDetailsViewController"];
+    [goodsDetailsVC setIsAct:@"1"];
+    [goodsDetailsVC setGetID:[allDatas[indexpath.section-1] objectForKey:@"ActivityProduct"][indexpath.row+1]];
+    [self.navigationController pushViewController:goodsDetailsVC animated:YES];
 }
 #pragma mark scetion里的加入购物车
 -(void)SectionBuyButton:(UIButton *)sender{
@@ -320,9 +340,20 @@
     baseViewController *baseVC = [stroyBoard instantiateViewControllerWithIdentifier:@"baseViewController"];
     [baseVC addProductsAnimation:wineHeadView.image selfView:self.view pointX:SCREENWIDTH-44 pointY:SCREENHTIGHT-44];
 
-    NSLog(@"%d",sender.tag);
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"FlashShoppingCartGoodsAdd" object:[allDatas[sender.tag-1] objectForKey:@"ActivityProduct"][0]];
+    _badgeLabel.hidden = NO;
+    _badgeLabel.text = [NSString stringWithFormat:@"%@",[USERDEFAULTS objectForKey:@"PurchaseQuantity"]];}
+-(void)goodsClick2:(UIButton *)sender{
+    UIStoryboard *stroyBoard = GetStoryboard(@"Main");
+    goodsDetailsViewController *goodsDetailsVC = [stroyBoard instantiateViewControllerWithIdentifier:@"goodsDetailsViewController"];
+    [goodsDetailsVC setIsAct:@"1"];
+    [goodsDetailsVC setGetID:[allDatas[sender.tag-1] objectForKey:@"ActivityProduct"][0]];
+    [self.navigationController pushViewController:goodsDetailsVC animated:YES];
 }
-
+- (IBAction)goShoppingCart:(id)sender {
+    [self.navigationController popViewControllerAnimated:YES];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"jumpToShoppingCart" object:nil];
+}
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

@@ -18,7 +18,7 @@
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="[精选]智利车厘子+芒果" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kCF-aR-5Kd">
                         <rect key="frame" x="8" y="8" width="155.5" height="18"/>
                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BvX-Pc-Ycc">
@@ -38,7 +38,7 @@
                             <constraint firstAttribute="width" constant="19" id="Dzj-ZS-3Vc"/>
                         </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="l3X-e8-8G0">
@@ -48,7 +48,7 @@
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="￥9.99" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sIB-2r-kqF">
                         <rect key="frame" x="170.5" y="9" width="46.5" height="18"/>
                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
                 </subviews>
@@ -69,7 +69,19 @@
                     <constraint firstItem="sIB-2r-kqF" firstAttribute="leading" secondItem="kCF-aR-5Kd" secondAttribute="trailing" constant="7" id="lzQ-t4-eqZ"/>
                     <constraint firstAttribute="trailing" secondItem="d0z-yo-9BR" secondAttribute="trailing" constant="8" id="wqI-bw-Ro6"/>
                 </constraints>
+                <variation key="default">
+                    <mask key="constraints">
+                        <exclude reference="lzQ-t4-eqZ"/>
+                    </mask>
+                </variation>
             </tableViewCellContentView>
+            <connections>
+                <outlet property="minButton" destination="l3X-e8-8G0" id="Gu2-AT-sXj"/>
+                <outlet property="name" destination="kCF-aR-5Kd" id="Y1G-sv-PKW"/>
+                <outlet property="number" destination="P42-5T-x6y" id="jnO-Ts-g8s"/>
+                <outlet property="plusButton" destination="d0z-yo-9BR" id="St7-D8-NiA"/>
+                <outlet property="price" destination="sIB-2r-kqF" id="pJA-uO-uY1"/>
+            </connections>
             <point key="canvasLocation" x="227" y="339.5"/>
         </tableViewCell>
     </objects>

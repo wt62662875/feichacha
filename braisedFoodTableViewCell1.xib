@@ -17,9 +17,6 @@
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PbQ-xt-HDL">
                         <rect key="frame" x="8" y="8" width="304" height="115.5"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="卤味熟食_03.png" translatesAutoresizingMaskIntoConstraints="NO" id="sQt-hL-tfD">
-                                <rect key="frame" x="0.0" y="0.0" width="304" height="115.5"/>
-                            </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="abB-fi-JOH">
                                 <rect key="frame" x="8" y="8" width="120" height="100"/>
                                 <constraints>
@@ -63,6 +60,12 @@
                                 <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5cz-tc-oZ4">
+                                <rect key="frame" x="8" y="8" width="120" height="99.5"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="120" id="pwk-VE-C6l"/>
+                                </constraints>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -70,21 +73,20 @@
                             <constraint firstItem="Vn1-62-d5c" firstAttribute="leading" secondItem="abB-fi-JOH" secondAttribute="trailing" constant="8" id="32F-rn-04r"/>
                             <constraint firstItem="Vn1-62-d5c" firstAttribute="top" secondItem="lhb-mN-jNp" secondAttribute="bottom" constant="4" id="8O4-Dq-LDi"/>
                             <constraint firstItem="lhb-mN-jNp" firstAttribute="top" secondItem="PbQ-xt-HDL" secondAttribute="top" constant="8" id="95H-ND-FM0"/>
-                            <constraint firstItem="sQt-hL-tfD" firstAttribute="top" secondItem="PbQ-xt-HDL" secondAttribute="top" id="L6A-Mx-BmW"/>
+                            <constraint firstAttribute="bottom" secondItem="5cz-tc-oZ4" secondAttribute="bottom" constant="8" id="BJz-PK-4bn"/>
                             <constraint firstItem="abB-fi-JOH" firstAttribute="leading" secondItem="PbQ-xt-HDL" secondAttribute="leading" constant="8" id="M7y-rB-dSL"/>
                             <constraint firstItem="abB-fi-JOH" firstAttribute="top" secondItem="PbQ-xt-HDL" secondAttribute="top" constant="8" id="OkT-mC-Wcw"/>
                             <constraint firstItem="6wm-J5-TMn" firstAttribute="top" secondItem="Vn1-62-d5c" secondAttribute="bottom" constant="3" id="QdN-3z-7GQ"/>
+                            <constraint firstItem="5cz-tc-oZ4" firstAttribute="leading" secondItem="PbQ-xt-HDL" secondAttribute="leading" constant="8" id="TnL-U1-Xnd"/>
                             <constraint firstItem="2pd-4F-u40" firstAttribute="top" secondItem="6wm-J5-TMn" secondAttribute="bottom" constant="1" id="VAF-ua-eQF"/>
                             <constraint firstItem="OEu-ol-LDL" firstAttribute="top" secondItem="2pd-4F-u40" secondAttribute="bottom" constant="4" id="XJ1-eS-ble"/>
                             <constraint firstAttribute="trailing" secondItem="lhb-mN-jNp" secondAttribute="trailing" constant="8" id="XxQ-xk-laL"/>
                             <constraint firstItem="OEu-ol-LDL" firstAttribute="leading" secondItem="abB-fi-JOH" secondAttribute="trailing" constant="8" id="Y0n-TD-M2J"/>
                             <constraint firstItem="6wm-J5-TMn" firstAttribute="leading" secondItem="abB-fi-JOH" secondAttribute="trailing" constant="8" id="YqU-at-4tc"/>
                             <constraint firstItem="2pd-4F-u40" firstAttribute="leading" secondItem="abB-fi-JOH" secondAttribute="trailing" constant="8" id="ZeV-ja-vZg"/>
-                            <constraint firstAttribute="trailing" secondItem="sQt-hL-tfD" secondAttribute="trailing" id="eeJ-8B-QDk"/>
-                            <constraint firstAttribute="bottom" secondItem="sQt-hL-tfD" secondAttribute="bottom" id="exY-gn-u3P"/>
                             <constraint firstItem="lhb-mN-jNp" firstAttribute="leading" secondItem="abB-fi-JOH" secondAttribute="trailing" constant="8" id="izP-8v-pC5"/>
-                            <constraint firstItem="sQt-hL-tfD" firstAttribute="leading" secondItem="PbQ-xt-HDL" secondAttribute="leading" id="oc9-Kr-UdL"/>
                             <constraint firstItem="aFz-kl-WMC" firstAttribute="leading" secondItem="2pd-4F-u40" secondAttribute="trailing" constant="8" id="s4x-5b-dMa"/>
+                            <constraint firstItem="5cz-tc-oZ4" firstAttribute="top" secondItem="PbQ-xt-HDL" secondAttribute="top" constant="8" id="xap-1q-fFm"/>
                             <constraint firstAttribute="bottom" secondItem="abB-fi-JOH" secondAttribute="bottom" constant="7.5" id="xni-DE-WlN"/>
                         </constraints>
                     </view>
@@ -99,6 +101,7 @@
             <color key="backgroundColor" red="0.97254901959999995" green="0.94901960780000005" blue="0.8862745098" alpha="1" colorSpace="calibratedRGB"/>
             <connections>
                 <outlet property="buyButton" destination="OEu-ol-LDL" id="zbS-PA-rzn"/>
+                <outlet property="goodsClick" destination="5cz-tc-oZ4" id="dHW-Bp-3tq"/>
                 <outlet property="image" destination="abB-fi-JOH" id="p0n-kf-zbT"/>
                 <outlet property="name" destination="lhb-mN-jNp" id="4Hv-9s-wKy"/>
                 <outlet property="oldPrice" destination="6wm-J5-TMn" id="PDY-rl-nka"/>
@@ -110,6 +113,5 @@
     </objects>
     <resources>
         <image name="huawei_btn.png" width="88" height="21"/>
-        <image name="卤味熟食_03.png" width="903" height="400"/>
     </resources>
 </document>

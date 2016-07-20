@@ -15,18 +15,21 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="faQ-P3-MhM">
-                        <rect key="frame" x="30" y="8" width="37.5" height="18"/>
+                        <rect key="frame" x="30" y="8" width="282" height="18"/>
                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                         <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VL5-td-qVl">
-                        <rect key="frame" x="8" y="26" width="31" height="14.5"/>
+                        <rect key="frame" x="8" y="26" width="304" height="14.5"/>
                         <fontDescription key="fontDescription" type="system" pointSize="12"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="map_icon.png" translatesAutoresizingMaskIntoConstraints="NO" id="59Q-Ui-B2F">
                         <rect key="frame" x="8" y="8" width="14" height="19"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="14" id="RwK-rz-R5X"/>
+                        </constraints>
                     </imageView>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1KL-Qh-tSG">
                         <rect key="frame" x="8" y="47" width="312" height="1"/>
@@ -37,11 +40,13 @@
                     </view>
                 </subviews>
                 <constraints>
+                    <constraint firstAttribute="trailing" secondItem="VL5-td-qVl" secondAttribute="trailing" constant="8" id="AmU-bt-SdK"/>
                     <constraint firstItem="faQ-P3-MhM" firstAttribute="leading" secondItem="59Q-Ui-B2F" secondAttribute="trailing" constant="8" id="Aux-HW-2og"/>
                     <constraint firstItem="1KL-Qh-tSG" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="8" id="WSf-DU-uyF"/>
                     <constraint firstItem="VL5-td-qVl" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="8" id="cF8-Vx-vRS"/>
                     <constraint firstItem="59Q-Ui-B2F" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="8" id="cYK-f9-STB"/>
                     <constraint firstAttribute="bottom" secondItem="1KL-Qh-tSG" secondAttribute="bottom" id="ftK-3Z-DZv"/>
+                    <constraint firstAttribute="trailing" secondItem="faQ-P3-MhM" secondAttribute="trailing" constant="8" id="g6J-wt-QpB"/>
                     <constraint firstAttribute="trailing" secondItem="1KL-Qh-tSG" secondAttribute="trailing" id="gn0-km-gw3"/>
                     <constraint firstItem="VL5-td-qVl" firstAttribute="top" secondItem="faQ-P3-MhM" secondAttribute="bottom" id="mBL-n6-abB"/>
                     <constraint firstItem="59Q-Ui-B2F" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="8" id="n5R-lf-1n9"/>

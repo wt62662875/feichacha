@@ -10,6 +10,7 @@
 #import "germanBeerCollectionViewCell.h"
 #import "germanBeerHeadCollectionReusableView.h"
 #import "germanBeerFootCollectionReusableView.h"
+#import "goodsDetailsViewController.h"
 
 @interface germanBeerViewController ()<UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout>
 {
@@ -27,6 +28,11 @@
     [super viewDidLoad];
     _badgeLabel.layer.cornerRadius = 8;
     _badgeLabel.layer.masksToBounds = YES;
+    if ([[USERDEFAULTS objectForKey:@"PurchaseQuantity"] intValue] == 0) {
+        _badgeLabel.hidden = YES;
+    }else{
+        _badgeLabel.text = [NSString stringWithFormat:@"%@",[USERDEFAULTS objectForKey:@"PurchaseQuantity"]];
+    }
     // Do any additional setup after loading the view.
     [self ActivityListDatas];
 
@@ -64,42 +70,12 @@
 
     cell.name.text = [datas[indexPath.row] objectForKey:@"Name"];
     cell.price.text = [NSString stringWithFormat:@"￥%@",[datas[indexPath.row] objectForKey:@"Price"]];
+    [cell.backImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[datas[indexPath.row] objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"beer_por1"]];
     
-    switch (indexPath.row) {
-        case 0:
-            [cell.backImageView setImage:[UIImage imageNamed:@"beer_por1"]];
-            break;
-        case 1:
-            [cell.backImageView setImage:[UIImage imageNamed:@"beer_por2"]];
-            break;
-        case 2:
-            [cell.backImageView setImage:[UIImage imageNamed:@"beer_por3"]];
-            break;
-        case 3:
-            [cell.backImageView setImage:[UIImage imageNamed:@"beer_por4"]];
-            break;
-        case 4:
-            [cell.backImageView setImage:[UIImage imageNamed:@"beer_por5"]];
-            break;
-        case 5:
-            [cell.backImageView setImage:[UIImage imageNamed:@"beer_por6"]];
-            break;
-        case 6:
-            [cell.backImageView setImage:[UIImage imageNamed:@"beer_por7"]];
-            break;
-        case 7:
-            [cell.backImageView setImage:[UIImage imageNamed:@"beer_por8"]];
-            break;
-        case 8:
-            [cell.backImageView setImage:[UIImage imageNamed:@"beer_por9"]];
-            break;
-        case 9:
-            [cell.backImageView setImage:[UIImage imageNamed:@"beer_por10"]];
-            break;
-        default:
-            break;
-    }
-   
+    cell.buyButton.tag = indexPath.row;
+    [cell.buyButton addTarget:self action:@selector(buyButton:) forControlEvents:UIControlEventTouchUpInside];
+    cell.goodsClick.tag = indexPath.row;
+    [cell.goodsClick addTarget:self action:@selector(goodsClick:) forControlEvents:UIControlEventTouchUpInside];
     return  cell;
 }
 //定义每个UICollectionView 的大小
@@ -155,6 +131,23 @@
     return size;
 }
 
+-(void)buyButton:(UIButton *)sender{
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"FlashShoppingCartGoodsAdd" object:datas[sender.tag]];
+    _badgeLabel.hidden = NO;
+    _badgeLabel.text = [NSString stringWithFormat:@"%@",[USERDEFAULTS objectForKey:@"PurchaseQuantity"]];
+
+}
+-(void)goodsClick:(UIButton *)sender{
+    UIStoryboard *stroyBoard = GetStoryboard(@"Main");
+    goodsDetailsViewController *goodsDetailsVC = [stroyBoard instantiateViewControllerWithIdentifier:@"goodsDetailsViewController"];
+    [goodsDetailsVC setIsAct:@"1"];
+    [goodsDetailsVC setGetID:datas[sender.tag]];
+    [self.navigationController pushViewController:goodsDetailsVC animated:YES];
+}
+- (IBAction)goShoppingCart:(id)sender {
+    [self.navigationController popViewControllerAnimated:YES];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"jumpToShoppingCart" object:nil];
+}
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

@@ -32,6 +32,7 @@
     [super viewDidLoad];
     [self initLayer];
     stateOrDetails = YES;
+    NSLog(@"%@",_getDatas);
 
     // Do any additional setup after loading the view.
 }

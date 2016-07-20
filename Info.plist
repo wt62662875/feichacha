@@ -34,6 +34,18 @@
 				<string>feichacha</string>
 			</array>
 		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLIconFile</key>
+			<string>logo@3x</string>
+			<key>CFBundleURLName</key>
+			<string>feichacha</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>wxfbd72a1955031c01</string>
+			</array>
+		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>1.0.0</string>

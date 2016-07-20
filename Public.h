@@ -9,10 +9,16 @@
 #pragma    isRegister   是否登陆   1登陆   0未登录
 #pragma    shopID   当前所选店铺ID
 #pragma    telPhoneNumber   电话
+#pragma    UserID     用户ID
 
+#pragma    delectDetailedAddress   选中详细地址
 #pragma    CurrentAddress   当前地址
 #pragma    CurrentLongitude   当前经度
 #pragma    CurrentLatitude   当前纬度
+
+#pragma    FlashShoppingCartGoods           购物车闪送商品
+#pragma    ReservationShoppingCartGoods     购物车预定商品
+#pragma    PurchaseQuantity                 购买量
 
 
 #import "AppUtils.h"
@@ -36,7 +42,6 @@
 #define IMGURL @"http://manage.feichacha.com"
 
 
-
 //#define SeviceURL @"http://192.168.1.150:996"
 
 #define RGBCOLORA(r,g,b,a) [UIColor colorWithRed:(r)/255.0f green:(g)/255.0f blue:(b)/255.0f alpha:(a)]
@@ -45,7 +50,7 @@
 #define X_CLIENT_TOKEN @"Authorization"
 
 // 黄色/
-#define YELLOW_COLOR	RGBCOLORA(194,143,95,1
+#define YELLOW_COLOR	RGBCOLORA(194,143,95,1)
 // view灰背景色
 #define BACKGROUND_DARK_COLOR	RGBCOLORA(242,240,240,1)
 // 背景色/

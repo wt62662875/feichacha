@@ -17,5 +17,6 @@
 @property (weak, nonatomic) IBOutlet UIButton *buyButton;
 @property (weak, nonatomic) IBOutlet UIView *backView;
 
+@property (weak, nonatomic) IBOutlet UIButton *goodsClick;
 
 @end

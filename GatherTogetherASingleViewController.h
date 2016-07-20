@@ -9,5 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @interface GatherTogetherASingleViewController : UIViewController
+@property (weak, nonatomic) NSString *isAct;
 
 @end

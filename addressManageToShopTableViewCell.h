@@ -9,5 +9,9 @@
 #import <UIKit/UIKit.h>
 
 @interface addressManageToShopTableViewCell : UITableViewCell
+@property (weak, nonatomic) IBOutlet UILabel *shopName;
+@property (weak, nonatomic) IBOutlet UILabel *time;
+@property (weak, nonatomic) IBOutlet UILabel *address;
+@property (weak, nonatomic) IBOutlet UILabel *distance;
 
 @end

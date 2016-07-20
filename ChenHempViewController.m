@@ -27,6 +27,11 @@
     [super viewDidLoad];
     _badgeLabel.layer.cornerRadius = 8;
     _badgeLabel.layer.masksToBounds = YES;
+    if ([[USERDEFAULTS objectForKey:@"PurchaseQuantity"] intValue] == 0) {
+        _badgeLabel.hidden = YES;
+    }else{
+        _badgeLabel.text = [NSString stringWithFormat:@"%@",[USERDEFAULTS objectForKey:@"PurchaseQuantity"]];
+    }
     // Do any additional setup after loading the view.
     [self ActivityListDatas];
 
@@ -81,7 +86,8 @@
     
     
     [cell.buyButton addTarget:self action:@selector(cellBuyButton:) forControlEvents:UIControlEventTouchUpInside];
-    
+    cell.goodsClick.tag = indexPath.row;
+    [cell.goodsClick addTarget:self action:@selector(goodsClick:) forControlEvents:UIControlEventTouchUpInside];
     return  cell;
 }
 //定义每个UICollectionView 的大小
@@ -103,6 +109,7 @@
     headView.price.text = [NSString stringWithFormat:@"热卖价：%@",[datas[0] objectForKey:@"Price"]];
     [headView.titleImage sd_setImageWithURL:[NSURL URLWithString:@"http://manage.feichacha.com/html/shop/images/chen_banner.jpg"]];
     [headView.buyButton addTarget:self action:@selector(buyButton:) forControlEvents:UIControlEventTouchUpInside];
+    [headView.goodsClick addTarget:self action:@selector(titleGoodsClick:) forControlEvents:UIControlEventTouchUpInside];
     
     return  headView;
 }
@@ -116,6 +123,9 @@
     UIStoryboard *stroyBoard = GetStoryboard(@"Main");
     baseViewController *baseVC = [stroyBoard instantiateViewControllerWithIdentifier:@"baseViewController"];
     [baseVC addProductsAnimation:headView.iamge selfView:self.view pointX:SCREENWIDTH-44 pointY:SCREENHTIGHT-44];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"FlashShoppingCartGoodsAdd" object:datas[0]];
+    _badgeLabel.hidden = NO;
+    _badgeLabel.text = [NSString stringWithFormat:@"%@",[USERDEFAULTS objectForKey:@"PurchaseQuantity"]];
 }
 #pragma mark cell buybutton
 -(void)cellBuyButton:(UIButton *)sender{
@@ -126,9 +136,29 @@
     NSIndexPath *indexpath = [self.collectionView indexPathForCell:tempcell];//获取cell对应的indexpath;
     ChenHempCollectionViewCell *cell = (ChenHempCollectionViewCell *)[_collectionView cellForItemAtIndexPath:indexpath];
     [baseVC addProductsAnimation:cell.image selfView:self.view pointX:SCREENWIDTH-44 pointY:SCREENHTIGHT-44];
-    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"FlashShoppingCartGoodsAdd" object:datas[indexpath.row]];
+    _badgeLabel.hidden = NO;
+    _badgeLabel.text = [NSString stringWithFormat:@"%@",[USERDEFAULTS objectForKey:@"PurchaseQuantity"]];
+}
+-(void)goodsClick:(UIButton *)sender{
+    UIStoryboard *stroyBoard = GetStoryboard(@"Main");
+    goodsDetailsViewController *goodsDetailsVC = [stroyBoard instantiateViewControllerWithIdentifier:@"goodsDetailsViewController"];
+    [goodsDetailsVC setIsAct:@"1"];
+    [goodsDetailsVC setGetID:datas[sender.tag]];
+    [self.navigationController pushViewController:goodsDetailsVC animated:YES];
+}
+-(void)titleGoodsClick:(UIButton *)sender{
+    UIStoryboard *stroyBoard = GetStoryboard(@"Main");
+    goodsDetailsViewController *goodsDetailsVC = [stroyBoard instantiateViewControllerWithIdentifier:@"goodsDetailsViewController"];
+    [goodsDetailsVC setIsAct:@"1"];
+    [goodsDetailsVC setGetID:datas[0]];
+    [self.navigationController pushViewController:goodsDetailsVC animated:YES];
 }
 
+- (IBAction)goShoppingCart:(id)sender {
+    [self.navigationController popViewControllerAnimated:YES];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"jumpToShoppingCart" object:nil];
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

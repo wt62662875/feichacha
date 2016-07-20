@@ -9,6 +9,7 @@
 #import "taiwaneseFoodViewController.h"
 #import "baseViewController.h"
 #import "taiwaneseFoodTableViewCell.h"
+#import "goodsDetailsViewController.h"
 
 @interface taiwaneseFoodViewController ()<UITableViewDataSource,UITableViewDelegate>
 {
@@ -27,6 +28,11 @@
     [super viewDidLoad];
     _badgeLabel.layer.cornerRadius = 8;
     _badgeLabel.layer.masksToBounds = YES;
+    if ([[USERDEFAULTS objectForKey:@"PurchaseQuantity"] intValue] == 0) {
+        _badgeLabel.hidden = YES;
+    }else{
+        _badgeLabel.text = [NSString stringWithFormat:@"%@",[USERDEFAULTS objectForKey:@"PurchaseQuantity"]];
+    }
     UIView *tableHeadView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREENWIDTH,SCREENWIDTH*0.509)];
     UIImageView *imageView = [[UIImageView alloc]initWithFrame:tableHeadView.frame];
     [imageView sd_setImageWithURL:[NSURL URLWithString:@"http://manage.feichacha.com/html/shop/images/twms_banner.png"]];
@@ -45,11 +51,8 @@
             datas = [[responseObject objectForKey:@"AppendData"] objectForKey:@"ActivityProduct"];
             lastDatas = [datas mutableCopy];
             [lastDatas removeObjectsInRange:NSMakeRange(0, 2)];
-            
             [_tableView reloadData];
-
         }else {
-            
             [SVProgressHUD showErrorWithStatus:@"请求失败，请稍后重试" maskType:SVProgressHUDMaskTypeNone];
         }
         [SVProgressHUD dismiss];
@@ -116,12 +119,10 @@
         }
     }
     
-
-    
-    
     [cell.buyButton addTarget:self action:@selector(buyButton:) forControlEvents:UIControlEventTouchUpInside];
     [cell.buyButton2 addTarget:self action:@selector(buyButton2:) forControlEvents:UIControlEventTouchUpInside];
-
+    [cell.goodsClick addTarget:self action:@selector(goodsClick:) forControlEvents:UIControlEventTouchUpInside];
+    [cell.goodsClick2 addTarget:self action:@selector(goodsClick2:) forControlEvents:UIControlEventTouchUpInside];
     return cell;
 }
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
@@ -167,7 +168,14 @@
     baseViewController *baseVC = [stroyBoard instantiateViewControllerWithIdentifier:@"baseViewController"];
     taiwaneseFoodTableViewCell *cell = (taiwaneseFoodTableViewCell *)[_tableView cellForRowAtIndexPath:indexPath];
     [baseVC addProductsAnimation:cell.image1 selfView:self.view pointX:SCREENWIDTH-44 pointY:SCREENHTIGHT-44];
-    
+
+    if (indexPath.section == 0) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"FlashShoppingCartGoodsAdd" object:datas[0]];
+    }else{
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"FlashShoppingCartGoodsAdd" object:lastDatas[indexPath.row*2]];
+    }
+    _badgeLabel.hidden = NO;
+    _badgeLabel.text = [NSString stringWithFormat:@"%@",[USERDEFAULTS objectForKey:@"PurchaseQuantity"]];
 }
 -(void)buyButton2:(UIButton*)sender{
     UIView *temp = [[[[sender superview] superview] superview] superview];
@@ -178,7 +186,48 @@
     baseViewController *baseVC = [stroyBoard instantiateViewControllerWithIdentifier:@"baseViewController"];
     taiwaneseFoodTableViewCell *cell = (taiwaneseFoodTableViewCell *)[_tableView cellForRowAtIndexPath:indexPath];
     [baseVC addProductsAnimation:cell.image2 selfView:self.view pointX:SCREENWIDTH-44 pointY:SCREENHTIGHT-44];
+    if (indexPath.section == 0) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"FlashShoppingCartGoodsAdd" object:datas[1]];
+    }else{
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"FlashShoppingCartGoodsAdd" object:lastDatas[indexPath.row*2+1]];
+    }
+    _badgeLabel.hidden = NO;
+    _badgeLabel.text = [NSString stringWithFormat:@"%@",[USERDEFAULTS objectForKey:@"PurchaseQuantity"]];
 }
+-(void)goodsClick:(UIButton *)sender{
+    UIView *temp = [[[sender superview] superview] superview];
+    UITableViewCell *tempCell = (UITableViewCell *)[temp superview];//获取cell
+    NSIndexPath *indexPath = [_tableView indexPathForCell:tempCell];//获取cell对应的section
+    UIStoryboard *stroyBoard = GetStoryboard(@"Main");
+    goodsDetailsViewController *goodsDetailsVC = [stroyBoard instantiateViewControllerWithIdentifier:@"goodsDetailsViewController"];
+    [goodsDetailsVC setIsAct:@"1"];
+    if (indexPath.section == 0) {
+        [goodsDetailsVC setGetID:datas[0]];
+    }else{
+        [goodsDetailsVC setGetID:lastDatas[indexPath.row*2]];
+    }
+    [self.navigationController pushViewController:goodsDetailsVC animated:YES];
+}
+-(void)goodsClick2:(UIButton *)sender{
+    UIView *temp = [[[sender superview] superview] superview];
+    UITableViewCell *tempCell = (UITableViewCell *)[temp superview];//获取cell
+    NSIndexPath *indexPath = [_tableView indexPathForCell:tempCell];//获取cell对应的section
+    UIStoryboard *stroyBoard = GetStoryboard(@"Main");
+    goodsDetailsViewController *goodsDetailsVC = [stroyBoard instantiateViewControllerWithIdentifier:@"goodsDetailsViewController"];
+    [goodsDetailsVC setIsAct:@"1"];
+    if (indexPath.section == 0) {
+        [goodsDetailsVC setGetID:datas[1]];
+    }else{
+        [goodsDetailsVC setGetID:lastDatas[indexPath.row*2+1]];
+    }
+    [self.navigationController pushViewController:goodsDetailsVC animated:YES];
+
+}
+- (IBAction)goShoppingCart:(id)sender {
+    [self.navigationController popViewControllerAnimated:YES];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"jumpToShoppingCart" object:nil];
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

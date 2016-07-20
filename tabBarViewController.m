@@ -32,6 +32,7 @@
     UIButton *button4;
     UIButton *button5;
 
+    UILabel *bedgeLbael;
 }
 @end
 
@@ -46,10 +47,27 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(initFiveButton:) name:@"initFiveButton"object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(initFourButton:) name:@"initFourButton"object:nil];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(jumpToBaseView:) name:@"jumpToBaseView"object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(jumpToFlashSmallSupper:) name:@"jumpToFlashSmallSupper"object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(jumpToShoppingCart:) name:@"jumpToShoppingCart"object:nil];
     
-}
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(FlashShoppingCartGoodsAdd:) name:@"FlashShoppingCartGoodsAdd"object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(ReservationShoppingCartGoodsAdd:) name:@"ReservationShoppingCartGoodsAdd"object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(FlashShoppingCartGoodsMin:) name:@"FlashShoppingCartGoodsMin"object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(ReservationShoppingCartGoodsMin:) name:@"ReservationShoppingCartGoodsMin"object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(FlashShoppingCartGoodsDelete:) name:@"FlashShoppingCartGoodsDelete"object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(ReservationShoppingCartGoodsDelete:) name:@"ReservationShoppingCartGoodsDelete"object:nil];
 
+//    [USERDEFAULTS setObject:nil forKey:@"FlashShoppingCartGoods"];
+//    [USERDEFAULTS setObject:nil forKey:@"ReservationShoppingCartGoods"];
+}
+-(void)jumpToShoppingCart:(NSNotification*)notification{
+    [self btn4click:nil];
+}
+-(void)jumpToBaseView:(NSNotification*)notification{
+    [self btn1click:nil];
+}
 -(void)jumpToFlashSmallSupper:(NSNotification*)notification{
     [self btn2click:nil];
 }
@@ -112,6 +130,15 @@
     label3.textAlignment = NSTextAlignmentCenter;
     label4.textAlignment = NSTextAlignmentCenter;
     label5.textAlignment = NSTextAlignmentCenter;
+    
+    bedgeLbael = [[UILabel alloc]initWithFrame:CGRectMake(button5.frame.size.width/2+5, 4, 16, 16)];
+    bedgeLbael.backgroundColor = [UIColor redColor];
+    bedgeLbael.textColor = [UIColor whiteColor];
+    bedgeLbael.text = @"99";
+    bedgeLbael.layer.cornerRadius = 8;
+    bedgeLbael.layer.masksToBounds = YES;
+    bedgeLbael.font = [UIFont boldSystemFontOfSize:10];
+    bedgeLbael.textAlignment = NSTextAlignmentCenter;
 
     
     [button1 addTarget:self action:@selector(btn1click:) forControlEvents:UIControlEventTouchUpInside];
@@ -136,6 +163,8 @@
     [button3 addSubview:label3];
     [button4 addSubview:label4];
     [button5 addSubview:label5];
+    [button4 addSubview:bedgeLbael];
+    [self bedgeNumber];
 
 }
 -(void)initFourButton{
@@ -187,6 +216,14 @@
     [button4 addTarget:self action:@selector(btn4click:) forControlEvents:UIControlEventTouchUpInside];
     [button5 addTarget:self action:@selector(btn5click:) forControlEvents:UIControlEventTouchUpInside];
     
+    bedgeLbael = [[UILabel alloc]initWithFrame:CGRectMake(button5.frame.size.width/2+5, 4, 16, 16)];
+    bedgeLbael.backgroundColor = [UIColor redColor];
+    bedgeLbael.textColor = [UIColor whiteColor];
+    bedgeLbael.text = @"99";
+    bedgeLbael.layer.cornerRadius = 8;
+    bedgeLbael.layer.masksToBounds = YES;
+    bedgeLbael.font = [UIFont boldSystemFontOfSize:10];
+    bedgeLbael.textAlignment = NSTextAlignmentCenter;
     
     [tabbarView addSubview:button1];
     [tabbarView addSubview:button2];
@@ -200,7 +237,9 @@
     [button2 addSubview:label2];
     [button4 addSubview:label4];
     [button5 addSubview:label5];
-    
+    [button4 addSubview:bedgeLbael];
+    [self bedgeNumber];
+
 }
 
 -(void)btn1click:(UIButton*)sender{
@@ -257,7 +296,7 @@
         VerifyTheMobilePhoneViewController *VerifyTheMobilePhoneVC = [[VerifyTheMobilePhoneViewController alloc] initWithNibName:@"VerifyTheMobilePhoneViewController"   bundle:nil];
         [self.navigationController pushViewController:VerifyTheMobilePhoneVC animated:YES];
     }
-
+    
 }
 - (void)toMakeAnApp:(UIImageView *)view {
     /* 放大缩小 */
@@ -291,6 +330,177 @@
     
     
 }
+#pragma mark bedgeLbael数量计算
+-(void)bedgeNumber{
+    bedgeLbael.hidden = NO;
+    int bedgeNumber = 0;
+    if ([USERDEFAULTS objectForKey:@"FlashShoppingCartGoods"] && [USERDEFAULTS objectForKey:@"ReservationShoppingCartGoods"]) {
+        NSArray *tempArray = [USERDEFAULTS objectForKey:@"FlashShoppingCartGoods"];
+        NSArray *tempArray2 = [USERDEFAULTS objectForKey:@"ReservationShoppingCartGoods"];
+        for (int i = 0; i<tempArray.count; i++) {
+            bedgeNumber += [[tempArray[i] objectForKey:@"PurchaseQuantity"] intValue];
+        }
+        for (int i = 0; i<tempArray2.count; i++) {
+            bedgeNumber += [[tempArray2[i] objectForKey:@"PurchaseQuantity"] intValue];
+        }
+    }else if([USERDEFAULTS objectForKey:@"FlashShoppingCartGoods"]){
+        NSArray *tempArray = [USERDEFAULTS objectForKey:@"FlashShoppingCartGoods"];
+        for (int i = 0; i<tempArray.count; i++) {
+            bedgeNumber += [[tempArray[i] objectForKey:@"PurchaseQuantity"] intValue];
+        }
+    }else if([USERDEFAULTS objectForKey:@"ReservationShoppingCartGoods"]){
+        NSArray *tempArray2 = [USERDEFAULTS objectForKey:@"ReservationShoppingCartGoods"];
+        for (int i = 0; i<tempArray2.count; i++) {
+            bedgeNumber += [[tempArray2[i] objectForKey:@"PurchaseQuantity"] intValue];
+        }
+    }else{
+        bedgeLbael.hidden = YES;
+    }
+    if (bedgeNumber == 0) {
+        bedgeLbael.hidden = YES;
+    }
+    [USERDEFAULTS setInteger:bedgeNumber forKey:@"PurchaseQuantity"];
+    bedgeLbael.text = [NSString stringWithFormat:@"%d",bedgeNumber];
+}
+
+
+#pragma mark 闪送商品添加
+-(void)FlashShoppingCartGoodsAdd:(NSNotification *)notification{
+    if ([USERDEFAULTS objectForKey:@"FlashShoppingCartGoods"]) {
+        NSMutableArray *tempArray = [[USERDEFAULTS objectForKey:@"FlashShoppingCartGoods"] mutableCopy];
+        NSMutableArray *isContains = [[NSMutableArray alloc]init];
+        for (int i = 0; i<tempArray.count; i++) {
+            [isContains addObject:[tempArray[i] objectForKey:@"Fguid"]];
+        }
+        if ([isContains containsObject:[notification.object objectForKey:@"Fguid"]]) {
+            for (int i = 0; i<tempArray.count; i++) {
+                if ([[tempArray[i] objectForKey:@"Fguid"] isEqualToString:[notification.object objectForKey:@"Fguid"]]) {
+                    NSMutableDictionary * tempDic = [tempArray[i] mutableCopy];
+                    NSString * tempStr = [NSString stringWithFormat:@"%d",[[tempDic objectForKey:@"PurchaseQuantity"] intValue]+1];
+                    [tempDic setObject:tempStr forKey:@"PurchaseQuantity"];
+                    tempArray[i] = [tempDic copy];
+                }
+            }
+        }else{
+            NSMutableDictionary *tempDic = [notification.object mutableCopy];
+            [tempDic setObject:@"1" forKey:@"PurchaseQuantity"];
+            [tempArray addObject:tempDic];
+        }
+        
+        [USERDEFAULTS setObject:[tempArray copy] forKey:@"FlashShoppingCartGoods"];
+    }else{
+        NSMutableArray *tempArray = [[NSMutableArray alloc]init];
+        NSMutableDictionary *tempDic = [notification.object mutableCopy];
+        [tempDic setObject:@"1" forKey:@"PurchaseQuantity"];
+        [tempArray addObject:tempDic];
+        [USERDEFAULTS setObject:[tempArray copy] forKey:@"FlashShoppingCartGoods"];
+    }
+    [self bedgeNumber];
+}
+#pragma mark 预定商品添加
+-(void)ReservationShoppingCartGoodsAdd:(NSNotification*)notification{
+    if ([USERDEFAULTS objectForKey:@"ReservationShoppingCartGoods"]) {
+        NSMutableArray *tempArray = [[USERDEFAULTS objectForKey:@"ReservationShoppingCartGoods"] mutableCopy];
+        NSMutableArray *isContains = [[NSMutableArray alloc]init];
+        for (int i = 0; i<tempArray.count; i++) {
+            [isContains addObject:[tempArray[i] objectForKey:@"Fguid"]];
+        }
+        if ([isContains containsObject:[notification.object objectForKey:@"Fguid"]]) {
+            for (int i = 0; i<tempArray.count; i++) {
+                if ([[tempArray[i] objectForKey:@"Fguid"] isEqualToString:[notification.object objectForKey:@"Fguid"]]) {
+                    NSMutableDictionary * tempDic = [tempArray[i] mutableCopy];
+                    NSString * tempStr = [NSString stringWithFormat:@"%d",[[tempDic objectForKey:@"PurchaseQuantity"] intValue]+1];
+                    [tempDic setObject:tempStr forKey:@"PurchaseQuantity"];
+                    tempArray[i] = [tempDic copy];
+                }
+            }
+        }else{
+            NSMutableDictionary *tempDic = [notification.object mutableCopy];
+            [tempDic setObject:@"1" forKey:@"PurchaseQuantity"];
+            [tempArray addObject:tempDic];
+        }
+        
+        [USERDEFAULTS setObject:[tempArray copy] forKey:@"ReservationShoppingCartGoods"];
+    }else{
+        NSMutableArray *tempArray = [[NSMutableArray alloc]init];
+        NSMutableDictionary *tempDic = [notification.object mutableCopy];
+        [tempDic setObject:@"1" forKey:@"PurchaseQuantity"];
+        [tempArray addObject:tempDic];
+        [USERDEFAULTS setObject:[tempArray copy] forKey:@"ReservationShoppingCartGoods"];
+    }
+    [self bedgeNumber];
+}
+#pragma mark 闪送商品减
+-(void)FlashShoppingCartGoodsMin:(NSNotification *)notification{
+    NSMutableArray *tempArray = [[USERDEFAULTS objectForKey:@"FlashShoppingCartGoods"] mutableCopy];
+    if ([[notification.object objectForKey:@"PurchaseQuantity"] intValue] == 1) {
+        for (int i = 0; i<tempArray.count; i++) {
+            if ([[tempArray[i] objectForKey:@"Fguid"] isEqualToString:[notification.object objectForKey:@"Fguid"]]) {
+                [tempArray removeObjectAtIndex:i];
+            }
+        }
+    }else{
+        for (int i = 0; i<tempArray.count; i++) {
+            if ([[tempArray[i] objectForKey:@"Fguid"] isEqualToString:[notification.object objectForKey:@"Fguid"]]) {
+                NSMutableDictionary * tempDic = [tempArray[i] mutableCopy];
+                NSString * tempStr = [NSString stringWithFormat:@"%d",[[tempDic objectForKey:@"PurchaseQuantity"] intValue]-1];
+                [tempDic setObject:tempStr forKey:@"PurchaseQuantity"];
+                tempArray[i] = [tempDic copy];
+            }
+            
+        }
+    }
+    [USERDEFAULTS setObject:[tempArray copy] forKey:@"FlashShoppingCartGoods"];
+    [self bedgeNumber];
+}
+#pragma mark 预定商品减
+-(void)ReservationShoppingCartGoodsMin:(NSNotification *)notification{
+    NSMutableArray *tempArray = [[USERDEFAULTS objectForKey:@"ReservationShoppingCartGoods"] mutableCopy];
+    if ([[notification.object objectForKey:@"PurchaseQuantity"] intValue] == 1) {
+        for (int i = 0; i<tempArray.count; i++) {
+            if ([[tempArray[i] objectForKey:@"Fguid"] isEqualToString:[notification.object objectForKey:@"Fguid"]]) {
+                [tempArray removeObjectAtIndex:i];
+            }
+        }
+    }else{
+        for (int i = 0; i<tempArray.count; i++) {
+            if ([[tempArray[i] objectForKey:@"Fguid"] isEqualToString:[notification.object objectForKey:@"Fguid"]]) {
+                NSMutableDictionary * tempDic = [tempArray[i] mutableCopy];
+                NSString * tempStr = [NSString stringWithFormat:@"%d",[[tempDic objectForKey:@"PurchaseQuantity"] intValue]-1];
+                [tempDic setObject:tempStr forKey:@"PurchaseQuantity"];
+                tempArray[i] = [tempDic copy];
+            }
+            
+        }
+    }
+    [USERDEFAULTS setObject:[tempArray copy] forKey:@"ReservationShoppingCartGoods"];
+    [self bedgeNumber];
+}
+#pragma mark 闪送商品删除
+-(void)FlashShoppingCartGoodsDelete:(NSNotification *)notification{
+    NSMutableArray *tempArray = [[USERDEFAULTS objectForKey:@"FlashShoppingCartGoods"] mutableCopy];
+    for (int i = 0; i<tempArray.count; i++) {
+        if ([[tempArray[i] objectForKey:@"Fguid"] isEqualToString:[notification.object objectForKey:@"Fguid"]]) {
+            [tempArray removeObjectAtIndex:i];
+        }
+    }
+    [USERDEFAULTS setObject:[tempArray copy] forKey:@"FlashShoppingCartGoods"];
+    [self bedgeNumber];
+
+}
+#pragma mark 预定商品删除
+-(void)ReservationShoppingCartGoodsDelete:(NSNotification *)notification{
+    NSMutableArray *tempArray = [[USERDEFAULTS objectForKey:@"ReservationShoppingCartGoods"] mutableCopy];
+    for (int i = 0; i<tempArray.count; i++) {
+        if ([[tempArray[i] objectForKey:@"Fguid"] isEqualToString:[notification.object objectForKey:@"Fguid"]]) {
+            [tempArray removeObjectAtIndex:i];
+        }
+    }
+    [USERDEFAULTS setObject:[tempArray copy] forKey:@"ReservationShoppingCartGoods"];
+    [self bedgeNumber];
+}
+
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

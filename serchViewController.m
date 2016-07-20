@@ -126,26 +126,30 @@
     [JCView2 removeFromSuperview];
     [clearHistory removeFromSuperview];
     
-    hotSerch = [[UILabel alloc]initWithFrame:CGRectMake(8, 8, SCREENWIDTH, 22)];
-    hotSerch.text = @"热门搜索";
-    hotSerch.font = [UIFont systemFontOfSize:15];
-    hotSerch.textColor = RGBCOLORA(139, 139, 139, 1);
-    [_backScrollView addSubview:hotSerch];
+//    hotSerch = [[UILabel alloc]initWithFrame:CGRectMake(8, 8, SCREENWIDTH, 22)];
+//    hotSerch.text = @"热门搜索";
+//    hotSerch.font = [UIFont systemFontOfSize:15];
+//    hotSerch.textColor = RGBCOLORA(139, 139, 139, 1);
+//    [_backScrollView addSubview:hotSerch];
+//    
+//    JCView = [[JCTagView alloc] initWithFrame:CGRectMake(0, 38, SCREENWIDTH, 0)];
+//    JCView.delegate = self;
+//    JCView.JCSignalTagColor = [UIColor whiteColor];
+//    JCView.JCbackgroundColor = [UIColor clearColor];
+//    [JCView setArrayTagWithLabelArray:self.dataSource];
+//    [_backScrollView addSubview:JCView];
     
-    JCView = [[JCTagView alloc] initWithFrame:CGRectMake(0, 38, SCREENWIDTH, 0)];
-    JCView.delegate = self;
-    JCView.JCSignalTagColor = [UIColor whiteColor];
-    JCView.JCbackgroundColor = [UIColor clearColor];
-    [JCView setArrayTagWithLabelArray:self.dataSource];
-    [_backScrollView addSubview:JCView];
-    
-    historySerch = [[UILabel alloc]initWithFrame:CGRectMake(8, JCView.frame.size.height+50, SCREENWIDTH, 22)];
+//    historySerch = [[UILabel alloc]initWithFrame:CGRectMake(8, JCView.frame.size.height+50, SCREENWIDTH, 22)];
+    historySerch = [[UILabel alloc]initWithFrame:CGRectMake(8, 8, SCREENWIDTH, 22)];
+
     historySerch.text = @"历史搜索";
     historySerch.font = [UIFont systemFontOfSize:15];
     historySerch.textColor = RGBCOLORA(139, 139, 139, 1);
     [_backScrollView addSubview:historySerch];
     
-    JCView2 = [[JCTagView alloc] initWithFrame:CGRectMake(0, historySerch.frame.origin.y+30, SCREENWIDTH, 0)];
+//    JCView2 = [[JCTagView alloc] initWithFrame:CGRectMake(0, historySerch.frame.origin.y+30, SCREENWIDTH, 0)];
+    JCView2 = [[JCTagView alloc] initWithFrame:CGRectMake(0,38, SCREENWIDTH, 0)];
+
     JCView2.delegate = self;
     JCView2.JCSignalTagColor = [UIColor whiteColor];
     JCView2.JCbackgroundColor = [UIColor clearColor];

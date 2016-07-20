@@ -12,13 +12,27 @@
 #import "submitOrderSectionHeadView.h"
 #import "submitOrderSectionFootView.h"
 #import "submitOrderFootView.h"
+#import <AlipaySDK/AlipaySDK.h>
+#import "WXApi.h"
+#import "WXApiObject.h"
 
-@interface submitOrdersViewController ()
+@interface submitOrdersViewController ()<WXApiDelegate>
 {
     submitOrderHeadView *headView;
     submitOrderFootView *footView;
+    
+    NSString *selectPay;
+    
+    NSMutableArray *Direct;
+    NSMutableArray *notDirect;
+    float dirMoney;
+    float notDirMoney;
+    id userLuck;
 }
+//@property (nonatomic, assign) id<WXApiManagerDelegate> delegate;
+
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (weak, nonatomic) IBOutlet UILabel *allPrice;
 
 @end
 
@@ -30,18 +44,80 @@
     self.tableView.tableHeaderView = view;
     footView = [[NSBundle mainBundle] loadNibNamed:@"submitOrderFootView" owner:self options:nil][0];
     [footView setFrame:CGRectMake(0, 0, SCREENWIDTH, 157)];
+    footView.shoppingFee.text = [NSString stringWithFormat:@"￥%@",_getFreight];
     self.tableView.tableFooterView = footView;
-
+    selectPay = @"weChat";
+    [self getUserLuck];
+    
+    Direct = [[NSMutableArray alloc]init];
+    notDirect = [[NSMutableArray alloc]init];
+    for (int i = 0; i<_getDatas.count; i++) {
+        if (![[_getDatas[i] objectForKey:@"IsDeleted"] boolValue] && [[_getDatas[i] allKeys] containsObject:@"IsDeleted"]) {
+            [Direct addObject:_getDatas[i]];
+        }else{
+            [notDirect addObject:_getDatas[i]];
+        }
+    }
     
     // Do any additional setup after loading the view.
+    dirMoney = 0;
+    notDirMoney = 0;
+    if (Direct.count != 0) {
+        for (int i = 0; i<Direct.count; i++) {
+            dirMoney += ([[Direct [i] objectForKey:@"PurchaseQuantity"] floatValue]*[[Direct [i] objectForKey:@"Price"] floatValue]);
+        }
+    }
+    if (notDirect.count != 0) {
+        for (int i = 0; i<notDirect.count; i++) {
+            dirMoney += ([[notDirect [i] objectForKey:@"PurchaseQuantity"] intValue]*[[notDirect [i] objectForKey:@"Price"] floatValue]);
+        }
+    }
+    footView.goodsTotalMoney.text = [NSString stringWithFormat:@"%.2f",dirMoney+notDirMoney];
+    _allPrice.text = [NSString stringWithFormat:@"%.2f",dirMoney+notDirMoney];
+    NSLog(@"%@",[USERDEFAULTS objectForKey:@"CurrentAddress"]);
+}
+-(void)getUserLuck{
+    [SVProgressHUD showWithStatus:@"加载中..."];
+    [[NetworkUtils shareNetworkUtils] UserLucky:^(id responseObject) {
+        NSLog(@"数据:%@",responseObject);
+        if ([[responseObject objectForKey:@"ResultType"]intValue] == 0) {
+            
+        }else {
+            userLuck = nil;
+        }
+        [_tableView reloadData];
+        [SVProgressHUD dismiss];
+    } failure:^(NSString *error) {
+        [SVProgressHUD dismiss];
+    }];
+
 }
 #pragma mark CELL的row数量
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     if (section == 0) {
         return 0;
     }else {
-        return 3;
+        if (section == 1) {
+            if ([self returnSituation] != 4) {
+                return  Direct.count;
+            }else{
+                return  notDirect.count;
+            }
+        }
+        if (section == 2) {
+            if ([self returnSituation] != 3 ||[self returnSituation] != 4 ) {
+                return  0;
+            }else{
+                return  notDirect.count;
+            }
+        }
+        if (section == 3) {
+            if (userLuck != nil) {
+                return 0;
+            }
+        }
     }
+    return 0;
 }
 #pragma mark CELL的高度
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -56,23 +132,65 @@
         cell = [[NSBundle mainBundle] loadNibNamed:@"submitOrderGoodsTableViewCell" owner:self options:nil][0];
     }
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    if (indexPath.section == 4) {
-        cell.goodsDescribe.hidden = YES;
-        cell.goodsNumber.hidden = YES;
-        cell.goodsPrice.text = @"x1";
+    
+    if (indexPath.section == 1) {
+        if ([self returnSituation] != 4) {
+            cell.goodsName.text = [Direct[indexPath.row] objectForKey:@"Name"];
+            cell.goodsNumber.text = [NSString stringWithFormat:@"x%@",[Direct[indexPath.row] objectForKey:@"PurchaseQuantity"]];
+            cell.goodsPrice.text = [NSString stringWithFormat:@"%.2f",[[Direct[indexPath.row] objectForKey:@"Price"] floatValue]];
+        }else{
+            cell.goodsName.text = [notDirect[indexPath.row] objectForKey:@"Name"];
+            cell.goodsNumber.text = [NSString stringWithFormat:@"x%@",[notDirect[indexPath.row] objectForKey:@"PurchaseQuantity"]];
+            cell.goodsPrice.text = [NSString stringWithFormat:@"%.2f",[[notDirect[indexPath.row] objectForKey:@"Price"] floatValue]];
+
+
+        }
     }
+    if (indexPath.section == 2) {
+        if ([self returnSituation] != 3 ||[self returnSituation] != 4 ) {
+
+        }else{
+            cell.goodsName.text = [notDirect[indexPath.row] objectForKey:@"Name"];
+            cell.goodsNumber.text = [NSString stringWithFormat:@"x%@",[notDirect[indexPath.row] objectForKey:@"PurchaseQuantity"]];
+            cell.goodsPrice.text = [NSString stringWithFormat:@"%.2f",[[notDirect[indexPath.row] objectForKey:@"Price"] floatValue]];
+
+
+        }
+    }
+    if (indexPath.section == 3) {
+        if (userLuck != nil) {
+            cell.goodsDescribe.hidden = YES;
+            cell.goodsNumber.hidden = YES;
+            cell.goodsPrice.text = @"x1";
+        }
+    }
+
     
     return cell;
 }
 
 #pragma mark 有几组
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
-    return 5;
+    if ([self returnSituation] == 0) {
+        return 1;
+    }else if ([self returnSituation] == 1){
+        return 2;
+    }else if ([self returnSituation] == 2){
+        return 3;
+    }else if ([self returnSituation] == 3){
+        return 3;
+    }else if ([self returnSituation] == 4){
+        return 3;
+    }else if ([self returnSituation] == 5){
+        return 3;
+    }else  {
+        return 4;
+    }
 }
 #pragma mark 头有多高
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
     if (section == 0) {
-        return 228;
+        return 159;
     }else{
         return 35;
     }
@@ -82,17 +200,33 @@
     if (section == 0) {
         headView = [[NSBundle mainBundle] loadNibNamed:@"submitOrderHeadView" owner:self options:nil][0];
         [headView.couponsButton addTarget:self action:@selector(couponsButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+        [headView.aliPayButton addTarget:self action:@selector(aliPayButton:) forControlEvents:UIControlEventTouchUpInside];
+        [headView.weChatButton addTarget:self action:@selector(weChatButton:) forControlEvents:UIControlEventTouchUpInside];
+        [headView.CashOnDeliveryButton addTarget:self action:@selector(CashOnDeliveryButton:) forControlEvents:UIControlEventTouchUpInside];
+        headView.toLabel.backgroundColor = [UIColor redColor];
+        headView.CashOnDeliveryView.backgroundColor = [UIColor whiteColor];
+        headView.CashOnDeliveryMessage.hidden = YES;
+        
         
         return headView;
     }else{
         submitOrderSectionHeadView *sectionHeadView = [[NSBundle mainBundle] loadNibNamed:@"submitOrderSectionHeadView" owner:self options:nil][0];
+
         if (section == 1) {
-            sectionHeadView.name.text = @"叉叉精选";
-        }else if (section == 2) {
-            sectionHeadView.name.text = @"叉叉代购";
-        }else if (section == 3) {
-            sectionHeadView.name.text = @"其他商品";
-        }else if (section == 4) {
+            if ([self returnSituation] != 4) {
+                sectionHeadView.name.text = @"叉叉精选";
+            }else{
+                sectionHeadView.name.text = @"其他商品";
+            }
+        }
+        if (section == 2) {
+            if ([self returnSituation] != 3 ||[self returnSituation] != 4 ) {
+                sectionHeadView.name.text = @"中奖商品";
+            }else{
+                sectionHeadView.name.text = @"其他商品";
+            }
+        }
+        if (section == 3) {
             sectionHeadView.name.text = @"中奖商品";
         }
         
@@ -113,20 +247,183 @@
 #pragma mark 底部内容
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
     submitOrderSectionFootView *sectionFootView = [[NSBundle mainBundle] loadNibNamed:@"submitOrderSectionFootView" owner:self options:nil][0];
+    
+    
     if (section == 0) {
         return nil;
-    }else if(section == 4){
+    }else if(section == 3){
         return nil;
     }else{
-        
-        return sectionFootView;
+        if (section == 1) {
+            if ([self returnSituation] != 4) {
+                sectionFootView.allPrice.text = [NSString stringWithFormat:@"%.2f",dirMoney];
+            }else{
+                sectionFootView.allPrice.text = [NSString stringWithFormat:@"%.2f",notDirMoney];
+            }
+        }
+        if (section == 2) {
+            if ([self returnSituation] != 3 ||[self returnSituation] != 4 ) {
+
+            }else{
+                sectionFootView.allPrice.text = [NSString stringWithFormat:@"%.2f",notDirMoney];
+            }
+        }
+               return sectionFootView;
     }
 }
 #pragma mark 跳转优惠卷
 -(void)couponsButtonClick:(UIButton *)sender{
     [self performSegueWithIdentifier:@"submitOrdersToCoupons" sender:self];
 }
+-(void)aliPayButton:(UIButton *)sender{
+    selectPay = @"aliPay";
+    [headView.weChatButton setImage:[UIImage imageNamed:@"radio"] forState:UIControlStateNormal];
+    [headView.aliPayButton setImage:[UIImage imageNamed:@"radio_x"] forState:UIControlStateNormal];
+    [headView.CashOnDeliveryButton setImage:[UIImage imageNamed:@"radio"] forState:UIControlStateNormal];
+}
+-(void)weChatButton:(UIButton *)sender{
+    selectPay = @"weChat";
+    [headView.weChatButton setImage:[UIImage imageNamed:@"radio_x"] forState:UIControlStateNormal];
+    [headView.aliPayButton setImage:[UIImage imageNamed:@"radio"] forState:UIControlStateNormal];
+    [headView.CashOnDeliveryButton setImage:[UIImage imageNamed:@"radio"] forState:UIControlStateNormal];
+}
+-(void)CashOnDeliveryButton:(UIButton *)sender{
+    selectPay = @"CashOnDelivery";
+    [headView.weChatButton setImage:[UIImage imageNamed:@"radio"] forState:UIControlStateNormal];
+    [headView.aliPayButton setImage:[UIImage imageNamed:@"radio"] forState:UIControlStateNormal];
+    [headView.CashOnDeliveryButton setImage:[UIImage imageNamed:@"radio_x"] forState:UIControlStateNormal];
+}
 
+-(int)returnSituation{
+    //0都没有
+    //1有精
+    //2有其他
+    //3有精和奖品
+    //4有其他和奖品
+    //5有精和其他
+    //6都有
+    if(userLuck == nil && Direct.count == 0 && notDirect.count == 0){
+        return 0;
+    }else if(userLuck == nil&& Direct.count != 0 && notDirect.count == 0){
+        return 1;
+    }else if(userLuck == nil&& Direct.count == 0 && notDirect.count != 0){
+        return 2;
+    }else if(userLuck != nil&& Direct.count != 0 && notDirect.count == 0){
+        return 3;
+    }else if (userLuck != nil&& Direct.count == 0 && notDirect.count != 0){
+        return 4;
+    }else if (userLuck == nil&& Direct.count != 0 && notDirect.count != 0){
+        return 5;
+    }else{
+        return 6;
+    }
+}
+- (IBAction)toPay:(id)sender {
+    NSString* tempStr;
+    if ([selectPay isEqualToString:@"aliPay"]) {
+        tempStr = @"1";
+    }
+    if ([selectPay isEqualToString:@"weChat"]) {
+        tempStr = @"2";
+    }
+    if ([selectPay isEqualToString:@"CashOnDelivery"]) {
+        tempStr = @"4";
+    }
+    NSMutableArray *tempArray = [[NSMutableArray alloc]init];
+    for (int i = 0; i<_getDatas.count; i++) {
+        NSMutableDictionary *tempDic = [[NSMutableDictionary alloc]init];
+        [tempDic setObject:[_getDatas[i] objectForKey:@"Fguid"] forKey:@"ProductId"];
+        [tempDic setObject:[_getDatas[i] objectForKey:@"PurchaseQuantity"] forKey:@"ProductCount"];
+        [tempDic setObject:[NSString stringWithFormat:@"%.2f",[[_getDatas[i] objectForKey:@"Price"] floatValue]*[[_getDatas[i] objectForKey:@"PurchaseQuantity"] floatValue]] forKey:@"ProductMoney"];
+        [tempArray addObject:tempDic];
+    }
+    
+    [SVProgressHUD showWithStatus:@"加载中..."];
+    [[NetworkUtils shareNetworkUtils] SubmitOrder:[USERDEFAULTS objectForKey:@"UserID"] CompanyId:[USERDEFAULTS objectForKey:@"shopID"] Type:tempStr CouponId:@"0" IsCoupon:@"false" AddId:[[USERDEFAULTS objectForKey:@"delectDetailedAddress"] objectForKey:@"Id"] Remark:_Remark OrderType:_OrderType PresetTime:@"" OrderList:tempArray success:^(id responseObject) {
+        NSLog(@"数据:%@",responseObject);
+        if ([[responseObject objectForKey:@"ResultType"]intValue] == 0) {
+            if ([_OrderType intValue ] == 1) {
+                for (int i = 0; i<_getDatas.count; i++) {
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"FlashShoppingCartGoodsDelete" object:_getDatas[i]];
+                }
+            }else{
+                for (int i = 0; i<_getDatas.count; i++) {
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"ReservationShoppingCartGoodsDelete" object:_getDatas[i]];
+                }
+            }
+            NSLog(@"%@",selectPay);
+            if ([selectPay isEqualToString:@"aliPay"]) {
+                [self PayDes:[[responseObject objectForKey:@"AppendData"] objectForKey:@"orderId"] Type:@"1"];
+            }
+            if ([selectPay isEqualToString:@"weChat"]) {
+                [self WxPayDes:[[responseObject objectForKey:@"AppendData"] objectForKey:@"orderId"]];
+            }
+            if ([selectPay isEqualToString:@"CashOnDelivery"]) {
+                
+            }
+        }else {
+            userLuck = nil;
+        }
+        [_tableView reloadData];
+        [SVProgressHUD dismiss];
+    } failure:^(NSString *error) {
+        [SVProgressHUD dismiss];
+    }];
+}
+-(void)PayDes:(NSString *)Order Type:(NSString *)Type{
+    [SVProgressHUD showWithStatus:@"加载中..."];
+    [[NetworkUtils shareNetworkUtils] PayDes:Order Type:Type success:^(id responseObject) {
+        NSLog(@"数据:%@",responseObject);
+        if ([[responseObject objectForKey:@"ResultType"]intValue] == 0) {
+            if ([selectPay isEqualToString:@"aliPay"]) {
+                NSString *tempStr = (NSString *)CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(nil, (CFStringRef)[[responseObject objectForKey:@"AppendData"] objectForKey:@"sign"], nil, (CFStringRef)@"!*'();:@&=+$,/?%#[]", kCFStringEncodingUTF8));
+                NSString *orderString = [NSString stringWithFormat:@"%@&sign=\"%@\"&sign_type=\"%@\"",[[responseObject objectForKey:@"AppendData"] objectForKey:@"biz_content"], tempStr, @"RSA"];
+                
+                [[AlipaySDK defaultService] payOrder:orderString fromScheme:@"feichacha" callback:^(NSDictionary *resultDic) {
+                        NSLog(@"reslut = %@",resultDic);
+                    }];
+            }
+            
+        }else {
+            
+        }
+        [_tableView reloadData];
+        [SVProgressHUD dismiss];
+    } failure:^(NSString *error) {
+        [SVProgressHUD dismiss];
+    }];
+
+}
+-(void)WxPayDes:(NSString *)order{
+    [SVProgressHUD showWithStatus:@"加载中..."];
+    [[NetworkUtils shareNetworkUtils] WxPayDes:order success:^(id responseObject) {
+        NSLog(@"数据:%@",responseObject);
+        if ([[responseObject objectForKey:@"ResultType"]intValue] == 0) {
+                PayReq* req       = [[PayReq alloc] init];
+                req.partnerId     = [[responseObject objectForKey:@"AppendData"] objectForKey:@"partnerId"];
+                req.prepayId      = [[responseObject objectForKey:@"AppendData"] objectForKey:@"prepayId"];
+                req.nonceStr      = [[responseObject objectForKey:@"AppendData"] objectForKey:@"nonceStr"];
+                req.timeStamp     = [[[responseObject objectForKey:@"AppendData"] objectForKey:@"timestamp"] intValue];
+                req.package       = [[responseObject objectForKey:@"AppendData"] objectForKey:@"packageValue"];
+                req.sign          = [[responseObject objectForKey:@"AppendData"] objectForKey:@"sign"];
+                
+                [WXApi sendReq:req];
+            
+        }else {
+            
+        }
+        [_tableView reloadData];
+        [SVProgressHUD dismiss];
+    } failure:^(NSString *error) {
+        [SVProgressHUD dismiss];
+    }];
+}
+-(void) setFalseFor_Pay{
+    NSLog(@"123321");
+}
+-(void) setSuccessFor_pay{
+    NSLog(@"shkvbseuibf");
+}
 - (IBAction)backView:(id)sender {
     [self.navigationController popViewControllerAnimated:YES];
 }

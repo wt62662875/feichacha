@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9531" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
@@ -26,10 +26,10 @@
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="美国华盛顿甜脆红地厘蛇果" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0Ze-0j-XfK">
                                 <rect key="frame" x="116" y="30" width="180" height="14.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="orange_left_xin.png" translatesAutoresizingMaskIntoConstraints="NO" id="99b-I6-q6Y">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="orange_left_xin.png" translatesAutoresizingMaskIntoConstraints="NO" id="99b-I6-q6Y">
                                 <rect key="frame" x="116" y="15" width="50" height="1"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="50" id="RgZ-wA-gyf"/>
@@ -50,7 +50,7 @@
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="500/盒" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UV1-z1-OEB">
                                 <rect key="frame" x="116" y="48" width="39" height="14.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="特色价：￥" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wT4-JA-miw">
@@ -78,9 +78,15 @@
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="原价：55.5" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="84F-sJ-LUj">
                                 <rect key="frame" x="221" y="66" width="61.5" height="14.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MC1-8m-8bK">
+                                <rect key="frame" x="8" y="8" width="100" height="100"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="100" id="hMG-lp-pDF"/>
+                                </constraints>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -90,6 +96,7 @@
                             <constraint firstItem="gIr-gB-Ocd" firstAttribute="leading" secondItem="rib-TZ-GZh" secondAttribute="trailing" constant="8" id="5U1-y2-n5y"/>
                             <constraint firstItem="99b-I6-q6Y" firstAttribute="leading" secondItem="rib-TZ-GZh" secondAttribute="trailing" constant="8" id="Bue-ES-9Xr"/>
                             <constraint firstItem="aSx-kp-mol" firstAttribute="top" secondItem="czo-zs-oE6" secondAttribute="top" constant="8" id="CMh-F3-ewy"/>
+                            <constraint firstItem="MC1-8m-8bK" firstAttribute="leading" secondItem="czo-zs-oE6" secondAttribute="leading" constant="8" id="DwL-sh-88b"/>
                             <constraint firstItem="iaW-GG-Hpi" firstAttribute="leading" secondItem="wT4-JA-miw" secondAttribute="trailing" id="EMB-v8-4br"/>
                             <constraint firstAttribute="trailing" secondItem="0Ze-0j-XfK" secondAttribute="trailing" constant="8" id="IMw-zF-Urb"/>
                             <constraint firstItem="0Ze-0j-XfK" firstAttribute="leading" secondItem="rib-TZ-GZh" secondAttribute="trailing" constant="8" id="Knz-CE-AGJ"/>
@@ -97,6 +104,7 @@
                             <constraint firstItem="iaW-GG-Hpi" firstAttribute="top" secondItem="0Ze-0j-XfK" secondAttribute="bottom" constant="17.5" id="Slq-a4-EZm"/>
                             <constraint firstAttribute="bottom" secondItem="gIr-gB-Ocd" secondAttribute="bottom" constant="8" id="TFx-Pw-kxj"/>
                             <constraint firstItem="wT4-JA-miw" firstAttribute="top" secondItem="UV1-z1-OEB" secondAttribute="bottom" constant="4" id="UQG-e3-TSI"/>
+                            <constraint firstItem="MC1-8m-8bK" firstAttribute="top" secondItem="czo-zs-oE6" secondAttribute="top" constant="8" id="WZQ-Zf-F3S"/>
                             <constraint firstItem="99b-I6-q6Y" firstAttribute="top" secondItem="czo-zs-oE6" secondAttribute="top" constant="15" id="WgN-OW-J1a"/>
                             <constraint firstItem="84F-sJ-LUj" firstAttribute="leading" secondItem="iaW-GG-Hpi" secondAttribute="trailing" constant="8" id="Zyh-EI-6g1"/>
                             <constraint firstItem="UV1-z1-OEB" firstAttribute="leading" secondItem="rib-TZ-GZh" secondAttribute="trailing" constant="8" id="cnR-P3-hWk"/>
@@ -105,6 +113,7 @@
                             <constraint firstAttribute="trailing" secondItem="X7f-9Z-TrY" secondAttribute="trailing" constant="8" id="lvf-72-NVc"/>
                             <constraint firstItem="wT4-JA-miw" firstAttribute="leading" secondItem="rib-TZ-GZh" secondAttribute="trailing" constant="8" id="urj-fU-Up2"/>
                             <constraint firstItem="X7f-9Z-TrY" firstAttribute="leading" secondItem="aSx-kp-mol" secondAttribute="trailing" id="wTQ-cK-BxO"/>
+                            <constraint firstAttribute="bottom" secondItem="MC1-8m-8bK" secondAttribute="bottom" constant="8" id="wUB-OS-vTn"/>
                             <constraint firstItem="rib-TZ-GZh" firstAttribute="leading" secondItem="czo-zs-oE6" secondAttribute="leading" constant="8" id="ytH-YZ-N4h"/>
                             <constraint firstItem="X7f-9Z-TrY" firstAttribute="top" secondItem="czo-zs-oE6" secondAttribute="top" constant="15" id="zoQ-Vf-Hhq"/>
                         </constraints>
@@ -121,6 +130,7 @@
             <connections>
                 <outlet property="backView" destination="czo-zs-oE6" id="E05-er-CzZ"/>
                 <outlet property="buyButton" destination="gIr-gB-Ocd" id="9qF-84-PV9"/>
+                <outlet property="goodsClick" destination="MC1-8m-8bK" id="AWq-qJ-6Ys"/>
                 <outlet property="goodsImage" destination="rib-TZ-GZh" id="vEz-jw-bnt"/>
                 <outlet property="goodsName" destination="0Ze-0j-XfK" id="Wuo-0T-Vsi"/>
                 <outlet property="goodsOldPrice" destination="84F-sJ-LUj" id="YtW-TR-Ggd"/>

@@ -94,6 +94,11 @@
     _afterSalesNumberLabel.layer.borderWidth = 1;
     _afterSalesNumberLabel.layer.borderColor = [UIColor redColor].CGColor;
     _afterSalesNumberLabel.layer.cornerRadius = 8;
+    
+    _obligationNumberLabel.hidden = YES;
+    _forTheGoodsNumberLabel.hidden = YES;
+    _ToEvaluateNumberLabel.hidden = YES;
+    _afterSalesNumberLabel.hidden = YES;
 }
 #pragma mark 收货地址
 - (IBAction)address:(id)sender {

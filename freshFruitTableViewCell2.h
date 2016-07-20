@@ -30,4 +30,8 @@
 
 @property (weak, nonatomic) IBOutlet UIButton *buyButton1;
 @property (weak, nonatomic) IBOutlet UIButton *buyButton2;
+
+@property (weak, nonatomic) IBOutlet UIButton *goodsClick1;
+@property (weak, nonatomic) IBOutlet UIButton *goodsClick2;
+
 @end

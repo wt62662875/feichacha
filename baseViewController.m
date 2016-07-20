@@ -16,7 +16,6 @@
 #import "goodsProjectTableViewCell.h"
 #import "CrossSellingTableViewCell.h"
 
-//#import <AlipaySDK/AlipaySDK.h>
 
 
 @interface baseViewController ()<SDCycleScrollViewDelegate,UIGestureRecognizerDelegate,BMKLocationServiceDelegate,BMKGeoCodeSearchDelegate,positioningDelegate>
@@ -63,11 +62,6 @@
     _deliveryTo.layer.borderWidth = 0.5;
     // Do any additional setup after loading the view.
     [self getCurrentAddress];
-
-//    NSString *orderString = @"partner=2088221732730795&seller_id=513029998@qq.com&out_trade_no=201606171455082316&subject=测试订单&body=测试订单&total_fee=0.1&notify_url=manage.feichacha.com/Pay/NotifyUrl&service=mobile.securitypay.pay&payment_type=1&_input_charset=utf-8&it_b_pay=30m&show_url=m.alipay.com&sign_type=RSA&sign=Kl00J0dclsehpwpe1qGqeMJTtuLdeF8yAwq8Jw7ue5nlknvCGvSLvvMekRVMm7d/KyfKM6cASLTbzu/OPjyCgYG5p6phRlPFQR6GZ9SlLUk5Gut1JzMDvlNnqgvhrfplFnuKgOA5+FowXxdGF4jieL40dq/8FLD2oYhjfTHBU4Y=";
-//    [[AlipaySDK defaultService] payOrder:orderString fromScheme:@"feichacha" callback:^(NSDictionary *resultDic) {
-//        NSLog(@"reslut = %@",resultDic);
-//    }];
 
 }
 -(void)viewWillAppear:(BOOL)animated{
@@ -568,20 +562,20 @@ errorCode:(BMKSearchErrorCode)error{
     
     switch (sender.tag) {
         case 0:
-            NSLog(@"加入购物车0");
             [self addProductsAnimation:cell.goodsImage1 selfView:self.view pointX:SCREENWIDTH/10*7 pointY:SCREENHTIGHT-40];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"FlashShoppingCartGoodsAdd" object:proHeatDatas[0]];
             break;
         case 1:
-            NSLog(@"加入购物车1");
             [self addProductsAnimation:cell.goodsImage2 selfView:self.view pointX:SCREENWIDTH/10*7 pointY:SCREENHTIGHT-40];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"FlashShoppingCartGoodsAdd" object:proHeatDatas[1]];
             break;
         case 2:
-            NSLog(@"加入购物车2");
             [self addProductsAnimation:cell.goodsImage3 selfView:self.view pointX:SCREENWIDTH/10*7 pointY:SCREENHTIGHT-40];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"FlashShoppingCartGoodsAdd" object:proHeatDatas[2]];
             break;
         case 3:
-            NSLog(@"加入购物车3");
             [self addProductsAnimation:cell.goodsImage4 selfView:self.view pointX:SCREENWIDTH/10*7 pointY:SCREENHTIGHT-40];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"FlashShoppingCartGoodsAdd" object:proHeatDatas[3]];
             break;
         default:
             break;
@@ -695,17 +689,37 @@ errorCode:(BMKSearchErrorCode)error{
 #pragma mark 添加商品进购物车点击事件
 -(void)addShoppingCartButton1:(UIButton *)sender{
     goodsProjectTableViewCell *cell = (goodsProjectTableViewCell *)[_tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:sender.tag+4 inSection:0]];
-
+    
+    if ([[indexDatas[sender.tag] objectForKey:@"ActType"] intValue] == 1){
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"FlashShoppingCartGoodsAdd" object:[indexDatas[sender.tag] objectForKey:@"CompanyProduct"][0]];
+    }else{
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"ReservationShoppingCartGoodsAdd" object:[indexDatas[sender.tag] objectForKey:@"FreshCompany"][0]];
+    }
+    
     [self addProductsAnimation:cell.goodsImage1 selfView:self.view pointX:SCREENWIDTH/10*7 pointY:SCREENHTIGHT-40];
 }
 -(void)addShoppingCartButton2:(UIButton *)sender{
     goodsProjectTableViewCell *cell = (goodsProjectTableViewCell *)[_tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:sender.tag+4 inSection:0]];
     
-    [self addProductsAnimation:cell.goodsImage2 selfView:self.view pointX:SCREENWIDTH/10*7 pointY:SCREENHTIGHT-40];}
+    if ([[indexDatas[sender.tag] objectForKey:@"ActType"] intValue] == 1){
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"FlashShoppingCartGoodsAdd" object:[indexDatas[sender.tag] objectForKey:@"CompanyProduct"][1]];
+    }else{
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"ReservationShoppingCartGoodsAdd" object:[indexDatas[sender.tag] objectForKey:@"FreshCompany"][1]];
+    }
+    
+    [self addProductsAnimation:cell.goodsImage2 selfView:self.view pointX:SCREENWIDTH/10*7 pointY:SCREENHTIGHT-40];
+}
 -(void)addShoppingCartButton3:(UIButton *)sender{
     goodsProjectTableViewCell *cell = (goodsProjectTableViewCell *)[_tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:sender.tag+4 inSection:0]];
     
-    [self addProductsAnimation:cell.goodsImage3 selfView:self.view pointX:SCREENWIDTH/10*7 pointY:SCREENHTIGHT-40];}
+    if ([[indexDatas[sender.tag] objectForKey:@"ActType"] intValue] == 1){
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"FlashShoppingCartGoodsAdd" object:[indexDatas[sender.tag] objectForKey:@"CompanyProduct"][2]];
+    }else{
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"ReservationShoppingCartGoodsAdd" object:[indexDatas[sender.tag] objectForKey:@"FreshCompany"][2]];
+    }
+    
+    [self addProductsAnimation:cell.goodsImage3 selfView:self.view pointX:SCREENWIDTH/10*7 pointY:SCREENHTIGHT-40];
+}
 #pragma mark 更多点击事件
 -(void)moreButton:(UIButton *)sender{
     NSLog(@"MORE%ld",(long)sender.tag);

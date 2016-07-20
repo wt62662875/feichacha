@@ -19,4 +19,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *price;
 
 @property (weak, nonatomic) IBOutlet UIButton *buyButton;
+@property (weak, nonatomic) IBOutlet UIButton *goodsClick;
+
 @end

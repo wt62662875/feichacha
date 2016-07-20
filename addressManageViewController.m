@@ -17,6 +17,8 @@
     BOOL selectBool;                    //0送货上门   1门店自提
     NSString *editAddBool;              //1新增   0修改
     NSArray *deliveryDatas;             //送货上门列表
+    NSArray *toShopDatas;             //到店自提列表
+
     NSString *sendAddressID;            //修改的地址ID
 }
 @property (weak, nonatomic) IBOutlet UIButton *addAddressButton;
@@ -49,25 +51,46 @@
 }
 -(void)getDeliveryDatas{
     [SVProgressHUD showWithStatus:@"加载中..."];
-    [[NetworkUtils shareNetworkUtils] userAddressList:^(id responseObject) {
+    [[NetworkUtils shareNetworkUtils] userAddressList:@"" lon:@"" success:^(id responseObject) {
         NSLog(@"数据:%@",responseObject);
         if ([[responseObject objectForKey:@"ResultType"]intValue] == 0) {
             deliveryDatas = [responseObject objectForKey:@"AppendData"];
             [_tableView reloadData];
+            [self getToShopDatas];
+        }else {
+            deliveryDatas = nil;
+            [SVProgressHUD showErrorWithStatus:@"请求失败，请稍后重试" maskType:SVProgressHUDMaskTypeNone];
+            [_tableView reloadData];
+        }
+        [SVProgressHUD dismiss];
+    } failure:^(NSString *error) {
+        [SVProgressHUD dismiss];
+    }];                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+}
+-(void)getToShopDatas{
+    [SVProgressHUD showWithStatus:@"加载中..."];
+    [[NetworkUtils shareNetworkUtils] StoresList:[USERDEFAULTS objectForKey:@"CurrentLatitude"] lon:[USERDEFAULTS objectForKey:@"CurrentLongitude"] success:^(id responseObject) {
+        NSLog(@"数据:%@",responseObject);
+        if ([[responseObject objectForKey:@"ResultType"]intValue] == 0) {
+            toShopDatas = [responseObject objectForKey:@"AppendData"];
+            [_tableView reloadData];
             
         }else {
+            deliveryDatas = nil;
             [SVProgressHUD showErrorWithStatus:@"请求失败，请稍后重试" maskType:SVProgressHUDMaskTypeNone];
+            [_tableView reloadData];
         }
         [SVProgressHUD dismiss];
     } failure:^(NSString *error) {
         [SVProgressHUD dismiss];
     }];
-
 }
+
+
 #pragma mark 有几组
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
     if (selectBool) {
-        return 2;
+        return 1;
     }else {
         return 1;
     }
@@ -98,9 +121,9 @@
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     if (selectBool) {
         if (section == 0) {
-            return 5;
+            return toShopDatas.count;
         }else{
-            return 3;
+            return 0;
         }
     }else{
         return deliveryDatas.count;
@@ -125,6 +148,11 @@
             cell = [[NSBundle mainBundle] loadNibNamed:@"addressManageToShopTableViewCell" owner:self options:nil][0];
         }
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+        cell.shopName.text = [toShopDatas[indexPath.row] objectForKey:@"CompanyName"];
+        cell.time.text = [NSString stringWithFormat:@"营业时间%@-%@",[toShopDatas[indexPath.row] objectForKey:@"ShopStartHour"],[toShopDatas[indexPath.row] objectForKey:@"ShopEndHour"]];
+        cell.address.text = [toShopDatas[indexPath.row] objectForKey:@"Address"];
+        cell.distance.text = [NSString stringWithFormat:@"%@km",[toShopDatas[indexPath.row] objectForKey:@"Distance"]];
+
         
         return cell;
 
@@ -140,17 +168,27 @@
         cell.name.text = [deliveryDatas[indexPath.row] objectForKey:@"Name"];
         cell.phoneNumber.text = [deliveryDatas[indexPath.row] objectForKey:@"Mobile"];
         cell.address.text = [NSString stringWithFormat:@"%@%@%@",[deliveryDatas[indexPath.row] objectForKey:@"CityName"],[deliveryDatas[indexPath.row] objectForKey:@"Address"],[deliveryDatas[indexPath.row] objectForKey:@"AddressDetail"]];
-
+        
         
         return cell;
     }
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     if (selectBool) {
+        [USERDEFAULTS setObject:[toShopDatas[indexPath.row] objectForKey:@"Address"] forKey:@"CurrentAddress"];
+        [USERDEFAULTS setObject:toShopDatas[indexPath.row] forKey:@"delectDetailedAddress"];
+        
+        [USERDEFAULTS setObject:[NSString stringWithFormat:@"%f",[[toShopDatas[indexPath.row] objectForKey:@"Coordinate_y"] floatValue]] forKey:@"CurrentLatitude"];
+        [USERDEFAULTS setObject:[NSString stringWithFormat:@"%f",[[toShopDatas[indexPath.row] objectForKey:@"Coordinate_x"] floatValue]] forKey:@"CurrentLongitude"];
+        [self.delegate positioningBackView:@"2"];
+        [self.navigationController popViewControllerAnimated:YES];
+
     }else{
         [USERDEFAULTS setObject:[deliveryDatas[indexPath.row] objectForKey:@"Address"] forKey:@"CurrentAddress"];
-        [USERDEFAULTS setObject:[NSString stringWithFormat:@"%f",[[deliveryDatas[indexPath.row] objectForKey:@"Coordinate_x"] floatValue]] forKey:@"CurrentLatitude"];
-        [USERDEFAULTS setObject:[NSString stringWithFormat:@"%f",[[deliveryDatas[indexPath.row] objectForKey:@"Coordinate_y"] floatValue]] forKey:@"CurrentLongitude"];
+        [USERDEFAULTS setObject:deliveryDatas[indexPath.row] forKey:@"delectDetailedAddress"];
+
+        [USERDEFAULTS setObject:[NSString stringWithFormat:@"%f",[[deliveryDatas[indexPath.row] objectForKey:@"Coordinate_y"] floatValue]] forKey:@"CurrentLatitude"];
+        [USERDEFAULTS setObject:[NSString stringWithFormat:@"%f",[[deliveryDatas[indexPath.row] objectForKey:@"Coordinate_x"] floatValue]] forKey:@"CurrentLongitude"];
         [self.delegate positioningBackView:@"1"];
         [self.navigationController popViewControllerAnimated:YES];
     }

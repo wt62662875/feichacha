@@ -107,18 +107,27 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="曹家桥凉拌藕片" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4IS-LZ-bOD">
-                        <rect key="frame" x="126" y="20" width="119" height="21"/>
+                        <rect key="frame" x="126" y="20" width="186" height="21"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <color key="textColor" red="0.45098039220000002" green="0.4431372549" blue="0.44705882349999998" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mt8-6F-rRk">
+                        <rect key="frame" x="13" y="12" width="100" height="100"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="100" id="hPN-QT-QdD"/>
+                        </constraints>
+                    </button>
                 </subviews>
                 <color key="backgroundColor" red="0.95686274510000002" green="0.96470588239999999" blue="0.91764705879999997" alpha="1" colorSpace="calibratedRGB"/>
                 <constraints>
+                    <constraint firstItem="mt8-6F-rRk" firstAttribute="top" secondItem="pw5-En-uJ1" secondAttribute="top" constant="12" id="0C7-OC-NU6"/>
                     <constraint firstItem="4IS-LZ-bOD" firstAttribute="leading" secondItem="rvl-5b-5NU" secondAttribute="trailing" constant="8" id="1WK-as-AGg"/>
                     <constraint firstAttribute="trailing" secondItem="aTN-NJ-1Tc" secondAttribute="trailing" constant="13" id="1pt-7N-Qx1"/>
+                    <constraint firstItem="mt8-6F-rRk" firstAttribute="leading" secondItem="pw5-En-uJ1" secondAttribute="leading" constant="13" id="2H1-ej-NxV"/>
                     <constraint firstItem="gfv-YG-1NK" firstAttribute="leading" secondItem="rvl-5b-5NU" secondAttribute="trailing" constant="8" id="2ke-5w-AK1"/>
                     <constraint firstAttribute="bottom" secondItem="ddP-MI-H5J" secondAttribute="bottom" constant="21.5" id="3ly-iO-Rrv"/>
+                    <constraint firstAttribute="bottom" secondItem="mt8-6F-rRk" secondAttribute="bottom" constant="13.5" id="4Fo-Fa-1k3"/>
                     <constraint firstItem="n8D-99-Fds" firstAttribute="leading" secondItem="gfv-YG-1NK" secondAttribute="trailing" constant="-43" id="ERA-c5-tYC"/>
                     <constraint firstItem="gfv-YG-1NK" firstAttribute="top" secondItem="4IS-LZ-bOD" secondAttribute="bottom" constant="8" id="FRR-RT-94r"/>
                     <constraint firstItem="rvl-5b-5NU" firstAttribute="leading" secondItem="pw5-En-uJ1" secondAttribute="leading" constant="8" id="FwB-bJ-Dqc"/>
@@ -127,6 +136,7 @@
                     <constraint firstAttribute="trailing" secondItem="rvl-5b-5NU" secondAttribute="trailing" constant="8" id="UNx-ju-A6E"/>
                     <constraint firstItem="ddP-MI-H5J" firstAttribute="leading" secondItem="gfv-YG-1NK" secondAttribute="trailing" constant="6" id="Xmz-UR-Dst"/>
                     <constraint firstItem="n8D-99-Fds" firstAttribute="leading" secondItem="VDu-0d-afV" secondAttribute="trailing" constant="4" id="ZBD-kC-s7f"/>
+                    <constraint firstAttribute="trailing" secondItem="4IS-LZ-bOD" secondAttribute="trailing" constant="8" id="Zz9-4E-MtZ"/>
                     <constraint firstAttribute="bottom" secondItem="aTN-NJ-1Tc" secondAttribute="bottom" constant="13.5" id="bMP-Zj-eQR"/>
                     <constraint firstItem="4IS-LZ-bOD" firstAttribute="leading" secondItem="pw5-En-uJ1" secondAttribute="leading" constant="8" id="dMk-aU-evT"/>
                     <constraint firstAttribute="bottom" secondItem="rvl-5b-5NU" secondAttribute="bottom" constant="8" id="fww-tl-PE2"/>
@@ -148,6 +158,7 @@
             <connections>
                 <outlet property="backImage" destination="rvl-5b-5NU" id="mY2-yo-VfP"/>
                 <outlet property="buyButton" destination="ddP-MI-H5J" id="kkz-1k-kLj"/>
+                <outlet property="goodsClick" destination="mt8-6F-rRk" id="prP-3j-I5l"/>
                 <outlet property="goodsImage" destination="aTN-NJ-1Tc" id="nTD-Bf-clm"/>
                 <outlet property="name" destination="4IS-LZ-bOD" id="Cz3-cu-Ab1"/>
                 <outlet property="oldPrice" destination="n8D-99-Fds" id="K1h-2j-l72"/>

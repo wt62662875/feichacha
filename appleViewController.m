@@ -12,6 +12,9 @@
 @interface appleViewController ()
 {
     UIImageView *Image3;
+    NSArray* datas;
+    
+    UILabel * badgeLabel;
 }
 @property (weak, nonatomic) IBOutlet UIView *backView;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *backViewHeight;
@@ -26,8 +29,12 @@
     [Image1 setImage:[UIImage imageNamed:@"apple_banner.jpg"]];
     UIImageView *Image2 = [[UIImageView alloc]initWithFrame:CGRectMake(0, Image1.frame.size.height, SCREENWIDTH*0.36, SCREENWIDTH*0.43)];
     [Image2 setImage:[UIImage imageNamed:@"apple_porl.png"]];
-    Image3 = [[UIImageView alloc]initWithFrame:CGRectMake(Image2.frame.size.width, Image1.frame.size.height, SCREENWIDTH*0.64, SCREENWIDTH*0.43)];
-    [Image3 setImage:[UIImage imageNamed:@"apple_porr.png"]];
+    Image3 = [[UIImageView alloc]initWithFrame:CGRectMake(Image2.frame.size.width, Image1.frame.size.height, SCREENWIDTH*0.54, SCREENWIDTH*0.43)];
+//    [Image3 setImage:[UIImage imageNamed:@"apple_porr.png"]];
+    UIButton *tempButtom = [UIButton buttonWithType:UIButtonTypeCustom];
+    [tempButtom setFrame:Image3.frame];
+    [tempButtom addTarget:self action:@selector(goodsClick:) forControlEvents:UIControlEventTouchUpInside];
+    
     
     UIImageView *Image4 = [[UIImageView alloc]initWithFrame:CGRectMake(0, Image3.frame.size.height+Image3.frame.origin.y, SCREENWIDTH , SCREENWIDTH*1.14)];
     [Image4 setImage:[UIImage imageNamed:@"apple_bottom_img1.jpg"]];
@@ -58,6 +65,7 @@
     [_backView addSubview:Image5];
     [_backView addSubview:Image6];
     [_backView addSubview:Image7];
+    [_backView addSubview:tempButtom];
     [_backView addSubview:addShoppingCart];
 
 
@@ -68,20 +76,24 @@
     UIButton * shoopingCartButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [shoopingCartButton setFrame:CGRectMake(SCREENWIDTH-64, SCREENHTIGHT-64, 44, 44)];
     [shoopingCartButton setImage:[UIImage imageNamed:@"shop_cart_icon1.png"] forState:UIControlStateNormal];
-    UILabel * label = [[UILabel alloc]initWithFrame:CGRectMake(SCREENWIDTH-36, SCREENHTIGHT-64, 16, 16)];
-    label.font = [UIFont systemFontOfSize:12];
-    label.textAlignment = NSTextAlignmentCenter;
-    label.text = @"99";
-    label.backgroundColor = [UIColor redColor];
-    label.textColor = [UIColor whiteColor];
-    label.layer.cornerRadius = 8;
-    label.layer.masksToBounds = YES;
+    badgeLabel = [[UILabel alloc]initWithFrame:CGRectMake(SCREENWIDTH-36, SCREENHTIGHT-64, 16, 16)];
+    badgeLabel.font = [UIFont systemFontOfSize:12];
+    badgeLabel.textAlignment = NSTextAlignmentCenter;
+    badgeLabel.text = @"99";
+    badgeLabel.backgroundColor = [UIColor redColor];
+    badgeLabel.textColor = [UIColor whiteColor];
+    badgeLabel.layer.cornerRadius = 8;
+    badgeLabel.layer.masksToBounds = YES;
     
-    
+    if ([[USERDEFAULTS objectForKey:@"PurchaseQuantity"] intValue] == 0) {
+        badgeLabel.hidden = YES;
+    }else{
+        badgeLabel.text = [NSString stringWithFormat:@"%@",[USERDEFAULTS objectForKey:@"PurchaseQuantity"]];
+    }
     [shoopingCartButton addTarget:self action:@selector(shoopingCartButton:) forControlEvents:UIControlEventTouchUpInside];
     
     [self.view addSubview:shoopingCartButton];
-    [self.view addSubview:label];
+    [self.view addSubview:badgeLabel];
     [self ActivityListDatas];
 
 }
@@ -91,8 +103,8 @@
     [[NetworkUtils shareNetworkUtils] ActivityList:[_getDatas objectForKey:@"Id"] ActType:[_getDatas objectForKey:@"ActType"] success:^(id responseObject) {
         NSLog(@"数据:%@",responseObject);
         if ([[responseObject objectForKey:@"ResultType"]intValue] == 0) {
-            
-            
+            datas = [[responseObject objectForKey:@"AppendData"] objectForKey:@"ActivityProduct"];
+            [Image3 sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[datas[0] objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"apple_porr.png"]];
         }else {
             
             [SVProgressHUD showErrorWithStatus:@"请求失败，请稍后重试" maskType:SVProgressHUDMaskTypeNone];
@@ -107,10 +119,22 @@
     UIStoryboard *stroyBoard = GetStoryboard(@"Main");
     baseViewController *baseVC = [stroyBoard instantiateViewControllerWithIdentifier:@"baseViewController"];
     [baseVC addProductsAnimation:Image3 selfView:self.view pointX:SCREENWIDTH-44 pointY:SCREENHTIGHT-44];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"FlashShoppingCartGoodsAdd" object:datas[0]];
+    badgeLabel.hidden = NO;
+    badgeLabel.text = [NSString stringWithFormat:@"%@",[USERDEFAULTS objectForKey:@"PurchaseQuantity"]];
 }
 #pragma mark 点击购物车
 -(void)shoopingCartButton:(UIButton *)sender{
-    
+    [self.navigationController popViewControllerAnimated:YES];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"jumpToShoppingCart" object:nil];
+}
+-(void)goodsClick:(UIButton *)sender{
+    UIStoryboard *stroyBoard = GetStoryboard(@"Main");
+    goodsDetailsViewController *goodsDetailsVC = [stroyBoard instantiateViewControllerWithIdentifier:@"goodsDetailsViewController"];
+     [goodsDetailsVC setIsAct:@"1"];
+    [goodsDetailsVC setGetID:datas[0]];
+    [self.navigationController pushViewController:goodsDetailsVC animated:YES];
+
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

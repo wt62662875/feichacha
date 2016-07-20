@@ -25,4 +25,8 @@
 
 @property (weak, nonatomic) IBOutlet UIView *roundView;
 
+@property (weak, nonatomic) IBOutlet UIButton *goodsClick;
+@property (weak, nonatomic) IBOutlet UIButton *goodsClick2;
+
+
 @end

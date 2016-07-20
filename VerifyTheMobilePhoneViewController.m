@@ -114,6 +114,8 @@
             NSLog(@"数据:%@",responseObject);
             if ([[responseObject objectForKey:@"ResultType"]intValue] == 0) {
                 [USERDEFAULTS setObject:[[responseObject objectForKey:@"AppendData"] objectForKey:@"token"] forKey:@"TOKEN"];
+                [USERDEFAULTS setObject:[[responseObject objectForKey:@"AppendData"] objectForKey:@"userid"] forKey:@"UserID"];
+                
                 [USERDEFAULTS setObject:@"1" forKey:@"isRegister"];
                 [USERDEFAULTS setObject:_phoneNumberTextField.text forKey:@"telPhoneNumber"];
                 [self.navigationController popViewControllerAnimated:YES];

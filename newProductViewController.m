@@ -31,6 +31,11 @@
     [self initHeadView];
     _badgeLabel.layer.cornerRadius = 8;
     _badgeLabel.layer.masksToBounds = YES;
+    if ([[USERDEFAULTS objectForKey:@"PurchaseQuantity"] intValue] == 0) {
+        _badgeLabel.hidden = YES;
+    }else{
+        _badgeLabel.text = [NSString stringWithFormat:@"%@",[USERDEFAULTS objectForKey:@"PurchaseQuantity"]];
+    }
     // Do any additional setup after loading the view.
     [self newListDatas];
 }
@@ -106,7 +111,8 @@
         
         cell.buyButton.tag = indexPath.row;
         [cell.buyButton addTarget:self action:@selector(buyButton:) forControlEvents:UIControlEventTouchUpInside];
-    
+        cell.goodsClick.tag = indexPath.row;
+        [cell.goodsClick addTarget:self action:@selector(goodsClick1:) forControlEvents:UIControlEventTouchUpInside];
         return cell;
     }
     if ((indexPath.row == 0 || indexPath.row == 2 || indexPath.row == 5)) {
@@ -178,7 +184,10 @@
         cell.buyButton2.tag = indexPath.row;
         [cell.buyButton1 addTarget:self action:@selector(buyButton1:) forControlEvents:UIControlEventTouchUpInside];
         [cell.buyButton2 addTarget:self action:@selector(buyButton2:) forControlEvents:UIControlEventTouchUpInside];
-
+        cell.goodsClick.tag = indexPath.row;
+        cell.goodsClick2.tag = indexPath.row;
+        [cell.goodsClick addTarget:self action:@selector(goodsClick2:) forControlEvents:UIControlEventTouchUpInside];
+        [cell.goodsClick2 addTarget:self action:@selector(goodsClick3:) forControlEvents:UIControlEventTouchUpInside];
         return cell;
     }
 }
@@ -188,6 +197,15 @@
     baseViewController *baseVC = [stroyBoard instantiateViewControllerWithIdentifier:@"baseViewController"];
     newProductGoods1TableViewCell *cell = (newProductGoods1TableViewCell *)[_tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:sender.tag inSection:0]];
     [baseVC addProductsAnimation:cell.goodsImage selfView:self.view pointX:SCREENWIDTH-44 pointY:SCREENHTIGHT-44];
+    if (sender.tag == 1) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"FlashShoppingCartGoodsAdd" object: datas[0]];
+    }else if (sender.tag == 3) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"FlashShoppingCartGoodsAdd" object: datas[1]];
+    }else if (sender.tag == 4) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"FlashShoppingCartGoodsAdd" object: datas[2]];
+    }
+    _badgeLabel.hidden = NO;
+    _badgeLabel.text = [NSString stringWithFormat:@"%@",[USERDEFAULTS objectForKey:@"PurchaseQuantity"]];
 
 }
 #pragma mark 竖排商品购买1
@@ -196,6 +214,9 @@
     baseViewController *baseVC = [stroyBoard instantiateViewControllerWithIdentifier:@"baseViewController"];
     newProductGoods2TableViewCell *cell = (newProductGoods2TableViewCell *)[_tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:sender.tag inSection:0]];
     [baseVC addProductsAnimation:cell.goodsImage1 selfView:self.view pointX:SCREENWIDTH-44 pointY:SCREENHTIGHT-44];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"FlashShoppingCartGoodsAdd" object: lastDatas[(sender.tag-6)*2]];
+     _badgeLabel.hidden = NO;
+     _badgeLabel.text = [NSString stringWithFormat:@"%@",[USERDEFAULTS objectForKey:@"PurchaseQuantity"]];
 }
 #pragma mark 竖排商品购买2
 -(void)buyButton2:(UIButton *)sender{
@@ -203,6 +224,37 @@
     baseViewController *baseVC = [stroyBoard instantiateViewControllerWithIdentifier:@"baseViewController"];
     newProductGoods2TableViewCell *cell = (newProductGoods2TableViewCell *)[_tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:sender.tag inSection:0]];
     [baseVC addProductsAnimation:cell.goodsImage2 selfView:self.view pointX:SCREENWIDTH-44 pointY:SCREENHTIGHT-44];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"FlashShoppingCartGoodsAdd" object: lastDatas[(sender.tag-6)*2+1]];
+    _badgeLabel.hidden = NO;
+    _badgeLabel.text = [NSString stringWithFormat:@"%@",[USERDEFAULTS objectForKey:@"PurchaseQuantity"]];
+}
+-(void)goodsClick1:(UIButton *)sender{
+    UIStoryboard *stroyBoard = GetStoryboard(@"Main");
+    goodsDetailsViewController *goodsDetailsVC = [stroyBoard instantiateViewControllerWithIdentifier:@"goodsDetailsViewController"];
+    [goodsDetailsVC setIsAct:@"1"];
+    if (sender.tag == 1) {
+        [goodsDetailsVC setGetID:datas[0]];
+    }else if (sender.tag == 3) {
+        [goodsDetailsVC setGetID:datas[1]];
+    }else if (sender.tag == 4) {
+        [goodsDetailsVC setGetID:datas[2]];
+    }
+    [self.navigationController pushViewController:goodsDetailsVC animated:YES];
+
+}
+-(void)goodsClick2:(UIButton *)sender{
+    UIStoryboard *stroyBoard = GetStoryboard(@"Main");
+    goodsDetailsViewController *goodsDetailsVC = [stroyBoard instantiateViewControllerWithIdentifier:@"goodsDetailsViewController"];
+    [goodsDetailsVC setIsAct:@"1"];
+    [goodsDetailsVC setGetID:lastDatas[(sender.tag-6)*2]];
+    [self.navigationController pushViewController:goodsDetailsVC animated:YES];
+}
+-(void)goodsClick3:(UIButton *)sender{
+    UIStoryboard *stroyBoard = GetStoryboard(@"Main");
+    goodsDetailsViewController *goodsDetailsVC = [stroyBoard instantiateViewControllerWithIdentifier:@"goodsDetailsViewController"];
+    [goodsDetailsVC setIsAct:@"1"];
+    [goodsDetailsVC setGetID:lastDatas[(sender.tag-6)*2+1]];
+    [self.navigationController pushViewController:goodsDetailsVC animated:YES];
 }
 -(void)initHeadView{
     UIView *headView  = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREENWIDTH, SCREENWIDTH*0.5519+16)];
@@ -213,6 +265,10 @@
     
     [headView addSubview:image];
     _tableView.tableHeaderView = headView;
+}
+- (IBAction)goShoppingCart:(id)sender {
+    [self.navigationController popViewControllerAnimated:YES];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"jumpToShoppingCart" object:nil];
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

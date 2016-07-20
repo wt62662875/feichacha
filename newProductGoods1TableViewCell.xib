@@ -26,13 +26,13 @@
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="重庆奉节继承" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="303-hd-FIH">
                                 <rect key="frame" x="142" y="8" width="154" height="18"/>
                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="新鲜采摘 产地直发" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="epU-Zk-jGy">
                                 <rect key="frame" x="142" y="30" width="154" height="18"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="3.6/500g" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oER-l7-av9">
@@ -53,13 +53,21 @@
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="限量50份" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IEc-sP-noX">
                                 <rect key="frame" x="232" y="77" width="63.5" height="18"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hN8-eb-wRV">
+                                <rect key="frame" x="8" y="8" width="126" height="125"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="126" id="L3Y-1g-57e"/>
+                                    <constraint firstAttribute="height" constant="125" id="wyl-Kc-lRN"/>
+                                </constraints>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="bottom" secondItem="EV9-li-OdY" secondAttribute="bottom" constant="8" id="2e7-B8-VD3"/>
+                            <constraint firstItem="hN8-eb-wRV" firstAttribute="leading" secondItem="hpg-zl-81c" secondAttribute="leading" constant="8" id="5c8-cM-k1q"/>
                             <constraint firstItem="epU-Zk-jGy" firstAttribute="leading" secondItem="EV9-li-OdY" secondAttribute="trailing" constant="8" id="5qT-vL-swl"/>
                             <constraint firstAttribute="trailing" secondItem="epU-Zk-jGy" secondAttribute="trailing" constant="8" id="7yB-pr-ns0"/>
                             <constraint firstAttribute="trailing" secondItem="56A-1s-aaa" secondAttribute="trailing" constant="8" id="9S0-ba-RGf"/>
@@ -71,6 +79,7 @@
                             <constraint firstItem="epU-Zk-jGy" firstAttribute="top" secondItem="303-hd-FIH" secondAttribute="bottom" constant="4" id="WJt-Qh-Ltk"/>
                             <constraint firstItem="oER-l7-av9" firstAttribute="top" secondItem="epU-Zk-jGy" secondAttribute="bottom" constant="5" id="YO6-gH-Hb4"/>
                             <constraint firstItem="EV9-li-OdY" firstAttribute="leading" secondItem="hpg-zl-81c" secondAttribute="leading" constant="8" id="ZDf-nZ-Ih5"/>
+                            <constraint firstItem="hN8-eb-wRV" firstAttribute="top" secondItem="hpg-zl-81c" secondAttribute="top" constant="8" id="aff-0I-6xg"/>
                             <constraint firstAttribute="trailing" secondItem="IEc-sP-noX" secondAttribute="trailing" constant="8" id="htc-59-5lo"/>
                             <constraint firstItem="303-hd-FIH" firstAttribute="leading" secondItem="EV9-li-OdY" secondAttribute="trailing" constant="8" id="l6f-Df-TYx"/>
                             <constraint firstItem="56A-1s-aaa" firstAttribute="top" secondItem="IEc-sP-noX" secondAttribute="bottom" constant="8" id="oe3-DO-ks6"/>
@@ -88,6 +97,7 @@
             <connections>
                 <outlet property="backView" destination="hpg-zl-81c" id="Tc8-do-5sI"/>
                 <outlet property="buyButton" destination="56A-1s-aaa" id="oVl-H4-nOt"/>
+                <outlet property="goodsClick" destination="hN8-eb-wRV" id="SwA-Br-rnG"/>
                 <outlet property="goodsImage" destination="EV9-li-OdY" id="i9W-HD-Wpf"/>
                 <outlet property="goodsMessage" destination="epU-Zk-jGy" id="faE-TK-BnN"/>
                 <outlet property="goodsMessage2" destination="IEc-sP-noX" id="yIB-vi-irT"/>

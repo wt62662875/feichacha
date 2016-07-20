@@ -30,7 +30,13 @@
 -(void)getDatas{
     [SVProgressHUD showWithStatus:@"加载中..."];
     NSLog(@"%@",_getID);
-    [[NetworkUtils shareNetworkUtils] ProDetail:[_getID objectForKey:@"Fguid"] ActType:[_getID objectForKey:@"Library"] IsAct:@"0" success:^(id responseObject) {
+    NSString *tempAct;
+    if ([_isAct isEqualToString:@"1"]) {
+        tempAct = @"1";
+    }else{
+        tempAct = @"0";
+    }
+    [[NetworkUtils shareNetworkUtils] ProDetail:[_getID objectForKey:@"Fguid"] ActType:[_getID objectForKey:@"Library"] IsAct:tempAct success:^(id responseObject) {
         NSLog(@"数据:%@",responseObject);
         if ([[responseObject objectForKey:@"ResultType"]intValue] == 0) {
             datas = [responseObject objectForKey:@"AppendData"];
@@ -94,7 +100,7 @@
     }
     NSLog(@"%@",imageURL);
     headView.imageURLStringsGroup = imageURL;
-    headView.placeholderImage = [UIImage imageNamed:@"bg.png"];
+    headView.placeholderImage = [UIImage imageNamed:@"loading_default"];
     headView.autoScrollTimeInterval = 3.0;
     headView.currentPageDotColor = RGBCOLORA(225, 214, 0, 1);
     _tableView.tableHeaderView = headView;

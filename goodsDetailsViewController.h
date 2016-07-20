@@ -11,5 +11,6 @@
 @interface goodsDetailsViewController : UIViewController
 
 @property (weak, nonatomic) id getID;
+@property (weak, nonatomic) NSString* isAct;
 
 @end

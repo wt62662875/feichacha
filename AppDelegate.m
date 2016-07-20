@@ -33,8 +33,10 @@
 #import "JPUSHService.h"
 #import <AdSupport/AdSupport.h>
 #include <AlipaySDK/AlipaySDK.h>
+#import "WXApi.h"
+#import "submitOrdersViewController.h"
 
-@interface AppDelegate ()
+@interface AppDelegate ()<WXApiDelegate>
 
 @end
 
@@ -91,7 +93,8 @@
     
     [JPUSHService setupWithOption:launchOptions appKey:@"3488fa05324bfc53c0e19e93" channel:@"App Store" apsForProduction:NO advertisingIdentifier:advertisingId];
     
-    
+    //向微信注册wxd930ea5d5a258f4f
+    [WXApi registerApp:@"wxfbd72a1955031c01" withDescription:@"feichacha"];
     
     return YES;
 }
@@ -146,24 +149,9 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
 }
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
 {
-    //    [[AlipaySDK defaultService] processAuthResult:url standbyCallback:^(NSDictionary *resultDic) {
-    //                    //【由于在跳转支付宝客户端支付的过程中，商户app在后台很可能被系统kill了，所以pay接口的callback就会失效，请商户对standbyCallback返回的回调结果进行处理,就是在这个方法里面处理跟callback一样的逻辑】
-    //                    NSLog(@"result == %@",resultDic);
-    //
-    //                }];
-    //    [[AlipaySDK defaultService] processOrderWithPaymentResult:url standbyCallback:^(NSDictionary *resultDic) {
-    //                    //【由于在跳转支付宝客户端支付的过程中，商户app在后台很可能被系统kill了，所以pay接口的callback就会失效，请商户对standbyCallback返回的回调结果进行处理,就是在这个方法里面处理跟callback一样的逻辑】
-    //                    NSLog(@"=====%@",[resultDic[@"resultStatus"] class]);
-    //                    NSLog(@"result == %@",[resultDic[@"resultStatus"] class]);
-    //                }];
     
     //如果极简开发包不可用，会跳转支付宝钱包进行支付，需要将支付宝钱包的支付结果回传给开发包
     if ([url.host isEqualToString:@"safepay"]) {
-        //        @property (nullable, readonly, copy) NSString *fragment;
-        //        @property (nullable, readonly, copy) NSString *parameterString;
-        //        @property (nullable, readonly, copy) NSString *query;
-        //        @property (nullable, readonly, copy) NSString *relativePath;
-        
         NSString *str = [url.query stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
         NSData *jsonData = [str dataUsingEncoding:NSUTF8StringEncoding];
         NSError *err;
@@ -171,20 +159,21 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
                                                             options:NSJSONReadingMutableContainers
                                                               error:&err];
         NSLog(@"%@",dic);
-//        UINavigationController *ctrl = (UINavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
-//        PayoffViewController *payVC=(PayoffViewController *)ctrl.topViewController;
-//        if ([dic[@"memo"][@"ResultStatus"] isEqualToString:@"9000"]) {
+        
+        UINavigationController *ctrl = (UINavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
+        submitOrdersViewController *payVC=(submitOrdersViewController *)ctrl.topViewController;
+        if ([dic[@"memo"][@"ResultStatus"] isEqualToString:@"9000"]) {
 //            [payVC setSuccessFor_pay];
-//        }else if ([dic[@"memo"][@"ResultStatus"] isEqualToString:@"6001"]){
-//            //NSLog(@"%@",ctrl.topViewController);
-//            //[SVProgressHUD showErrorWithStatus:dic[@"memo"][@"memo"]];
+        }else if ([dic[@"memo"][@"ResultStatus"] isEqualToString:@"6001"]){
 //            [payVC setFalseFor_Pay];
-//        }
-        //[[AlipaySDK defaultService] processOrderWithPaymentResult:url standbyCallback:^(NSDictionary *resultDic) {
-        //【由于在跳转支付宝客户端支付的过程中，商户app在后台很可能被系统kill了，所以pay接口的callback就会失效，请商户对standbyCallback返回的回调结果进行处理,就是在这个方法里面处理跟callback一样的逻辑】
-        //NSLog(@"=====%@",[resultDic[@"resultStatus"] class]);
-        //NSLog(@"result == %@",[resultDic[@"resultStatus"] class]);
-        //}];
+            
+        }
+        [[AlipaySDK defaultService] processOrderWithPaymentResult:url standbyCallback:^(NSDictionary *resultDic) {
+//        【由于在跳转支付宝客户端支付的过程中，商户app在后台很可能被系统kill了，所以pay接口的callback就会失效，请商户对standbyCallback返回的回调结果进行处理,就是在这个方法里面处理跟callback一样的逻辑】
+        NSLog(@"=====%@",[resultDic[@"resultStatus"] class]);
+        NSLog(@"result == %@",[resultDic[@"resultStatus"] class]);
+        }];
+        return YES;
     }
     if ([url.host isEqualToString:@"platformapi"]){//支付宝钱包快登授权返回authCode
         
@@ -193,7 +182,52 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
             //NSLog(@"result == %@",resultDic);
             
         }];
+        return YES;
     }
+    return [WXApi handleOpenURL:url delegate:self];
+    
     return YES;
 }
+#pragma mark - WXApiDelegate
+- (void)onResp:(BaseResp *)resp {
+    //    if ([resp isKindOfClass:[SendMessageToWXResp class]]) {
+    //        if (_delegate
+    //            && [_delegate respondsToSelector:@selector(managerDidRecvMessageResponse:)]) {
+    //            SendMessageToWXResp *messageResp = (SendMessageToWXResp *)resp;
+    //            [_delegate managerDidRecvMessageResponse:messageResp];
+    //        }
+    //    } else if ([resp isKindOfClass:[SendAuthResp class]]) {
+    //        if (_delegate
+    //            && [_delegate respondsToSelector:@selector(managerDidRecvAuthResponse:)]) {
+    //            SendAuthResp *authResp = (SendAuthResp *)resp;
+    //            [_delegate managerDidRecvAuthResponse:authResp];
+    //        }
+    //    } else if ([resp isKindOfClass:[AddCardToWXCardPackageResp class]]) {
+    //        if (_delegate
+    //            && [_delegate respondsToSelector:@selector(managerDidRecvAddCardResponse:)]) {
+    //            AddCardToWXCardPackageResp *addCardResp = (AddCardToWXCardPackageResp *)resp;
+    //            [_delegate managerDidRecvAddCardResponse:addCardResp];
+    //        }
+    //    }else
+    if([resp isKindOfClass:[PayResp class]]){
+        //支付返回结果，实际支付结果需要去微信服务器端查询
+        NSString *strMsg,*strTitle = [NSString stringWithFormat:@"支付结果"];
+        
+        switch (resp.errCode) {
+            case WXSuccess:
+                strMsg = @"支付结果：成功！";
+                NSLog(@"支付成功－PaySuccess，retcode = %d", resp.errCode);
+                break;
+                
+            default:
+                strMsg = [NSString stringWithFormat:@"支付结果：失败！retcode = %d, retstr = %@", resp.errCode,resp.errStr];
+                NSLog(@"错误，retcode = %d, retstr = %@", resp.errCode,resp.errStr);
+                break;
+        }
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:strTitle message:strMsg delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+        [alert show];
+    }
+    
+}
+
 @end
