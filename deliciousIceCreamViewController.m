@@ -152,7 +152,12 @@
     [cell.iamge sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[[allDatas[indexPath.section-1] objectForKey:@"ActivityProduct"][indexPath.row]objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"loading_default"]];
     cell.name.text = [[allDatas[indexPath.section-1] objectForKey:@"ActivityProduct"][indexPath.row]objectForKey:@"Name"];
     cell.specifications.text = [[allDatas[indexPath.section-1] objectForKey:@"ActivityProduct"][indexPath.row]objectForKey:@"Size"];
-    cell.price.text = [NSString stringWithFormat:@"￥%@",[[allDatas[indexPath.section-1] objectForKey:@"ActivityProduct"][indexPath.row]objectForKey:@"Price"]];
+    cell.price.text = [NSString stringWithFormat:@"￥%.1f",[[[allDatas[indexPath.section-1] objectForKey:@"ActivityProduct"][indexPath.row]objectForKey:@"Price"] floatValue]];
+    if ([[[allDatas[indexPath.section-1] objectForKey:@"ActivityProduct"][indexPath.row]objectForKey:@"Stock"] intValue] == 0) {
+        cell.buyButton.backgroundColor = [UIColor lightGrayColor];
+        [cell.buyButton setTitle:@"已抢光" forState:UIControlStateNormal];
+        cell.buyButton.userInteractionEnabled = NO;
+    }
     cell.oldPrice.hidden = YES;
 
     [cell.buyButton addTarget:self action:@selector(buyButton:) forControlEvents:UIControlEventTouchUpInside];

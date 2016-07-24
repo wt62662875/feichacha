@@ -69,8 +69,13 @@
     germanBeerCollectionViewCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:CellIdentifier forIndexPath:indexPath];
 
     cell.name.text = [datas[indexPath.row] objectForKey:@"Name"];
-    cell.price.text = [NSString stringWithFormat:@"￥%@",[datas[indexPath.row] objectForKey:@"Price"]];
+    cell.price.text = [NSString stringWithFormat:@"￥%.1f",[[datas[indexPath.row] objectForKey:@"Price"] floatValue]];
     [cell.backImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[datas[indexPath.row] objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"beer_por1"]];
+    if ([[datas[indexPath.row] objectForKey:@"Stock"] intValue] == 0) {
+        cell.buyButton.backgroundColor = [UIColor lightGrayColor];
+        [cell.buyButton setTitle:@"已抢光" forState:UIControlStateNormal];
+        cell.buyButton.userInteractionEnabled = NO;
+    }
     
     cell.buyButton.tag = indexPath.row;
     [cell.buyButton addTarget:self action:@selector(buyButton:) forControlEvents:UIControlEventTouchUpInside];

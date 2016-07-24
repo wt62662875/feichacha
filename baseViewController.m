@@ -63,6 +63,10 @@
     // Do any additional setup after loading the view.
     [self getCurrentAddress];
 
+    _tableView.header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
+        [self getStores:[USERDEFAULTS objectForKey:@"CurrentLatitude"] lon:[USERDEFAULTS objectForKey:@"CurrentLongitude"]];
+        
+    }];
 }
 -(void)viewWillAppear:(BOOL)animated{
     if (![_titleAddress.titleLabel.text isEqualToString:[USERDEFAULTS objectForKey:@"CurrentAddress"]] && ![_titleAddress.titleLabel.text isEqualToString:@"选择收货地址"]) {
@@ -114,9 +118,10 @@
     [SVProgressHUD showWithStatus:@"加载中..."];
     [[NetworkUtils shareNetworkUtils] companyDetail:lat lon:lon Type:@"0" success:^(id responseObject) {
         NSLog(@"数据:%@",responseObject);
+        [self.tableView.header endRefreshing];
         if ([[responseObject objectForKey:@"ResultType"]intValue] == 0) {
-            if(![[NSUserDefaults standardUserDefaults] boolForKey:@"firstLaunch"]){
-                [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"firstLaunch"];
+            if(![[NSUserDefaults standardUserDefaults] boolForKey:@"baseFirstLaunch"]){
+                [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"baseFirstLaunch"];
                 [self initGuideView];
             }
             
@@ -372,9 +377,9 @@ errorCode:(BMKSearchErrorCode)error{
             cell.goodsMessage2.text = [[[indexDatas[indexPath.row-4] objectForKey:@"CompanyProduct"] objectAtIndex:1] objectForKey:@"Size"];
             cell.goodsMessage3.text = [[[indexDatas[indexPath.row-4] objectForKey:@"CompanyProduct"] objectAtIndex:2] objectForKey:@"Size"];
             
-            cell.goodsPrice1.text = [NSString stringWithFormat:@"￥%@",[[[indexDatas[indexPath.row-4] objectForKey:@"CompanyProduct"] objectAtIndex:0] objectForKey:@"Price"]];
-            cell.goodsPrice2.text = [NSString stringWithFormat:@"￥%@",[[[indexDatas[indexPath.row-4] objectForKey:@"CompanyProduct"] objectAtIndex:1] objectForKey:@"Price"]];
-            cell.goodsPrice3.text = [NSString stringWithFormat:@"￥%@",[[[indexDatas[indexPath.row-4] objectForKey:@"CompanyProduct"] objectAtIndex:2] objectForKey:@"Price"]];
+            cell.goodsPrice1.text = [NSString stringWithFormat:@"￥%.1f",[[[[indexDatas[indexPath.row-4] objectForKey:@"CompanyProduct"] objectAtIndex:0] objectForKey:@"Price"] floatValue]];
+            cell.goodsPrice2.text = [NSString stringWithFormat:@"￥%.1f",[[[[indexDatas[indexPath.row-4] objectForKey:@"CompanyProduct"] objectAtIndex:1] objectForKey:@"Price"] floatValue]];
+            cell.goodsPrice3.text = [NSString stringWithFormat:@"￥%.1f",[[[[indexDatas[indexPath.row-4] objectForKey:@"CompanyProduct"] objectAtIndex:2] objectForKey:@"Price"] floatValue]];
 
         }else{
             [cell.goodsImage1 sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[[[indexDatas[indexPath.row-4] objectForKey:@"FreshCompany"] objectAtIndex:0] objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"loading_default"]];
@@ -406,9 +411,9 @@ errorCode:(BMKSearchErrorCode)error{
             cell.goodsMessage2.text = [[[indexDatas[indexPath.row-4] objectForKey:@"FreshCompany"] objectAtIndex:1] objectForKey:@"Size"];
             cell.goodsMessage3.text = [[[indexDatas[indexPath.row-4] objectForKey:@"FreshCompany"] objectAtIndex:2] objectForKey:@"Size"];
             
-            cell.goodsPrice1.text = [NSString stringWithFormat:@"￥%@",[[[indexDatas[indexPath.row-4] objectForKey:@"FreshCompany"] objectAtIndex:0] objectForKey:@"Price"]];
-            cell.goodsPrice2.text = [NSString stringWithFormat:@"￥%@",[[[indexDatas[indexPath.row-4] objectForKey:@"FreshCompany"] objectAtIndex:1] objectForKey:@"Price"]];
-            cell.goodsPrice3.text = [NSString stringWithFormat:@"￥%@",[[[indexDatas[indexPath.row-4] objectForKey:@"FreshCompany"] objectAtIndex:2] objectForKey:@"Price"]];
+            cell.goodsPrice1.text = [NSString stringWithFormat:@"￥%.1f",[[[[indexDatas[indexPath.row-4] objectForKey:@"FreshCompany"] objectAtIndex:0] objectForKey:@"Price"] floatValue]];
+            cell.goodsPrice2.text = [NSString stringWithFormat:@"￥%.1f",[[[[indexDatas[indexPath.row-4] objectForKey:@"FreshCompany"] objectAtIndex:1] objectForKey:@"Price"] floatValue]];
+            cell.goodsPrice3.text = [NSString stringWithFormat:@"￥%.1f",[[[[indexDatas[indexPath.row-4] objectForKey:@"FreshCompany"] objectAtIndex:2] objectForKey:@"Price"] floatValue]];
         }
         cell.goodsDescribe1_3.hidden = YES;
         cell.goodsDescribe2_3.hidden = YES;
@@ -520,10 +525,10 @@ errorCode:(BMKSearchErrorCode)error{
         cell.goodsMessage3.text = [proHeatDatas[2] objectForKey:@"Size"];
         cell.goodsMessage4.text = [proHeatDatas[3] objectForKey:@"Size"];
         
-        cell.goodsPrice1.text = [NSString stringWithFormat:@"￥%@",[proHeatDatas[0] objectForKey:@"Price"]];
-        cell.goodsPrice2.text = [NSString stringWithFormat:@"￥%@",[proHeatDatas[1] objectForKey:@"Price"]];
-        cell.goodsPrice3.text = [NSString stringWithFormat:@"￥%@",[proHeatDatas[2] objectForKey:@"Price"]];
-        cell.goodsPrice4.text = [NSString stringWithFormat:@"￥%@",[proHeatDatas[3] objectForKey:@"Price"]];
+        cell.goodsPrice1.text = [NSString stringWithFormat:@"￥%.1f",[[proHeatDatas[0] objectForKey:@"Price"] floatValue]];
+        cell.goodsPrice2.text = [NSString stringWithFormat:@"￥%.1f",[[proHeatDatas[1] objectForKey:@"Price"] floatValue]];
+        cell.goodsPrice3.text = [NSString stringWithFormat:@"￥%.1f",[[proHeatDatas[2] objectForKey:@"Price"] floatValue]];
+        cell.goodsPrice4.text = [NSString stringWithFormat:@"￥%.1f",[[proHeatDatas[3] objectForKey:@"Price"] floatValue]];
 
         cell.goodsOldPrice1.hidden = YES;
         cell.goodsOldPrice2.hidden = YES;
@@ -722,7 +727,13 @@ errorCode:(BMKSearchErrorCode)error{
 }
 #pragma mark 更多点击事件
 -(void)moreButton:(UIButton *)sender{
-    NSLog(@"MORE%ld",(long)sender.tag);
+//    NSLog(@"MORE%@",indexDatas[sender.tag]);
+    [USERDEFAULTS setObject:[indexDatas[sender.tag] objectForKey:@"Name"] forKey:@"ChooseClass"];
+    if (sender.tag == 8) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"jumpToFreshBooking" object:nil];
+    }else{
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"jumpToFlashSmallSupper" object:nil];
+    }
 }
 
 #pragma mark 促销点击事件
@@ -861,11 +872,15 @@ errorCode:(BMKSearchErrorCode)error{
 -(void)positioningBackView:(NSString *)sender{
     if ([sender isEqualToString:@"0"]) {
         [self getCurrentAddress];
+        _deliveryTo.text = @"配送至";
     }else if([sender isEqualToString:@"1"]){
 //        [_titleAddress setTitle:[USERDEFAULTS objectForKey:@"CurrentAddress"] forState:UIControlStateNormal];
 //        [self getStores:[USERDEFAULTS objectForKey:@"CurrentLatitude"] lon:[USERDEFAULTS objectForKey:@"CurrentLongitude"]];
 //        [self initAddressTitleWidth:[USERDEFAULTS objectForKey:@"CurrentAddress"]];
-
+        NSLog(@"111");
+        _deliveryTo.text = @"配送至";
+    }else{
+        _deliveryTo.text = @"自提点";
     }
 }
 #pragma mark 重置titleAddress宽度

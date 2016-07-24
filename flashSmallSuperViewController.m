@@ -58,6 +58,9 @@
         _leftTableView.hidden = YES;
         _rightTableView.hidden = YES;
     }
+    
+//    [self tableView:_leftTableView didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:5 inSection:0]];
+
 }
 -(void)viewWillAppear:(BOOL)animated{
     if (![_titleAddress.titleLabel.text isEqualToString:[USERDEFAULTS objectForKey:@"CurrentAddress"]]) {
@@ -66,6 +69,13 @@
         [self initAddressTitleWidth:[USERDEFAULTS objectForKey:@"CurrentAddress"]];
     }
     
+    if (leftDatas && [USERDEFAULTS objectForKey:@"ChooseClass"]) {
+        for (int i = 0; i<leftDatas.count; i++) {
+            if ([[leftDatas[i]objectForKey:@"Name"] isEqualToString:[USERDEFAULTS objectForKey:@"ChooseClass"]]) {
+                [self tableView:_leftTableView didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
+            }
+        }
+    }
 }
 //获取当前地址
 -(void)getCurrentAddress{
@@ -167,6 +177,7 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"initFiveButton" object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"initFourButton" object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"jumpToFlashSmallSupper" object:nil];
+    [USERDEFAULTS setObject:nil forKey:@"ChooseClass"];
 }
 - (IBAction)loginAddress:(id)sender {
     [self performSegueWithIdentifier:@"flashSmallToAddress" sender:self];
@@ -182,12 +193,19 @@
         if ([[responseObject objectForKey:@"ResultType"]intValue] == 0) {
             page = 1;
             rightDatas = [[NSMutableArray alloc]init];
-
             leftDatas = [[NSArray alloc]init];
             leftDatas = [responseObject objectForKey:@"AppendData"];
             [_leftTableView reloadData];
-            defaultRightStr = [leftDatas[0] objectForKey:@"StringId"];
-            [self getRightDatas:[leftDatas[0] objectForKey:@"StringId"] page:1];
+            if ([USERDEFAULTS objectForKey:@"ChooseClass"]) {
+                for (int i = 0; i<leftDatas.count; i++) {
+                    if ([[leftDatas[i]objectForKey:@"Name"] isEqualToString:[USERDEFAULTS objectForKey:@"ChooseClass"]]) {
+                        [self tableView:_leftTableView didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
+                    }
+                }
+            }else{
+                defaultRightStr = [leftDatas[0] objectForKey:@"StringId"];
+                [self getRightDatas:[leftDatas[0] objectForKey:@"StringId"] page:1];
+            }
         }else {
             [SVProgressHUD showErrorWithStatus:@"请求失败，请稍后重试" maskType:SVProgressHUDMaskTypeNone];
         }
@@ -301,7 +319,8 @@
             [cell.goodsImage sd_setImageWithURL:[NSURL URLWithString:imageURL]];
             [cell.addShoppingCartButton addTarget:self action:@selector(addShoppingCartButton:) forControlEvents:UIControlEventTouchUpInside];
             cell.goodsName.text = [rightDatas[indexPath.row-1] objectForKey:@"Name"];
-            cell.goodsPrice.text = [NSString stringWithFormat:@"￥%@",[rightDatas[indexPath.row-1] objectForKey:@"Price"]];
+            cell.goodsPrice.text = [NSString stringWithFormat:@"￥%.1f",[[rightDatas[indexPath.row-1] objectForKey:@"Price"] floatValue]];
+            cell.goodsMessage.text = [rightDatas[indexPath.row-1] objectForKey:@"Size"];
             if ([[rightDatas[indexPath.row-1] objectForKey:@"IsDirect"] boolValue]) {
                 cell.goodsDescribe.hidden = YES;
             }else{

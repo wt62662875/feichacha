@@ -42,6 +42,8 @@
             datas = [responseObject objectForKey:@"AppendData"];
             [_tableView reloadData];
         }else {
+            datas = nil;
+            [_tableView reloadData];
         }
         [SVProgressHUD dismiss];
     } failure:^(NSString *error) {
@@ -148,7 +150,7 @@
     
     
     cell.goodsNumberLabel.text = [NSString stringWithFormat:@"共计%lu件商品",(unsigned long)tempArray.count];
-    cell.priceLabel.text = [NSString stringWithFormat:@"￥%@",[datas[indexPath.row] objectForKey:@"Money"]];
+    cell.priceLabel.text = [NSString stringWithFormat:@"￥%.1f",[[datas[indexPath.row] objectForKey:@"Money"] floatValue]];
     
     cell.footButton.tag = indexPath.row;
     cell.footButton2.tag = indexPath.row;
@@ -172,6 +174,8 @@
         [self ConfirmOrder:[datas[sender.tag] objectForKey:@"OrderId"] type:@"2"];
     }else if([[datas[sender.tag] objectForKey:@"State"]intValue] == 6){
         NSLog(@"去支付");
+        [USERDEFAULTS setObject:[datas[sender.tag] objectForKey:@"OrderId"] forKey:@"OrderNumber"];
+
         OrderId = [datas[sender.tag] objectForKey:@"OrderId"];
         UIActionSheet *actionsheet =[[UIActionSheet alloc]initWithTitle:@"去支付" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"微信支付",@"支付宝支付", nil];
         actionsheet.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
@@ -235,12 +239,18 @@
     [[NetworkUtils shareNetworkUtils] ConfirmOrder:orderID Type:type success:^(id responseObject) {
         NSLog(@"数据:%@",responseObject);
         if ([[responseObject objectForKey:@"ResultType"]intValue] == 0) {
-            
+            if ([type intValue] == 2) {
+                [SVProgressHUD showSuccessWithStatus:@"确认收货成功"];
+                [self getDatas:@"0"];
+            }else{
+                [SVProgressHUD showSuccessWithStatus:@"订单已取消"];
+                [self getDatas:@"0"];
+            }
         }else {
             
         }
-        [_tableView reloadData];
-        [SVProgressHUD dismiss];
+//        [_tableView reloadData];
+//        [SVProgressHUD dismiss];
     } failure:^(NSString *error) {
         [SVProgressHUD dismiss];
     }];
@@ -311,7 +321,7 @@
     // Dispose of any resources that can be recreated.
 }
 - (IBAction)backView:(id)sender {
-    [self.navigationController popViewControllerAnimated:YES];
+    [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
 /*

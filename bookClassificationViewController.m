@@ -64,7 +64,7 @@
     [cell.image sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[[datas objectForKey:@"ActivityProduct"][indexPath.row] objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"loading_default"]];
     cell.name.text = [[datas objectForKey:@"ActivityProduct"][indexPath.row] objectForKey:@"Name"];
     cell.specifications.text = [[datas objectForKey:@"ActivityProduct"][indexPath.row] objectForKey:@"Size"];
-    cell.price.text = [NSString stringWithFormat:@"￥%@",[[datas objectForKey:@"ActivityProduct"][indexPath.row] objectForKey:@"Price"]];
+    cell.price.text = [NSString stringWithFormat:@"￥%.1f",[[[datas objectForKey:@"ActivityProduct"][indexPath.row] objectForKey:@"Price"] floatValue]];
     cell.oldPrice.hidden = YES;
 
     

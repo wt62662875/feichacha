@@ -15,6 +15,8 @@
     NSArray* datas;
     
     UILabel * badgeLabel;
+    
+    UIButton *addShoppingCart;
 }
 @property (weak, nonatomic) IBOutlet UIView *backView;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *backViewHeight;
@@ -48,7 +50,7 @@
     UIImageView *Image7 = [[UIImageView alloc]initWithFrame:CGRectMake(0, Image6.frame.size.height+Image6.frame.origin.y, SCREENWIDTH , SCREENWIDTH*0.46)];
     [Image7 setImage:[UIImage imageNamed:@"apple_bottom_img4.jpg"]];
     
-    UIButton *addShoppingCart = [UIButton buttonWithType:UIButtonTypeCustom];
+    addShoppingCart = [UIButton buttonWithType:UIButtonTypeCustom];
     [addShoppingCart setFrame:CGRectMake(SCREENWIDTH*0.052, Image2.frame.origin.y+Image2.frame.size.height-8-25, 80, 25)];
     addShoppingCart.titleLabel.font = [UIFont systemFontOfSize:15];
     addShoppingCart.layer.cornerRadius = 4;
@@ -105,6 +107,12 @@
         if ([[responseObject objectForKey:@"ResultType"]intValue] == 0) {
             datas = [[responseObject objectForKey:@"AppendData"] objectForKey:@"ActivityProduct"];
             [Image3 sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[datas[0] objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"apple_porr.png"]];
+            if ([[datas[0] objectForKey:@"Stock"] intValue] == 0) {
+                addShoppingCart.backgroundColor = [UIColor lightGrayColor];
+                [addShoppingCart setTitle:@"已抢光" forState:UIControlStateNormal];
+                addShoppingCart.userInteractionEnabled = NO;
+            }
+            
         }else {
             
             [SVProgressHUD showErrorWithStatus:@"请求失败，请稍后重试" maskType:SVProgressHUDMaskTypeNone];

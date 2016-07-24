@@ -136,28 +136,52 @@
         [cell.iamge sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[datas1[indexPath.row] objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"loading_default"]];
         cell.name.text = [datas1[indexPath.row] objectForKey:@"Name"];
         cell.specifications.text = [datas1[indexPath.row] objectForKey:@"Size"];
-        cell.price.text = [NSString stringWithFormat:@"￥%@",[datas1[indexPath.row] objectForKey:@"Price"]];
+        cell.price.text = [NSString stringWithFormat:@"￥%1.f",[[datas1[indexPath.row] objectForKey:@"Price"] floatValue]];
+        if ([[datas1[indexPath.row] objectForKey:@"Stock"] intValue] == 0) {
+            cell.buyButton.backgroundColor = [UIColor lightGrayColor];
+            [cell.buyButton setTitle:@"已抢光" forState:UIControlStateNormal];
+            cell.buyButton.userInteractionEnabled = NO;
+        }
     }else if (indexPath.section == 2) {
         [cell.iamge sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[datas2[indexPath.row] objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"loading_default"]];
         cell.name.text = [datas2[indexPath.row] objectForKey:@"Name"];
         cell.specifications.text = [datas2[indexPath.row] objectForKey:@"Size"];
-        cell.price.text = [NSString stringWithFormat:@"￥%@",[datas2[indexPath.row] objectForKey:@"Price"]];
+        cell.price.text = [NSString stringWithFormat:@"￥%.1f",[[datas2[indexPath.row] objectForKey:@"Price"] floatValue]];
+        if ([[datas2[indexPath.row] objectForKey:@"Stock"] intValue] == 0) {
+            cell.buyButton.backgroundColor = [UIColor lightGrayColor];
+            [cell.buyButton setTitle:@"已抢光" forState:UIControlStateNormal];
+            cell.buyButton.userInteractionEnabled = NO;
+        }
     }else if (indexPath.section == 3) {
         [cell.iamge sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[datas3[indexPath.row] objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"loading_default"]];
         cell.name.text = [datas3[indexPath.row] objectForKey:@"Name"];
         cell.specifications.text = [datas3[indexPath.row] objectForKey:@"Size"];
-        cell.price.text = [NSString stringWithFormat:@"￥%@",[datas3[indexPath.row] objectForKey:@"Price"]];
-
+        cell.price.text = [NSString stringWithFormat:@"￥%.1f",[[datas3[indexPath.row] objectForKey:@"Price"] floatValue]];
+        if ([[datas3[indexPath.row] objectForKey:@"Stock"] intValue] == 0) {
+            cell.buyButton.backgroundColor = [UIColor lightGrayColor];
+            [cell.buyButton setTitle:@"已抢光" forState:UIControlStateNormal];
+            cell.buyButton.userInteractionEnabled = NO;
+        }
     }else if (indexPath.section == 4) {
         [cell.iamge sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[datas4[indexPath.row] objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"loading_default"]];
         cell.name.text = [datas4[indexPath.row] objectForKey:@"Name"];
         cell.specifications.text = [datas4[indexPath.row] objectForKey:@"Size"];
-        cell.price.text = [NSString stringWithFormat:@"￥%@",[datas4[indexPath.row] objectForKey:@"Price"]];
+        cell.price.text = [NSString stringWithFormat:@"￥%.1f",[[datas4[indexPath.row] objectForKey:@"Price"] floatValue]];
+        if ([[datas4[indexPath.row] objectForKey:@"Stock"] intValue] == 0) {
+            cell.buyButton.backgroundColor = [UIColor lightGrayColor];
+            [cell.buyButton setTitle:@"已抢光" forState:UIControlStateNormal];
+            cell.buyButton.userInteractionEnabled = NO;
+        }
     }else{
         [cell.iamge sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[datas5[indexPath.row] objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"loading_default"]];
         cell.name.text = [datas5[indexPath.row] objectForKey:@"Name"];
         cell.specifications.text = [datas5[indexPath.row] objectForKey:@"Size"];
-        cell.price.text = [NSString stringWithFormat:@"￥%@",[datas5[indexPath.row] objectForKey:@"Price"]];
+        cell.price.text = [NSString stringWithFormat:@"￥%.1f",[[datas5[indexPath.row] objectForKey:@"Price"] floatValue]];
+        if ([[datas5[indexPath.row] objectForKey:@"Stock"] intValue] == 0) {
+            cell.buyButton.backgroundColor = [UIColor lightGrayColor];
+            [cell.buyButton setTitle:@"已抢光" forState:UIControlStateNormal];
+            cell.buyButton.userInteractionEnabled = NO;
+        }
     }
     
     

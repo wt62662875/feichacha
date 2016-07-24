@@ -306,7 +306,7 @@
     }];
 }
 
--(void)SubmitOrder:(NSString *)UserId CompanyId:(NSString *)CompanyId Type:(NSString *)Type CouponId:(NSString *)CouponId IsCoupon:(NSString *)IsCoupon AddId:(NSString *)AddId Remark:(NSString *)Remark OrderType:(NSString *)OrderType PresetTime:(NSString *)PresetTime OrderList:(NSArray *)OrderList success:(SuccessBlock)success failure:(FailureBlock)faileure{
+-(void)SubmitOrder:(NSString *)UserId CompanyId:(NSString *)CompanyId Type:(NSString *)Type CouponId:(NSString *)CouponId IsCoupon:(NSString *)IsCoupon AddId:(NSString *)AddId Remark:(NSString *)Remark OrderType:(NSString *)OrderType PresetTime:(NSString *)PresetTime OrderList:(NSArray *)OrderList DeliveryType:(NSString *)DeliveryType success:(SuccessBlock)success failure:(FailureBlock)faileure{
     AFHTTPRequestOperationManager *manager = [self baseHtppRequest];
     [manager.requestSerializer setValue:TOKEN forHTTPHeaderField:X_CLIENT_TOKEN];
     NSString *url = [SeviceURL stringByAppendingFormat:@"/Order/SubmitOrder"];
@@ -314,8 +314,8 @@
                                                        options:NSJSONWritingPrettyPrinted
                                                          error:nil];
     NSString *jsonStr = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-    NSLog(@"%@",jsonStr);
-    NSDictionary * dic = [[NSDictionary alloc]initWithObjectsAndKeys:UserId,@"UserId" ,CompanyId,@"CompanyId",Type,@"Type",CouponId,@"CouponId",IsCoupon,@"IsCoupon",AddId,@"AddId",Remark,@"Remark",OrderType,@"OrderType",PresetTime,@"PresetTime",jsonStr,@"OrderList",nil];
+    NSDictionary * dic = [[NSDictionary alloc]initWithObjectsAndKeys:UserId,@"UserId" ,CompanyId,@"CompanyId",Type,@"Type",CouponId,@"CouponId",IsCoupon,@"IsCoupon",AddId,@"AddId",Remark,@"Remark",OrderType,@"OrderType",PresetTime,@"PresetTime",jsonStr,@"OrderList",DeliveryType,@"DeliveryType",nil];
+    NSLog(@"%@",dic);
     [manager POST:url parameters:dic success:^(AFHTTPRequestOperation *operation, id responseObject) {
         success(responseObject);
     }failure:^(AFHTTPRequestOperation *operation, NSError *error){
@@ -353,7 +353,7 @@
     AFHTTPRequestOperationManager *manager = [self baseHtppRequest];
     [manager.requestSerializer setValue:TOKEN forHTTPHeaderField:X_CLIENT_TOKEN];
     NSString *url = [SeviceURL stringByAppendingFormat:@"/WxPayment/WxPayDes?Order=%@",Order];
-    [manager GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [manager POST:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
         success(responseObject);
     }failure:^(AFHTTPRequestOperation *operation, NSError *error){
         NSString *errorStr = [error.userInfo objectForKey:@"NSLocalizedDescription"];
@@ -376,7 +376,7 @@
 -(void)ConfirmOrder:(NSString *)OrderId Type:(NSString *)Type success:(SuccessBlock)success failure:(FailureBlock)faileure{
     AFHTTPRequestOperationManager *manager = [self baseHtppRequest];
     [manager.requestSerializer setValue:TOKEN forHTTPHeaderField:X_CLIENT_TOKEN];
-    NSString *url = [SeviceURL stringByAppendingFormat:@"/UserOrder/ConfirmOrder?OrderId=%@&Type=%@",OrderId,Type];
+    NSString *url = [SeviceURL stringByAppendingFormat:@"/Confirm/ConfirmOrder?OrderId=%@&Type=%@",OrderId,Type];
     [manager GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
         success(responseObject);
     }failure:^(AFHTTPRequestOperation *operation, NSError *error){
@@ -384,6 +384,19 @@
         faileure(errorStr);
     }];
 }
+
+-(void)UserLuckyList:(SuccessBlock)success failure:(FailureBlock)faileure{
+    AFHTTPRequestOperationManager *manager = [self baseHtppRequest];
+    [manager.requestSerializer setValue:TOKEN forHTTPHeaderField:X_CLIENT_TOKEN];
+    NSString *url = [SeviceURL stringByAppendingFormat:@"/Lucky/UserLuckyList"];
+    [manager GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        success(responseObject);
+    }failure:^(AFHTTPRequestOperation *operation, NSError *error){
+        NSString *errorStr = [error.userInfo objectForKey:@"NSLocalizedDescription"];
+        faileure(errorStr);
+    }];
+}
+
 
 
 @end

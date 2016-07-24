@@ -49,6 +49,7 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(jumpToBaseView:) name:@"jumpToBaseView"object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(jumpToFlashSmallSupper:) name:@"jumpToFlashSmallSupper"object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(jumpToFreshBooking:) name:@"jumpToFreshBooking"object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(jumpToShoppingCart:) name:@"jumpToShoppingCart"object:nil];
     
     
@@ -58,9 +59,13 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(ReservationShoppingCartGoodsMin:) name:@"ReservationShoppingCartGoodsMin"object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(FlashShoppingCartGoodsDelete:) name:@"FlashShoppingCartGoodsDelete"object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(ReservationShoppingCartGoodsDelete:) name:@"ReservationShoppingCartGoodsDelete"object:nil];
-
+    
 //    [USERDEFAULTS setObject:nil forKey:@"FlashShoppingCartGoods"];
 //    [USERDEFAULTS setObject:nil forKey:@"ReservationShoppingCartGoods"];
+}
+
+-(void)jumpToFreshBooking:(NSNotification*)notification{
+    [self btn3click:nil];
 }
 -(void)jumpToShoppingCart:(NSNotification*)notification{
     [self btn4click:nil];
@@ -447,7 +452,6 @@
                 [tempDic setObject:tempStr forKey:@"PurchaseQuantity"];
                 tempArray[i] = [tempDic copy];
             }
-            
         }
     }
     [USERDEFAULTS setObject:[tempArray copy] forKey:@"FlashShoppingCartGoods"];

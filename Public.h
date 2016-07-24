@@ -10,6 +10,7 @@
 #pragma    shopID   当前所选店铺ID
 #pragma    telPhoneNumber   电话
 #pragma    UserID     用户ID
+#pragma    DeliveryType  1送货上门  2自提
 
 #pragma    delectDetailedAddress   选中详细地址
 #pragma    CurrentAddress   当前地址
@@ -19,6 +20,10 @@
 #pragma    FlashShoppingCartGoods           购物车闪送商品
 #pragma    ReservationShoppingCartGoods     购物车预定商品
 #pragma    PurchaseQuantity                 购买量
+
+#pragma    OrderNumber                 订单号
+
+#pragma    ChooseClass                 首页-更多  跳转倒闪送小超
 
 
 #import "AppUtils.h"

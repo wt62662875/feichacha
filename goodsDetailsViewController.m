@@ -11,10 +11,14 @@
 
 @interface goodsDetailsViewController ()<UIActionSheetDelegate,SDCycleScrollViewDelegate,UIWebViewDelegate>
 {
-    id datas;
+    NSMutableDictionary *datas;
 }
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
+@property (weak, nonatomic) IBOutlet UILabel *badgeLabel;
+@property (weak, nonatomic) IBOutlet UILabel *numberLabel;
+@property (weak, nonatomic) IBOutlet UIButton *plusButton;
+@property (weak, nonatomic) IBOutlet UIButton *minButton;
 
 @end
 
@@ -22,14 +26,21 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    _badgeLabel.layer.cornerRadius = 8;
+    _badgeLabel.layer.masksToBounds = YES;
+    if ([[USERDEFAULTS objectForKey:@"PurchaseQuantity"] intValue] == 0) {
+        _badgeLabel.hidden = YES;
+    }else{
+        _badgeLabel.text = [NSString stringWithFormat:@"%@",[USERDEFAULTS objectForKey:@"PurchaseQuantity"]];
+    }
     [self getDatas];
+    
 
     // Do any additional setup after loading the view.s
 
 }
 -(void)getDatas{
     [SVProgressHUD showWithStatus:@"加载中..."];
-    NSLog(@"%@",_getID);
     NSString *tempAct;
     if ([_isAct isEqualToString:@"1"]) {
         tempAct = @"1";
@@ -39,8 +50,10 @@
     [[NetworkUtils shareNetworkUtils] ProDetail:[_getID objectForKey:@"Fguid"] ActType:[_getID objectForKey:@"Library"] IsAct:tempAct success:^(id responseObject) {
         NSLog(@"数据:%@",responseObject);
         if ([[responseObject objectForKey:@"ResultType"]intValue] == 0) {
-            datas = [responseObject objectForKey:@"AppendData"];
+            datas = [[responseObject objectForKey:@"AppendData"] mutableCopy];
+            [datas setObject:[self getNumber] forKey:@"PurchaseQuantity"];
             _titleLabel.text = [datas objectForKey:@"Name"];
+            _numberLabel.text = [self getNumber];
             
             [self initHeadView];
             [self initFootView];
@@ -82,7 +95,7 @@
     cell.goodsOldPrice.hidden = YES;
 
     cell.goodsName.text = [datas objectForKey:@"Name"];
-    cell.goodsPrice.text = [NSString stringWithFormat:@"￥%@",[datas objectForKey:@"Price"]];
+    cell.goodsPrice.text = [NSString stringWithFormat:@"￥%.1f",[[datas objectForKey:@"Price"] floatValue]];
     cell.goodsBrand.text = [datas objectForKey:@"BrandId"];
     cell.goodsSpecifications.text = [datas objectForKey:@"Size"];
     cell.shelfLife.text = [NSString stringWithFormat:@"%d个月",[[datas objectForKey:@"Days"] intValue]/30];
@@ -139,6 +152,65 @@
         NSLog(@"QQ空间");
     }
 }
+- (IBAction)minButton:(id)sender {
+    if (![[self getNumber]isEqualToString:@"0"]) {
+        if ([[datas objectForKey:@"Library"] intValue] == 1) {
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"FlashShoppingCartGoodsMin" object:datas];
+            [datas setObject:[NSString stringWithFormat:@"%d",[[datas objectForKey:@"PurchaseQuantity"] intValue]-1] forKey:@"PurchaseQuantity"];
+            _badgeLabel.hidden = NO;
+            _badgeLabel.text = [NSString stringWithFormat:@"%@",[USERDEFAULTS objectForKey:@"PurchaseQuantity"]];
+        }else{
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"ReservationShoppingCartGoodsMin" object:datas];
+            [datas setObject:[NSString stringWithFormat:@"%d",[[datas objectForKey:@"PurchaseQuantity"] intValue]-1] forKey:@"PurchaseQuantity"];
+            _badgeLabel.hidden = NO;
+            _badgeLabel.text = [NSString stringWithFormat:@"%@",[USERDEFAULTS objectForKey:@"PurchaseQuantity"]];
+        }
+    }
+
+    _numberLabel.text = [self getNumber];
+}
+- (IBAction)plusButton:(id)sender {
+    if ([[datas objectForKey:@"Stock"] intValue] == 0) {
+        [SVProgressHUD showErrorWithStatus:@"已经抢光了..." maskType:SVProgressHUDMaskTypeNone];
+    }else{
+    if ([[datas objectForKey:@"Library"] intValue] == 1) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"FlashShoppingCartGoodsAdd" object:datas];
+        _badgeLabel.hidden = NO;
+        _badgeLabel.text = [NSString stringWithFormat:@"%@",[USERDEFAULTS objectForKey:@"PurchaseQuantity"]];
+    }else{
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"ReservationShoppingCartGoodsAdd" object:datas];
+        _badgeLabel.hidden = NO;
+        _badgeLabel.text = [NSString stringWithFormat:@"%@",[USERDEFAULTS objectForKey:@"PurchaseQuantity"]];
+    }
+    _numberLabel.text = [self getNumber];
+    }
+}
+
+#pragma mark 获取numberLabel数量
+-(NSString *)getNumber{
+    if ([[datas objectForKey:@"Library"] intValue] == 1) {
+        NSArray *tempArray = [USERDEFAULTS objectForKey:@"FlashShoppingCartGoods"];
+        for (int i = 0; i<tempArray.count; i++) {
+            if ([[datas objectForKey:@"Fguid"] isEqualToString:[tempArray[i] objectForKey:@"Fguid"]]) {
+                return [tempArray[i] objectForKey:@"PurchaseQuantity"];
+            }
+        }
+    }else if([[datas objectForKey:@"Library"] intValue] == 2){
+        NSArray *tempArray = [USERDEFAULTS objectForKey:@"ReservationShoppingCartGoods"];
+        for (int i = 0; i<tempArray.count; i++) {
+            if ([[datas objectForKey:@"Fguid"] isEqualToString:[tempArray[i] objectForKey:@"Fguid"]]) {
+                return [tempArray[i] objectForKey:@"PurchaseQuantity"];
+            }
+        }
+    }
+    return @"0";
+    
+}
+- (IBAction)toShoppingCar:(id)sender {
+    [self.navigationController popViewControllerAnimated:YES];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"jumpToShoppingCart" object:nil];
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

@@ -77,6 +77,8 @@
         NSLog(@"QQ空间");
     }
 }
+
+
 #pragma mark 初始化小圆点
 -(void)initNumberRound{
     _obligationNumberLabel.layer.borderWidth = 1;

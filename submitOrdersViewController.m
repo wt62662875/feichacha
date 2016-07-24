@@ -15,6 +15,8 @@
 #import <AlipaySDK/AlipaySDK.h>
 #import "WXApi.h"
 #import "WXApiObject.h"
+#import "paymentStatusViewController.h"
+#import "myOrderViewController.h"
 
 @interface submitOrdersViewController ()<WXApiDelegate>
 {
@@ -44,7 +46,7 @@
     self.tableView.tableHeaderView = view;
     footView = [[NSBundle mainBundle] loadNibNamed:@"submitOrderFootView" owner:self options:nil][0];
     [footView setFrame:CGRectMake(0, 0, SCREENWIDTH, 157)];
-    footView.shoppingFee.text = [NSString stringWithFormat:@"￥%@",_getFreight];
+    footView.shoppingFee.text = [NSString stringWithFormat:@"￥%1.f",[_getFreight floatValue]];
     self.tableView.tableFooterView = footView;
     selectPay = @"weChat";
     [self getUserLuck];
@@ -72,8 +74,8 @@
             dirMoney += ([[notDirect [i] objectForKey:@"PurchaseQuantity"] intValue]*[[notDirect [i] objectForKey:@"Price"] floatValue]);
         }
     }
-    footView.goodsTotalMoney.text = [NSString stringWithFormat:@"%.2f",dirMoney+notDirMoney];
-    _allPrice.text = [NSString stringWithFormat:@"%.2f",dirMoney+notDirMoney];
+    footView.goodsTotalMoney.text = [NSString stringWithFormat:@"￥%.2f",dirMoney+notDirMoney];
+    _allPrice.text = [NSString stringWithFormat:@"￥%.2f",dirMoney+notDirMoney];
     NSLog(@"%@",[USERDEFAULTS objectForKey:@"CurrentAddress"]);
 }
 -(void)getUserLuck{
@@ -202,12 +204,17 @@
         [headView.couponsButton addTarget:self action:@selector(couponsButtonClick:) forControlEvents:UIControlEventTouchUpInside];
         [headView.aliPayButton addTarget:self action:@selector(aliPayButton:) forControlEvents:UIControlEventTouchUpInside];
         [headView.weChatButton addTarget:self action:@selector(weChatButton:) forControlEvents:UIControlEventTouchUpInside];
-        [headView.CashOnDeliveryButton addTarget:self action:@selector(CashOnDeliveryButton:) forControlEvents:UIControlEventTouchUpInside];
-        headView.toLabel.backgroundColor = [UIColor redColor];
-        headView.CashOnDeliveryView.backgroundColor = [UIColor whiteColor];
-        headView.CashOnDeliveryMessage.hidden = YES;
-        
-        
+        if ([_OrderType intValue] == 1) {
+            [headView.CashOnDeliveryButton addTarget:self action:@selector(CashOnDeliveryButton:) forControlEvents:UIControlEventTouchUpInside];
+            headView.toLabel.backgroundColor = [UIColor redColor];
+            headView.CashOnDeliveryView.backgroundColor = [UIColor whiteColor];
+            headView.CashOnDeliveryMessage.hidden = YES;
+        }else{
+            headView.CashOnDeliveryButton.userInteractionEnabled = YES;
+            headView.toLabel.backgroundColor = RGBCOLORA(130, 130, 130, 1);
+            headView.CashOnDeliveryView.backgroundColor = RGBCOLORA(239, 239, 239, 1);
+            headView.CashOnDeliveryMessage.hidden = NO;
+        }
         return headView;
     }else{
         submitOrderSectionHeadView *sectionHeadView = [[NSBundle mainBundle] loadNibNamed:@"submitOrderSectionHeadView" owner:self options:nil][0];
@@ -256,16 +263,16 @@
     }else{
         if (section == 1) {
             if ([self returnSituation] != 4) {
-                sectionFootView.allPrice.text = [NSString stringWithFormat:@"%.2f",dirMoney];
+                sectionFootView.allPrice.text = [NSString stringWithFormat:@"￥%.2f",dirMoney];
             }else{
-                sectionFootView.allPrice.text = [NSString stringWithFormat:@"%.2f",notDirMoney];
+                sectionFootView.allPrice.text = [NSString stringWithFormat:@"￥%.2f",notDirMoney];
             }
         }
         if (section == 2) {
             if ([self returnSituation] != 3 ||[self returnSituation] != 4 ) {
 
             }else{
-                sectionFootView.allPrice.text = [NSString stringWithFormat:@"%.2f",notDirMoney];
+                sectionFootView.allPrice.text = [NSString stringWithFormat:@"￥%.2f",notDirMoney];
             }
         }
                return sectionFootView;
@@ -319,6 +326,13 @@
     }
 }
 - (IBAction)toPay:(id)sender {
+//    NSString* date;
+//    NSDateFormatter * formatter = [[NSDateFormatter alloc ] init];
+//    [formatter setDateFormat:@"YYYY-MM-dd hh:mm:ss:SSS"];
+//    date = [formatter stringFromDate:[NSDate date]];
+//    NSString* timeNow = [[NSString alloc] initWithFormat:@"%@", date];
+//    NSLog(@"开始支付=======%@", timeNow);
+    
     NSString* tempStr;
     if ([selectPay isEqualToString:@"aliPay"]) {
         tempStr = @"1";
@@ -339,8 +353,14 @@
     }
     
     [SVProgressHUD showWithStatus:@"加载中..."];
-    [[NetworkUtils shareNetworkUtils] SubmitOrder:[USERDEFAULTS objectForKey:@"UserID"] CompanyId:[USERDEFAULTS objectForKey:@"shopID"] Type:tempStr CouponId:@"0" IsCoupon:@"false" AddId:[[USERDEFAULTS objectForKey:@"delectDetailedAddress"] objectForKey:@"Id"] Remark:_Remark OrderType:_OrderType PresetTime:@"" OrderList:tempArray success:^(id responseObject) {
+    [[NetworkUtils shareNetworkUtils] SubmitOrder:[USERDEFAULTS objectForKey:@"UserID"] CompanyId:[USERDEFAULTS objectForKey:@"shopID"] Type:tempStr CouponId:@"0" IsCoupon:@"false" AddId:[[USERDEFAULTS objectForKey:@"delectDetailedAddress"] objectForKey:@"Id"] Remark:_Remark OrderType:_OrderType PresetTime:@"" OrderList:tempArray DeliveryType:[USERDEFAULTS objectForKey:@"DeliveryType"] success:^(id responseObject) {
         NSLog(@"数据:%@",responseObject);
+//        NSString* date;
+//        NSDateFormatter * formatter = [[NSDateFormatter alloc ] init];
+//        [formatter setDateFormat:@"YYYY-MM-dd hh:mm:ss:SSS"];
+//        date = [formatter stringFromDate:[NSDate date]];
+//        NSString* timeNow = [[NSString alloc] initWithFormat:@"%@", date];
+//        NSLog(@"得到订单号=======%@", timeNow);
         if ([[responseObject objectForKey:@"ResultType"]intValue] == 0) {
             if ([_OrderType intValue ] == 1) {
                 for (int i = 0; i<_getDatas.count; i++) {
@@ -351,7 +371,8 @@
                     [[NSNotificationCenter defaultCenter] postNotificationName:@"ReservationShoppingCartGoodsDelete" object:_getDatas[i]];
                 }
             }
-            NSLog(@"%@",selectPay);
+            
+            [USERDEFAULTS setObject:[[responseObject objectForKey:@"AppendData"] objectForKey:@"orderId"] forKey:@"OrderNumber"];
             if ([selectPay isEqualToString:@"aliPay"]) {
                 [self PayDes:[[responseObject objectForKey:@"AppendData"] objectForKey:@"orderId"] Type:@"1"];
             }
@@ -359,7 +380,10 @@
                 [self WxPayDes:[[responseObject objectForKey:@"AppendData"] objectForKey:@"orderId"]];
             }
             if ([selectPay isEqualToString:@"CashOnDelivery"]) {
-                
+                UIStoryboard *stroyBoard = GetStoryboard(@"Main");
+                myOrderViewController *myOrderVC = [stroyBoard instantiateViewControllerWithIdentifier:@"myOrderViewController"];
+                [myOrderVC setOrderType:@"allOrder"];
+                [self.navigationController pushViewController:myOrderVC animated:YES];
             }
         }else {
             userLuck = nil;
@@ -398,6 +422,12 @@
     [SVProgressHUD showWithStatus:@"加载中..."];
     [[NetworkUtils shareNetworkUtils] WxPayDes:order success:^(id responseObject) {
         NSLog(@"数据:%@",responseObject);
+//        NSString* date;
+//        NSDateFormatter * formatter = [[NSDateFormatter alloc ] init];
+//        [formatter setDateFormat:@"YYYY-MM-dd hh:mm:ss:SSS"];
+//        date = [formatter stringFromDate:[NSDate date]];
+//        NSString* timeNow = [[NSString alloc] initWithFormat:@"%@", date];
+//        NSLog(@"得到支付码开始微信=======%@", timeNow);
         if ([[responseObject objectForKey:@"ResultType"]intValue] == 0) {
                 PayReq* req       = [[PayReq alloc] init];
                 req.partnerId     = [[responseObject objectForKey:@"AppendData"] objectForKey:@"partnerId"];
@@ -418,12 +448,7 @@
         [SVProgressHUD dismiss];
     }];
 }
--(void) setFalseFor_Pay{
-    NSLog(@"123321");
-}
--(void) setSuccessFor_pay{
-    NSLog(@"shkvbseuibf");
-}
+
 - (IBAction)backView:(id)sender {
     [self.navigationController popViewControllerAnimated:YES];
 }

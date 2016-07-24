@@ -38,10 +38,11 @@
 }
 #pragma mark CELL的row数量
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    NSArray* tempArray = [_getDatas objectForKey:@"OrderList"];
     if (stateOrDetails) {
         return 3;
     }else{
-        return 4;
+        return 2+tempArray.count;
     }
 }
 #pragma mark CELL的高度
@@ -51,7 +52,7 @@
     }else{
         if (indexPath.row == 0) {
             NSDictionary *attribute = @{NSFontAttributeName: [UIFont systemFontOfSize:15]};
-            CGSize titleSize =[@"备注备注备注备注备注备注备注备注备注备注备注备注备注备注备注备注备注备注备注备注备注备注备注备注"  boundingRectWithSize:CGSizeMake(SCREENWIDTH-84, MAXFLOAT) options:NSStringDrawingTruncatesLastVisibleLine | NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading attributes:attribute context:nil].size;
+            CGSize titleSize =[[NSString stringWithFormat:@"%@ ",[_getDatas objectForKey:@"Remark"]]  boundingRectWithSize:CGSizeMake(SCREENWIDTH-84, MAXFLOAT) options:NSStringDrawingTruncatesLastVisibleLine | NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading attributes:attribute context:nil].size;
             return titleSize.height + 332;
         }else if (indexPath.row == 3){
             return 44;
@@ -64,6 +65,7 @@
 #pragma mark CELL的数据
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    NSArray *tempArray = [_getDatas objectForKey:@"OrderList"];
     if (stateOrDetails) {
         static NSString *cellIdentifier = @"orderStateTableViewCell";
         orderStateTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
@@ -87,11 +89,20 @@
                 cell = [[NSBundle mainBundle] loadNibNamed:@"orderDetailsTableViewCell" owner:self options:nil][0];
             }
             [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
-            cell.note.text = @"备注备注备注备注备注备注备注备注备注备注备注备注备注备注备注备注备注备注备注备注备注备注备注备注";
+            cell.orderNumber.text = [_getDatas objectForKey:@"OrderId"];
+            cell.orderTime.text = [_getDatas objectForKey:@"AddDates"];
+//            cell.deliveryTime.text = [_getDatas objectForKey:@"AddDate"];
+            cell.name.text = [_getDatas objectForKey:@"UserName"];
+            cell.phoneNumber.text = [_getDatas objectForKey:@"Mobile"];
+            cell.address.text = [_getDatas objectForKey:@"Address"];
+            cell.shopName.text = [_getDatas objectForKey:@"CompanyId"];
+
+
+            cell.note.text = [NSString stringWithFormat:@"%@ ",[_getDatas objectForKey:@"Remark"]];
 
             
             return cell;
-        }else if (indexPath.row == 3){
+        }else if (indexPath.row == tempArray.count+1){
             static NSString *cellIdentifier = @"orderDetailsFootTableViewCell";
             orderDetailsFootTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
             if (cell == nil) {
@@ -108,8 +119,12 @@
                 cell = [[NSBundle mainBundle] loadNibNamed:@"orderDetailsGoodsTableViewCell" owner:self options:nil][0];
             }
             [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
-            
-            
+            NSLog(@"%@",tempArray);
+            NSLog(@"%d",indexPath.row);
+            cell.name.text = [tempArray[indexPath.row-1] objectForKey:@"ProductName"];
+            cell.number.text = [NSString stringWithFormat:@"x%@",[tempArray[indexPath.row-1] objectForKey:@"ProductCount"]];
+            cell.price.text = [NSString stringWithFormat:@"￥%.1f",[[tempArray[indexPath.row-1] objectForKey:@"ProductMoney"] floatValue]];
+
             return cell;
         }
        
@@ -123,6 +138,7 @@
     [actionsheet showInView:self.view];
 }
 - (IBAction)button2Click:(id)sender {
+    
 }
 -(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex{
     if (buttonIndex == 0) {

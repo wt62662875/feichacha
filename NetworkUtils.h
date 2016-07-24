@@ -282,10 +282,11 @@ typedef void(^FailureBlock)(NSString *error);
  *  @param OrderType    1闪送小超订单，2新鲜预定订单
  *  @param PresetTime   预定送货时间 默认当前时间送达
  *  @param OrderList    商品集合  ProductId=商品Id   ProductCount=商品数量    SumMoney=商品总价
+ *  @param DeliveryType 1送货上门  2自提
  *  @param success      成功回调
  *  @param faileure     失败回调
  */
--(void)SubmitOrder:(NSString *)UserId CompanyId:(NSString *)CompanyId Type:(NSString *)Type CouponId:(NSString *)CouponId IsCoupon:(NSString *)IsCoupon AddId:(NSString *)AddId Remark:(NSString *)Remark OrderType:(NSString *)OrderType PresetTime:(NSString *)PresetTime OrderList:(NSArray *)OrderList success:(SuccessBlock)success failure:(FailureBlock)faileure;
+-(void)SubmitOrder:(NSString *)UserId CompanyId:(NSString *)CompanyId Type:(NSString *)Type CouponId:(NSString *)CouponId IsCoupon:(NSString *)IsCoupon AddId:(NSString *)AddId Remark:(NSString *)Remark OrderType:(NSString *)OrderType PresetTime:(NSString *)PresetTime OrderList:(NSArray *)OrderList DeliveryType:(NSString *)DeliveryType success:(SuccessBlock)success failure:(FailureBlock)faileure;
 
 /**
  *  支付宝支付接口
@@ -334,4 +335,15 @@ typedef void(^FailureBlock)(NSString *error);
  *  @param faileure    失败回调
  */
 -(void)ConfirmOrder:(NSString *)OrderId Type:(NSString *)Type success:(SuccessBlock)success failure:(FailureBlock)faileure;
+
+/**
+ *  查询我的中奖信息
+ *
+ *  @param success     成功回调
+ *  @param faileure    失败回调
+ */
+-(void)UserLuckyList:(SuccessBlock)success failure:(FailureBlock)faileure;
+
+
+
 @end

@@ -52,6 +52,11 @@
     _serchView.layer.cornerRadius = 4;
     _serchView.layer.borderWidth = 1;
     _serchView.layer.borderColor = RGBCOLORA(190, 190, 190, 1).CGColor;
+    if ([[USERDEFAULTS objectForKey:@"PurchaseQuantity"] intValue] == 0) {
+        _badgeLabel.hidden = YES;
+    }else{
+        _badgeLabel.text = [NSString stringWithFormat:@"%@",[USERDEFAULTS objectForKey:@"PurchaseQuantity"]];
+    }
     // Do any additional setup after loading the view.
     _collectionView.hidden = YES;
     _badgeView.hidden = YES;
@@ -196,7 +201,7 @@
     cell.addShoppingCartButton1.tag = indexPath.row;
     [cell.addShoppingCartButton1 addTarget:self action:@selector(addShoppingCartButton1:) forControlEvents:UIControlEventTouchUpInside];
     cell.goodsName.text = [datas[indexPath.row] objectForKey:@"Name"];
-    cell.goodsPrice1.text = [NSString stringWithFormat:@"￥%@",[datas[indexPath.row] objectForKey:@"Price"]];
+    cell.goodsPrice1.text = [NSString stringWithFormat:@"￥%.1f",[[datas[indexPath.row] objectForKey:@"Price"] floatValue]];
     cell.goodsMessage1.text = [datas[indexPath.row] objectForKey:@"Size"];
     if (![[datas[indexPath.row] objectForKey:@"IsDirect"] boolValue]) {
         cell.goodsDescribe1.layer.borderColor = RGBCOLORA(114, 172, 74, 1).CGColor;
@@ -282,7 +287,9 @@
     baseViewController *baseVC = [stroyBoard instantiateViewControllerWithIdentifier:@"baseViewController"];
     serchCollectionViewCell *cell = (serchCollectionViewCell *)[_collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:sender.tag inSection:0]];
     [baseVC addProductsAnimation:cell.goodsImage selfView:self.view pointX:SCREENWIDTH-44 pointY:SCREENHTIGHT-44];
-    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"ReservationShoppingCartGoodsAdd" object:datas[sender.tag]];
+    _badgeLabel.hidden = NO;
+    _badgeLabel.text = [NSString stringWithFormat:@"%@",[USERDEFAULTS objectForKey:@"PurchaseQuantity"]];
 }
 #pragma mark 综合
 -(void)comprehensiveButton:(UIButton *)sender{

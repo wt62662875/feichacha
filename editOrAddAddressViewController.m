@@ -263,6 +263,15 @@
     }
     
 }
+
+#pragma mark 不让输入笑脸符号
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString*)string{
+//    DLog(@"[[UITextInputMode currentInputMode]primaryLanguage] is %@",);
+    if ([[[UITextInputMode currentInputMode]primaryLanguage] isEqualToString:@"emoji"]) {
+        return NO;
+    }
+    return YES;
+}
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

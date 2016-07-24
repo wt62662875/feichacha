@@ -70,7 +70,7 @@
     [cell.goodsImage sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[datas[indexPath.row] objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"loading_default"]];
     cell.goodsName.text = [datas[indexPath.row] objectForKey:@"Name"];
     cell.goodsMessage1.text = [datas[indexPath.row] objectForKey:@"Size"];
-    cell.goodsPrice1.text = [NSString stringWithFormat:@"￥%@",[datas[indexPath.row] objectForKey:@"Price"]];
+    cell.goodsPrice1.text = [NSString stringWithFormat:@"￥%.1f",[[datas[indexPath.row] objectForKey:@"Price"] floatValue]];
 
     
     cell.addShoppingCartButton1.tag = indexPath.row;

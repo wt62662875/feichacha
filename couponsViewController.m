@@ -27,7 +27,7 @@
 }
 #pragma mark CELL的row数量
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 3;
+    return 0;
 }
 #pragma mark CELL的高度
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -78,6 +78,9 @@
 #pragma mark 不使用优惠卷
 -(void)notUseButton:(UIButton *)sender{
     NSLog(@" 不使用优惠卷");
+}
+- (IBAction)bindingButtonClick:(id)sender {
+    [AppUtils showAlertView:@"提示" STR:@"优惠卷号码无效" BtnTxt:@"确定"];
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

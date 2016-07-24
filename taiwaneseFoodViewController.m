@@ -88,15 +88,25 @@
     if (indexPath.section == 0) {
         [cell.image1 sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[datas[0] objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"loading_default"]];
         cell.name1.text = [datas[0] objectForKey:@"Name"];
-        cell.price1.text = [NSString stringWithFormat:@"￥%@",[datas[0] objectForKey:@"Price"]];
+        cell.price1.text = [NSString stringWithFormat:@"￥%.1f",[[datas[0] objectForKey:@"Price"] floatValue]];
         [cell.image2 sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[datas[1] objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"loading_default"]];
         cell.name2.text = [datas[1] objectForKey:@"Name"];
-        cell.price2.text = [NSString stringWithFormat:@"￥%@",[datas[1] objectForKey:@"Price"]];
+        cell.price2.text = [NSString stringWithFormat:@"￥%.1f",[[datas[1] objectForKey:@"Price"] floatValue]];
+        if ([[datas[1] objectForKey:@"Stock"] intValue] == 0) {
+            cell.buyButton.backgroundColor = [UIColor lightGrayColor];
+            [cell.buyButton setTitle:@"已抢光" forState:UIControlStateNormal];
+            cell.buyButton.userInteractionEnabled = NO;
+        }
         cell.roundView.layer.cornerRadius = 7;
     }else{
         [cell.image1 sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[lastDatas[indexPath.row*2] objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"loading_default"]];
         cell.name1.text = [lastDatas[indexPath.row*2] objectForKey:@"Name"];
-        cell.price1.text = [NSString stringWithFormat:@"￥%@",[lastDatas[indexPath.row*2] objectForKey:@"Price"]];
+        cell.price1.text = [NSString stringWithFormat:@"￥%.1f",[[lastDatas[indexPath.row*2] objectForKey:@"Price"] floatValue]];
+        if ([[lastDatas[indexPath.row*2] objectForKey:@"Stock"] intValue] == 0) {
+            cell.buyButton.backgroundColor = [UIColor lightGrayColor];
+            [cell.buyButton setTitle:@"已抢光" forState:UIControlStateNormal];
+            cell.buyButton.userInteractionEnabled = NO;
+        }
         if (lastDatas.count %2 != 0 && lastDatas.count/2 == indexPath.row) {
             cell.backView2.hidden = YES;
             UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, SCREENWIDTH-16, SCREENWIDTH/2+37-8) byRoundingCorners:UIRectCornerBottomLeft|UIRectCornerBottomRight cornerRadii:CGSizeMake(7, 7)];
@@ -107,7 +117,12 @@
         }else{
             [cell.image2 sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[lastDatas[indexPath.row*2+1] objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"loading_default"]];
             cell.name2.text = [lastDatas[indexPath.row*2+1] objectForKey:@"Name"];
-            cell.price2.text = [NSString stringWithFormat:@"￥%@",[lastDatas[indexPath.row*2+1] objectForKey:@"Price"]];
+            cell.price2.text = [NSString stringWithFormat:@"￥%.1f",[[lastDatas[indexPath.row*2+1] objectForKey:@"Price"] floatValue]];
+            if ([[lastDatas[indexPath.row*2+1] objectForKey:@"Stock"] intValue] == 0) {
+                cell.buyButton.backgroundColor = [UIColor lightGrayColor];
+                [cell.buyButton setTitle:@"已抢光" forState:UIControlStateNormal];
+                cell.buyButton2.userInteractionEnabled = NO;
+            }
             
             if (indexPath.row == 0) {
                 UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, SCREENWIDTH-16, SCREENWIDTH/2+37-8) byRoundingCorners:UIRectCornerTopLeft|UIRectCornerTopRight cornerRadii:CGSizeMake(7, 7)];

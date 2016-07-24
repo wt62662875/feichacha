@@ -34,7 +34,7 @@
 #import <AdSupport/AdSupport.h>
 #include <AlipaySDK/AlipaySDK.h>
 #import "WXApi.h"
-#import "submitOrdersViewController.h"
+#import "paymentStatusViewController.h"
 
 @interface AppDelegate ()<WXApiDelegate>
 
@@ -51,6 +51,7 @@
     //判断是不是第一次启动应用
     if(![[NSUserDefaults standardUserDefaults] boolForKey:@"firstLaunch"]){
 //         NSLog(@"第一次启动");
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"firstLaunch"];
         UIStoryboard *stroyBoard = GetStoryboard(@"Main");
         luanchViewController *luanchVC = [stroyBoard instantiateViewControllerWithIdentifier:@"luanchViewController"];
         self.window.rootViewController = luanchVC;
@@ -161,13 +162,17 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
         NSLog(@"%@",dic);
         
         UINavigationController *ctrl = (UINavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
-        submitOrdersViewController *payVC=(submitOrdersViewController *)ctrl.topViewController;
+        paymentStatusViewController *paymentStatusVC = [[paymentStatusViewController alloc] initWithNibName:@"paymentStatusViewController"   bundle:nil];
+
         if ([dic[@"memo"][@"ResultStatus"] isEqualToString:@"9000"]) {
-//            [payVC setSuccessFor_pay];
+            [paymentStatusVC setPayState:@"1"];
+            [ctrl pushViewController:paymentStatusVC animated:YES];
         }else if ([dic[@"memo"][@"ResultStatus"] isEqualToString:@"6001"]){
-//            [payVC setFalseFor_Pay];
+            [paymentStatusVC setPayState:@"0"];
+            [ctrl pushViewController:paymentStatusVC animated:YES];
             
         }
+
         [[AlipaySDK defaultService] processOrderWithPaymentResult:url standbyCallback:^(NSDictionary *resultDic) {
 //        【由于在跳转支付宝客户端支付的过程中，商户app在后台很可能被系统kill了，所以pay接口的callback就会失效，请商户对standbyCallback返回的回调结果进行处理,就是在这个方法里面处理跟callback一样的逻辑】
         NSLog(@"=====%@",[resultDic[@"resultStatus"] class]);
@@ -211,21 +216,21 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
     //    }else
     if([resp isKindOfClass:[PayResp class]]){
         //支付返回结果，实际支付结果需要去微信服务器端查询
-        NSString *strMsg,*strTitle = [NSString stringWithFormat:@"支付结果"];
+        UINavigationController *ctrl = (UINavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
+        paymentStatusViewController *paymentStatusVC = [[paymentStatusViewController alloc] initWithNibName:@"paymentStatusViewController"   bundle:nil];
         
         switch (resp.errCode) {
             case WXSuccess:
-                strMsg = @"支付结果：成功！";
-                NSLog(@"支付成功－PaySuccess，retcode = %d", resp.errCode);
+                [paymentStatusVC setPayState:@"1"];
+                [ctrl pushViewController:paymentStatusVC animated:YES];
                 break;
                 
             default:
-                strMsg = [NSString stringWithFormat:@"支付结果：失败！retcode = %d, retstr = %@", resp.errCode,resp.errStr];
-                NSLog(@"错误，retcode = %d, retstr = %@", resp.errCode,resp.errStr);
+               [paymentStatusVC setPayState:@"0"];
+               [ctrl pushViewController:paymentStatusVC animated:YES];
                 break;
         }
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:strTitle message:strMsg delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-        [alert show];
+
     }
     
 }

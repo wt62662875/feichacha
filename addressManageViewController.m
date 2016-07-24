@@ -76,7 +76,6 @@
             [_tableView reloadData];
             
         }else {
-            deliveryDatas = nil;
             [SVProgressHUD showErrorWithStatus:@"请求失败，请稍后重试" maskType:SVProgressHUDMaskTypeNone];
             [_tableView reloadData];
         }
@@ -180,6 +179,7 @@
         
         [USERDEFAULTS setObject:[NSString stringWithFormat:@"%f",[[toShopDatas[indexPath.row] objectForKey:@"Coordinate_y"] floatValue]] forKey:@"CurrentLatitude"];
         [USERDEFAULTS setObject:[NSString stringWithFormat:@"%f",[[toShopDatas[indexPath.row] objectForKey:@"Coordinate_x"] floatValue]] forKey:@"CurrentLongitude"];
+        [USERDEFAULTS setObject:@"2" forKey:@"DeliveryType"];
         [self.delegate positioningBackView:@"2"];
         [self.navigationController popViewControllerAnimated:YES];
 
@@ -189,6 +189,7 @@
 
         [USERDEFAULTS setObject:[NSString stringWithFormat:@"%f",[[deliveryDatas[indexPath.row] objectForKey:@"Coordinate_y"] floatValue]] forKey:@"CurrentLatitude"];
         [USERDEFAULTS setObject:[NSString stringWithFormat:@"%f",[[deliveryDatas[indexPath.row] objectForKey:@"Coordinate_x"] floatValue]] forKey:@"CurrentLongitude"];
+        [USERDEFAULTS setObject:@"1" forKey:@"DeliveryType"];
         [self.delegate positioningBackView:@"1"];
         [self.navigationController popViewControllerAnimated:YES];
     }

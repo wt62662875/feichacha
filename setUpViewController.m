@@ -26,7 +26,12 @@
     // Do any additional setup after loading the view.
 }
 - (IBAction)exitButton:(id)sender {
+    [USERDEFAULTS setObject:nil forKey:@"isRegister"];
+    [USERDEFAULTS setObject:nil forKey:@"UserID"];
+    [USERDEFAULTS setObject:nil forKey:@"telPhoneNumber"];
     
+    [self.navigationController popToRootViewControllerAnimated:YES];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"jumpToBaseView" object:nil];
 }
 - (IBAction)clearCache:(id)sender {
     //alert view

@@ -78,6 +78,11 @@
         [cell.image sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[datas[indexPath.row] objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"loading_default"]];
         cell.name.text = [datas[indexPath.row] objectForKey:@"Name"];
         cell.price.text = [NSString stringWithFormat:@"%@元",[datas[indexPath.row] objectForKey:@"Price"]];
+        if ([[datas[indexPath.row] objectForKey:@"Stock"] intValue] == 0) {
+            cell.buyButton.backgroundColor = [UIColor lightGrayColor];
+            [cell.buyButton setTitle:@"已抢光" forState:UIControlStateNormal];
+            cell.buyButton.userInteractionEnabled = NO;
+        }
         
         cell.buyButton.tag = indexPath.row;
         [cell.buyButton addTarget:self action:@selector(buyButton:) forControlEvents:UIControlEventTouchUpInside];
@@ -95,6 +100,11 @@
         [cell.image sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[datas[indexPath.row] objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"loading_default"]];
         cell.name.text = [datas[indexPath.row] objectForKey:@"Name"];
         cell.price.text = [NSString stringWithFormat:@"%@元",[datas[indexPath.row] objectForKey:@"Price"]];
+        if ([[datas[indexPath.row] objectForKey:@"Stock"] intValue] == 0) {
+            cell.buyButton.backgroundColor = [UIColor lightGrayColor];
+            [cell.buyButton setTitle:@"已抢光" forState:UIControlStateNormal];
+            cell.buyButton.userInteractionEnabled = NO;
+        }
         
         cell.buyButton.tag = indexPath.row;
         [cell.buyButton addTarget:self action:@selector(buyButton:) forControlEvents:UIControlEventTouchUpInside];

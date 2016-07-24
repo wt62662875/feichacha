@@ -72,7 +72,11 @@
     [[NetworkUtils shareNetworkUtils] userAddressList:@"" lon:@"" success:^(id responseObject) {
         NSLog(@"数据:%@",responseObject);
         if ([[responseObject objectForKey:@"ResultType"]intValue] == 0) {
-            addressDatas = [responseObject objectForKey:@"AppendData"][0];
+            if ([USERDEFAULTS objectForKey:@"delectDetailedAddress"]) {
+                addressDatas = [USERDEFAULTS objectForKey:@"delectDetailedAddress"];
+            }else{
+                addressDatas = [responseObject objectForKey:@"AppendData"][0];
+            }
             [_tableView reloadData];
         }else {
             addressDatas = nil;
@@ -89,7 +93,9 @@
     [SVProgressHUD showWithStatus:@"加载中..."];
     [[NetworkUtils shareNetworkUtils] companyDetail:lat lon:lon Type:Type success:^(id responseObject) {
         NSLog(@"数据:%@",responseObject);
-        if ([[responseObject objectForKey:@"ResultType"]intValue] == 0) {
+        NSArray * tempArray = [responseObject objectForKey:@"AppendData"];
+        
+        if ([[responseObject objectForKey:@"ResultType"]intValue] == 0 && tempArray.count >0) {
             [USERDEFAULTS setObject:[[responseObject objectForKey:@"AppendData"][0] objectForKey:@"Id"] forKey:@"shopID"];
             shopArray = [responseObject objectForKey:@"AppendData"];
             _tableView.hidden = NO;
@@ -225,10 +231,19 @@
             cell = [[NSBundle mainBundle] loadNibNamed:@"shoppingCartAddressTableViewCell" owner:self options:nil][0];
         }
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    
         if (addressDatas) {
-            cell.name.text = [addressDatas objectForKey:@"Name"];
-            cell.phoneNumber.text = [addressDatas objectForKey:@"Mobile"];
-            cell.address.text = [NSString stringWithFormat:@"%@%@%@",[addressDatas objectForKey:@"CityName"],[addressDatas objectForKey:@"Address"],[addressDatas objectForKey:@"AddressDetail"]];
+            if ([addressDatas objectForKey:@"Name"]) {
+                cell.name.text = [addressDatas objectForKey:@"Name"];
+                cell.phoneNumber.text = [addressDatas objectForKey:@"Mobile"];
+                cell.address.text = [NSString stringWithFormat:@"%@%@%@",[addressDatas objectForKey:@"CityName"],[addressDatas objectForKey:@"Address"],[addressDatas objectForKey:@"AddressDetail"]];
+            }else{
+                cell.name.text = [addressDatas objectForKey:@"CompanyName"];
+                cell.phoneNumber.text = @"自提";
+                cell.address.text = [addressDatas objectForKey:@"Address"];
+
+            }
+           
         }else{
             cell.name.hidden = YES;
             cell.phoneNumber.text = @"点击添加收货地址";
@@ -252,7 +267,7 @@
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         if(FlashShoppingCartGoodsDatas.count!=0 && indexPath.section == 1){
             cell.name.text = [FlashShoppingCartGoodsDatas[indexPath.row] objectForKey:@"Name"];
-            cell.price.text = [NSString stringWithFormat:@"￥%@",[FlashShoppingCartGoodsDatas[indexPath.row] objectForKey:@"Price"]];
+            cell.price.text = [NSString stringWithFormat:@"￥%.1f",[[FlashShoppingCartGoodsDatas[indexPath.row] objectForKey:@"Price"] floatValue]];
             cell.number.text = [NSString stringWithFormat:@"%@",[FlashShoppingCartGoodsDatas[indexPath.row] objectForKey:@"PurchaseQuantity"]];
             cell.plusButton.tag = indexPath.row;
             cell.minButton.tag = indexPath.row;
@@ -277,7 +292,7 @@
             }
         }else{
             cell.name.text = [ReservationShoppingCartGoodsDatas[indexPath.row] objectForKey:@"Name"];
-            cell.price.text = [NSString stringWithFormat:@"￥%@",[ReservationShoppingCartGoodsDatas[indexPath.row] objectForKey:@"Price"]];
+            cell.price.text = [NSString stringWithFormat:@"￥%.1f",[[ReservationShoppingCartGoodsDatas[indexPath.row] objectForKey:@"Price"] floatValue]];
             cell.number.text = [ReservationShoppingCartGoodsDatas[indexPath.row] objectForKey:@"PurchaseQuantity"];
             cell.plusButton.tag = indexPath.row;
             cell.minButton.tag = indexPath.row;
@@ -348,7 +363,7 @@
         headView.noteTextField.text = FlashNoteText;
         headView.togetherButton.tag = 1;
         [headView.togetherButton addTarget:self action:@selector(togetherButton:) forControlEvents:UIControlEventTouchUpInside];
-        [headView.flashButton addTarget:self action:@selector(flashButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+//        [headView.flashButton addTarget:self action:@selector(flashButtonClick:) forControlEvents:UIControlEventTouchUpInside];
         [headView.noteTextField addTarget:self action:@selector(flashNoteText:) forControlEvents:UIControlEventEditingChanged];
         return headView;
     }else{
