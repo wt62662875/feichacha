@@ -14,8 +14,9 @@
 #import "VerifyTheMobilePhoneViewController.h"
 #import "GatherTogetherASingleViewController.h"
 #import "submitOrdersViewController.h"
+#import "NewDatePicker.h"
 
-@interface shoppingCartViewController ()<UITableViewDelegate,UITableViewDataSource>
+@interface shoppingCartViewController ()<UITableViewDelegate,UITableViewDataSource,NewPickDateViewDelegate>
 {
     shoppingCartHeadView *headView;
     shoppingCartFootView *footView;
@@ -42,6 +43,12 @@
     NSString *sendShopFreight;                 //传运费
     NSString *OrderType;                //闪送，预定
     NSString *Remark;                //闪送，预定
+    
+    NSMutableArray *leftTimeArray;             //左边时间
+    NSMutableArray *rightTimeArray;             //右边时间
+    NSMutableArray *rightTimeArray2;             //右边时间2
+    
+    NSString *sendTime;
 
 }
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -107,6 +114,7 @@
         }
         [self getCompareOrderList:@"1"];
         [self getCompareOrderList:@"2"];
+        [self prestList];
 
         [SVProgressHUD dismiss];
     } failure:^(NSString *error) {
@@ -156,7 +164,6 @@
                 for (int i = 0; i<FlashShoppingCartGoodsAfterDatas.count; i++) {
                     [FlashShoppingCartGoodsDatas addObject:FlashShoppingCartGoodsAfterDatas[i]];
                 }
-                
             }else{
                 NSArray *tempArray = [[responseObject objectForKey:@"AppendData"] objectForKey:@"ListOrder"];
                 ReservationShoppingCartGoodsDatas = [[NSMutableArray alloc]init];
@@ -189,6 +196,34 @@
         [SVProgressHUD dismiss];
     }];
 }
+#pragma mark 获取商店营业时间
+-(void)prestList{
+    [SVProgressHUD showWithStatus:@"加载中..."];
+    [[NetworkUtils shareNetworkUtils] prestList:[USERDEFAULTS objectForKey:@"shopID"] success:^(id responseObject) {
+        NSLog(@"数据:%@",responseObject);
+        if ([[responseObject objectForKey:@"ResultType"]intValue] == 0) {
+            leftTimeArray = [[NSMutableArray alloc]init];
+            rightTimeArray = [[NSMutableArray alloc]init];
+            NSArray * tempDatas = [responseObject objectForKey:@"AppendData"];
+            for (int i = 0; i<tempDatas.count; i++) {
+                [leftTimeArray addObject:[tempDatas[i] objectForKey:@"Key"]];
+            }
+            rightTimeArray = [[tempDatas[0] objectForKey:@"Value"] mutableCopy];
+            rightTimeArray2 = [[tempDatas[1] objectForKey:@"Value"] mutableCopy];
+            sendTime = [NSString stringWithFormat:@"%@%@",leftTimeArray[0],[rightTimeArray[0] objectForKey:@"Key"]];
+
+            [_tableView reloadData];
+
+        }else {
+         
+        }
+        
+        [SVProgressHUD dismiss];
+    } failure:^(NSString *error) {
+        [SVProgressHUD dismiss];
+    }];
+}
+
 #pragma mark CELL的row数量
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     if (section == 0) {
@@ -365,6 +400,7 @@
         [headView.togetherButton addTarget:self action:@selector(togetherButton:) forControlEvents:UIControlEventTouchUpInside];
 //        [headView.flashButton addTarget:self action:@selector(flashButtonClick:) forControlEvents:UIControlEventTouchUpInside];
         [headView.noteTextField addTarget:self action:@selector(flashNoteText:) forControlEvents:UIControlEventEditingChanged];
+        [headView.timeButton addTarget:self action:@selector(timeButton:) forControlEvents:UIControlEventTouchUpInside];
         return headView;
     }else{
         headView.theRulesLbael.text = [NSString stringWithFormat:@"￥%@起送，配送费：￥%@",[shopArray[0] objectForKey:@"FreshDeliveryPrice"],[shopArray[0] objectForKey:@"FreshFromGetPrice"]];
@@ -374,7 +410,7 @@
         headView.shopName.hidden = YES;
         [headView.roundView setBackgroundColor:RGBCOLORA(131, 199, 252, 1)];
         headView.timeLabel2.hidden = YES;
-        headView.timeLabel1.text = @"明天10：00-12：00";
+        headView.timeLabel1.text = @"明天10：00-20：00";
         headView.noteTextField.text = FreshNoteText;
         headView.togetherButton.tag = 2;
         [headView.togetherButton addTarget:self action:@selector(togetherButton:) forControlEvents:UIControlEventTouchUpInside];
@@ -382,8 +418,42 @@
 
         return headView;
     }
+}
+#pragma mark 闪送小超选时间
+-(void)timeButton:(UIButton *)sender{
+    NSLog(@"选时间");
+    NSMutableArray *tempArray = [[NSMutableArray alloc]initWithObjects:@"今天",@"明天",@"后天",nil];
+    NSMutableArray *rightArray1 = [[NSMutableArray alloc]init];
+    NSMutableArray *rightArray2 = [[NSMutableArray alloc]init];
+    for (int i = 0; i<rightTimeArray.count; i++) {
+        [rightArray1 addObject:[NSString stringWithFormat:@"%@-%@",[rightTimeArray[i] objectForKey:@"Key"],[rightTimeArray[i] objectForKey:@"Value"]]];
+    }
+    for (int i = 0; i<rightTimeArray2.count; i++) {
+        [rightArray2 addObject:[NSString stringWithFormat:@"%@-%@",[rightTimeArray2[i] objectForKey:@"Key"],[rightTimeArray2[i] objectForKey:@"Value"]]];
+    }
+    NSLog(@"%@%@",rightArray1,rightArray2);
     
-    
+    NewDatePicker *alv = [[NewDatePicker alloc]initWithFrame:CGRectMake(0, 0, SCREENWIDTH, SCREENHTIGHT)];
+    alv.delegate = self;
+    alv.leftArray= tempArray;
+    alv.right1Array= rightArray1;
+    alv.right2Array = rightArray2;
+    alv.NewrightArray = alv.right1Array;
+    alv.dayString = @"0";
+    alv.hourString = @"0";
+    [self.navigationController.view addSubview:alv];
+
+}
+-(void)sendtime:(NSString *)year hour:(NSString *)hour{
+    if ([year intValue] == 0) {
+        NSLog(@"%@%@",leftTimeArray[[year intValue]],[rightTimeArray[[hour intValue]] objectForKey:@"Key"]);
+        sendTime = [NSString stringWithFormat:@"%@%@",leftTimeArray[[year intValue]],[rightTimeArray[[hour intValue]] objectForKey:@"Key"]];
+    }else{
+        NSLog(@"%@%@",leftTimeArray[[year intValue]],[rightTimeArray2[[hour intValue]] objectForKey:@"Key"]);
+        sendTime = [NSString stringWithFormat:@"%@%@",leftTimeArray[[year intValue]],[rightTimeArray2[[hour intValue]] objectForKey:@"Key"]];
+    }
+    [headView.timeButton setTitle:sendTime forState:UIControlStateNormal];
+    [_tableView reloadData];
 }
 #pragma mark  闪送小超按钮
 -(void)flashButtonClick:(UIButton *)sender{
@@ -604,6 +674,7 @@
         [submitOrdersVC setGetFreight:sendShopFreight];
         [submitOrdersVC setOrderType:OrderType];
         [submitOrdersVC setRemark:Remark];
+        [submitOrdersVC setTime:sendTime];
     }
 }
 /*

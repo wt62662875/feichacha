@@ -397,6 +397,53 @@
     }];
 }
 
+-(void)prestList:(NSString*)shopID success:(SuccessBlock)success failure:(FailureBlock)faileure{
+    AFHTTPRequestOperationManager *manager = [self baseHtppRequest];
+    NSString *url = [SeviceURL stringByAppendingFormat:@"/Preset/PresetList?CompanyId=%@",shopID];
+    [manager GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        success(responseObject);
+    }failure:^(AFHTTPRequestOperation *operation, NSError *error){
+        NSString *errorStr = [error.userInfo objectForKey:@"NSLocalizedDescription"];
+        faileure(errorStr);
+    }];
+}
+
+-(void)MessList:(NSString *)Type success:(SuccessBlock)success failure:(FailureBlock)faileure{
+    AFHTTPRequestOperationManager *manager = [self baseHtppRequest];
+    [manager.requestSerializer setValue:TOKEN forHTTPHeaderField:X_CLIENT_TOKEN];
+    NSString *url = [SeviceURL stringByAppendingFormat:@"/Message/MessList?Type=%@",Type];
+    [manager GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        success(responseObject);
+    }failure:^(AFHTTPRequestOperation *operation, NSError *error){
+        NSString *errorStr = [error.userInfo objectForKey:@"NSLocalizedDescription"];
+        faileure(errorStr);
+    }];
+}
+
+-(void)FinishOrder:(NSString *)UserId success:(SuccessBlock)success failure:(FailureBlock)faileure{
+    AFHTTPRequestOperationManager *manager = [self baseHtppRequest];
+    [manager.requestSerializer setValue:TOKEN forHTTPHeaderField:X_CLIENT_TOKEN];
+    NSString *url = [SeviceURL stringByAppendingFormat:@"/UserOrder/FinishOrder?UserId=%@",UserId];
+    [manager GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        success(responseObject);
+    }failure:^(AFHTTPRequestOperation *operation, NSError *error){
+        NSString *errorStr = [error.userInfo objectForKey:@"NSLocalizedDescription"];
+        faileure(errorStr);
+    }];
+}
+
+-(void)HotWord:(SuccessBlock)success failure:(FailureBlock)faileure{
+    AFHTTPRequestOperationManager *manager = [self baseHtppRequest];
+    [manager.requestSerializer setValue:TOKEN forHTTPHeaderField:X_CLIENT_TOKEN];
+    NSString *url = [SeviceURL stringByAppendingFormat:@"/HotWord/HotWordList"];
+    [manager GET:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        success(responseObject);
+    }failure:^(AFHTTPRequestOperation *operation, NSError *error){
+        NSString *errorStr = [error.userInfo objectForKey:@"NSLocalizedDescription"];
+        faileure(errorStr);
+    }];
+}
+
 
 
 @end

@@ -10,6 +10,7 @@
 #import "DoNotUseTableViewCell.h"
 #import "expiredCouponsTableViewCell.h"
 #import "couponsTableViewCell.h"
+#import "WXApiObject.h"
 
 @interface couponsViewController ()
 @property (weak, nonatomic) IBOutlet UIButton *bindingButton;
@@ -24,6 +25,7 @@
     _bindingButton.layer.masksToBounds = YES;
     
     // Do any additional setup after loading the view.
+
 }
 #pragma mark CELL的row数量
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{

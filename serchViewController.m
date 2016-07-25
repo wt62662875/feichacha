@@ -13,6 +13,8 @@
 
 @interface serchViewController ()<JCTagViewDelegate,UITextFieldDelegate>
 {
+    NSMutableArray *hotArray;
+    
     UIButton *comprehensiveButton;
     UIButton *salesButton;
     UIButton *thePriceButton;
@@ -52,6 +54,7 @@
     _serchView.layer.cornerRadius = 4;
     _serchView.layer.borderWidth = 1;
     _serchView.layer.borderColor = RGBCOLORA(190, 190, 190, 1).CGColor;
+    [self HotWord];
     if ([[USERDEFAULTS objectForKey:@"PurchaseQuantity"] intValue] == 0) {
         _badgeLabel.hidden = YES;
     }else{
@@ -68,6 +71,27 @@
         _badgeView.hidden = YES;
     }
 }
+-(void)HotWord{
+    [SVProgressHUD showWithStatus:@"加载中..."];
+    [[NetworkUtils shareNetworkUtils] HotWord:^(id responseObject) {
+        NSLog(@"数据:%@",responseObject);
+        if ([[responseObject objectForKey:@"ResultType"]intValue] == 0) {
+            hotArray = [[NSMutableArray alloc]init];
+            NSArray *tempArray = [responseObject objectForKey:@"AppendData"];
+            for (int i =0; i<tempArray.count; i++) {
+                [hotArray addObject:[tempArray[i] objectForKey:@"Word"]];
+            }
+            [self initJCTagView];
+        }else {
+            hotArray = nil;
+            [SVProgressHUD showErrorWithStatus:@"请求失败，请稍后重试" maskType:SVProgressHUDMaskTypeNone];
+        }
+        [SVProgressHUD dismiss];
+    } failure:^(NSString *error) {
+        [SVProgressHUD dismiss];
+    }];
+}
+
 //搜索接口
 -(void)serchAPI:(NSString *)order{
     [SVProgressHUD showWithStatus:@"加载中..."];
@@ -98,8 +122,9 @@
 }
 ///懒加载
 - (NSArray *)dataSource {
+    self.dataSource = hotArray;
     if (!_dataSource) {
-        self.dataSource = [NSArray arrayWithObjects:@"大家",@"你是什么",@"是不是呢",@"想要什么呢",@"吃大餐了哦哦哦",@"技术部的大牛",@"商场部的技术",@"全体人员注意了。开始了",@"全体人员注意了。开始了",@"全体人员注意了。开始了",@"全体人员注意了。开始了",@"全体人员注意了。开始了",@"全体人员注意了。开始了", nil];
+        self.dataSource = hotArray;
     }
     return _dataSource;
 }
@@ -131,20 +156,20 @@
     [JCView2 removeFromSuperview];
     [clearHistory removeFromSuperview];
     
-//    hotSerch = [[UILabel alloc]initWithFrame:CGRectMake(8, 8, SCREENWIDTH, 22)];
-//    hotSerch.text = @"热门搜索";
-//    hotSerch.font = [UIFont systemFontOfSize:15];
-//    hotSerch.textColor = RGBCOLORA(139, 139, 139, 1);
-//    [_backScrollView addSubview:hotSerch];
-//    
-//    JCView = [[JCTagView alloc] initWithFrame:CGRectMake(0, 38, SCREENWIDTH, 0)];
-//    JCView.delegate = self;
-//    JCView.JCSignalTagColor = [UIColor whiteColor];
-//    JCView.JCbackgroundColor = [UIColor clearColor];
-//    [JCView setArrayTagWithLabelArray:self.dataSource];
-//    [_backScrollView addSubview:JCView];
+    hotSerch = [[UILabel alloc]initWithFrame:CGRectMake(8, 8, SCREENWIDTH, 22)];
+    hotSerch.text = @"热门搜索";
+    hotSerch.font = [UIFont systemFontOfSize:15];
+    hotSerch.textColor = RGBCOLORA(139, 139, 139, 1);
+    [_backScrollView addSubview:hotSerch];
     
-//    historySerch = [[UILabel alloc]initWithFrame:CGRectMake(8, JCView.frame.size.height+50, SCREENWIDTH, 22)];
+    JCView = [[JCTagView alloc] initWithFrame:CGRectMake(0, 38, SCREENWIDTH, 0)];
+    JCView.delegate = self;
+    JCView.JCSignalTagColor = [UIColor whiteColor];
+    JCView.JCbackgroundColor = [UIColor clearColor];
+    [JCView setArrayTagWithLabelArray:self.dataSource];
+    [_backScrollView addSubview:JCView];
+    
+    historySerch = [[UILabel alloc]initWithFrame:CGRectMake(8, JCView.frame.size.height+50, SCREENWIDTH, 22)];
     historySerch = [[UILabel alloc]initWithFrame:CGRectMake(8, 8, SCREENWIDTH, 22)];
 
     historySerch.text = @"历史搜索";
@@ -152,7 +177,7 @@
     historySerch.textColor = RGBCOLORA(139, 139, 139, 1);
     [_backScrollView addSubview:historySerch];
     
-//    JCView2 = [[JCTagView alloc] initWithFrame:CGRectMake(0, historySerch.frame.origin.y+30, SCREENWIDTH, 0)];
+    JCView2 = [[JCTagView alloc] initWithFrame:CGRectMake(0, historySerch.frame.origin.y+30, SCREENWIDTH, 0)];
     JCView2 = [[JCTagView alloc] initWithFrame:CGRectMake(0,38, SCREENWIDTH, 0)];
 
     JCView2.delegate = self;

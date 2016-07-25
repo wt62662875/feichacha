@@ -11,6 +11,7 @@
 #import "editOrAddAddressViewController.h"
 #import "addressManageToShopTableViewCell.h"
 #import "baseViewController.h"
+#import "haveAddressSearchViewController.h"
 
 @interface addressManageViewController ()<UITableViewDelegate,UITableViewDataSource>
 {
@@ -29,6 +30,7 @@
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *positioningViewHeigh;
 
+@property (weak, nonatomic) IBOutlet UILabel *positioningLabel;
 @end
 
 @implementation addressManageViewController
@@ -47,7 +49,12 @@
     // Do any additional setup after loading the view.
 }
 -(void)viewWillAppear:(BOOL)animated{
-    [self getDeliveryDatas];
+    if (_sendDatas) {
+        _positioningLabel.text = [_sendDatas objectForKey:@"name"];
+        [self getToShopDatas:[_sendDatas objectForKey:@"latitude"] lon:[_sendDatas objectForKey:@"longitude"]];
+    }else{
+        [self getDeliveryDatas];
+    }
 }
 -(void)getDeliveryDatas{
     [SVProgressHUD showWithStatus:@"加载中..."];
@@ -56,7 +63,7 @@
         if ([[responseObject objectForKey:@"ResultType"]intValue] == 0) {
             deliveryDatas = [responseObject objectForKey:@"AppendData"];
             [_tableView reloadData];
-            [self getToShopDatas];
+            [self getToShopDatas:[USERDEFAULTS objectForKey:@"CurrentLatitude"] lon:[USERDEFAULTS objectForKey:@"CurrentLongitude"]];
         }else {
             deliveryDatas = nil;
             [SVProgressHUD showErrorWithStatus:@"请求失败，请稍后重试" maskType:SVProgressHUDMaskTypeNone];
@@ -67,15 +74,16 @@
         [SVProgressHUD dismiss];
     }];                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
 }
--(void)getToShopDatas{
+-(void)getToShopDatas:(NSString *)lat lon:(NSString *)lon{
     [SVProgressHUD showWithStatus:@"加载中..."];
-    [[NetworkUtils shareNetworkUtils] StoresList:[USERDEFAULTS objectForKey:@"CurrentLatitude"] lon:[USERDEFAULTS objectForKey:@"CurrentLongitude"] success:^(id responseObject) {
+    [[NetworkUtils shareNetworkUtils] StoresList:lat lon:lon success:^(id responseObject) {
         NSLog(@"数据:%@",responseObject);
         if ([[responseObject objectForKey:@"ResultType"]intValue] == 0) {
             toShopDatas = [responseObject objectForKey:@"AppendData"];
             [_tableView reloadData];
             
         }else {
+            toShopDatas = nil;
             [SVProgressHUD showErrorWithStatus:@"请求失败，请稍后重试" maskType:SVProgressHUDMaskTypeNone];
             [_tableView reloadData];
         }
@@ -150,7 +158,7 @@
         cell.shopName.text = [toShopDatas[indexPath.row] objectForKey:@"CompanyName"];
         cell.time.text = [NSString stringWithFormat:@"营业时间%@-%@",[toShopDatas[indexPath.row] objectForKey:@"ShopStartHour"],[toShopDatas[indexPath.row] objectForKey:@"ShopEndHour"]];
         cell.address.text = [toShopDatas[indexPath.row] objectForKey:@"Address"];
-        cell.distance.text = [NSString stringWithFormat:@"%@km",[toShopDatas[indexPath.row] objectForKey:@"Distance"]];
+        cell.distance.text = [NSString stringWithFormat:@"%.1fkm",[[toShopDatas[indexPath.row] objectForKey:@"Distance"] floatValue]/1000];
 
         
         return cell;
@@ -174,8 +182,9 @@
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     if (selectBool) {
-        [USERDEFAULTS setObject:[toShopDatas[indexPath.row] objectForKey:@"Address"] forKey:@"CurrentAddress"];
+        [USERDEFAULTS setObject:[toShopDatas[indexPath.row] objectForKey:@"CompanyName"] forKey:@"CurrentAddress"];
         [USERDEFAULTS setObject:toShopDatas[indexPath.row] forKey:@"delectDetailedAddress"];
+
         
         [USERDEFAULTS setObject:[NSString stringWithFormat:@"%f",[[toShopDatas[indexPath.row] objectForKey:@"Coordinate_y"] floatValue]] forKey:@"CurrentLatitude"];
         [USERDEFAULTS setObject:[NSString stringWithFormat:@"%f",[[toShopDatas[indexPath.row] objectForKey:@"Coordinate_x"] floatValue]] forKey:@"CurrentLongitude"];
@@ -210,6 +219,7 @@
 
 #pragma mark 送货上门
 - (IBAction)DoorToDoor:(id)sender {
+    _positioningLabel.text = @"定位到当前位置";
     _DoorToDoor.backgroundColor = RGBCOLORA(255, 214, 0, 1);
     _ToTheShop.backgroundColor = [UIColor whiteColor];
     [_DoorToDoor setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
@@ -228,8 +238,19 @@
 }
 #pragma mark 定位倒当前位置
 - (IBAction)positioning:(id)sender {
-    [self.delegate positioningBackView:@"0"];
-    [self.navigationController popViewControllerAnimated:YES];
+    if (selectBool) {
+        UIStoryboard *stroyBoard = GetStoryboard(@"Main");
+        haveAddressSearchViewController *haveAddressSearchVC = [stroyBoard instantiateViewControllerWithIdentifier:@"haveAddressSearchViewController"];
+        [haveAddressSearchVC setCity:@"重庆市"];
+        [haveAddressSearchVC setLat:[USERDEFAULTS objectForKey:@"CurrentLatitude"]];
+        [haveAddressSearchVC setLon:[USERDEFAULTS objectForKey:@"CurrentLongitude"]];
+        [haveAddressSearchVC setWhereGo:@"3"];
+        [self.navigationController pushViewController:haveAddressSearchVC animated:YES];
+    }else{
+        [self.delegate positioningBackView:@"0"];
+        [self.navigationController popViewControllerAnimated:YES];
+    }
+
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {

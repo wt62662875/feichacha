@@ -10,6 +10,9 @@
 #import "AppUtils.h"
 #import "AppDelegate.h"
 #import "Reachability.h"
+#import "WXApi.h"
+#import "WXMediaMessage+messageConstruct.h"
+#import "SendMessageToWXReq+requestWithTextOrMediaMessage.h"
 //#import "SendMessageToWXReq+requestWithTextOrMediaMessage.h"
 @implementation AppUtils
 static NSString * const FORM_FLE_INPUT = @"fileupload";
@@ -232,30 +235,30 @@ static NSString * const FORM_FLE_INPUT = @"fileupload";
     
     return scaledImage;   //返回的就是已经改变的图片
 }
-//#pragma mark 分享链接
-//+ (BOOL)sendLinkURL:(NSString *)urlString
-//            TagName:(NSString *)tagName
-//              Title:(NSString *)title
-//        Description:(NSString *)description
-//         ThumbImage:(UIImage *)thumbImage
-//            InScene:(enum WXScene)scene {
-//    WXWebpageObject *ext = [WXWebpageObject object];
-//    ext.webpageUrl = urlString;
-//    
-//    WXMediaMessage *message = [WXMediaMessage messageWithTitle:title
-//                                                   Description:description
-//                                                        Object:ext
-//                                                    MessageExt:nil
-//                                                 MessageAction:nil
-//                                                    ThumbImage:thumbImage
-//                                                      MediaTag:tagName];
-//    
-//    SendMessageToWXReq* req = [SendMessageToWXReq requestWithText:nil
-//                                                   OrMediaMessage:message
-//                                                            bText:NO
-//                                                          InScene:scene];
-//    return [WXApi sendReq:req];
-//}
+#pragma mark 分享链接
++ (BOOL)sendLinkURL:(NSString *)urlString
+            TagName:(NSString *)tagName
+              Title:(NSString *)title
+        Description:(NSString *)description
+         ThumbImage:(UIImage *)thumbImage
+            InScene:(enum WXScene)scene {
+    WXWebpageObject *ext = [WXWebpageObject object];
+    ext.webpageUrl = urlString;
+    
+    WXMediaMessage *message = [WXMediaMessage messageWithTitle:title
+                                                   Description:description
+                                                        Object:ext
+                                                    MessageExt:nil
+                                                 MessageAction:nil
+                                                    ThumbImage:thumbImage
+                                                      MediaTag:tagName];
+    
+    SendMessageToWXReq* req = [SendMessageToWXReq requestWithText:nil
+                                                   OrMediaMessage:message
+                                                            bText:NO
+                                                          InScene:scene];
+    return [WXApi sendReq:req];
+}
 
 //设置圆角
 +(id) setViewRand:(UIView *) viewT andRadius:(CGFloat) Fradius andViewBorder:(CGFloat) Fborder andColor:(UIColor *) Lcolor{

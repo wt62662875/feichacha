@@ -344,6 +344,39 @@ typedef void(^FailureBlock)(NSString *error);
  */
 -(void)UserLuckyList:(SuccessBlock)success failure:(FailureBlock)faileure;
 
+/**
+ *  获取商店营业时间
+ *
+ *  @param success     成功回调
+ *  @param faileure    失败回调
+ */
+-(void)prestList:(NSString*)shopID success:(SuccessBlock)success failure:(FailureBlock)faileure;
+
+/**
+ *  站内信
+ *
+ *  @param Type        true:个人消息 false:系统消息
+ *  @param success     成功回调
+ *  @param faileure    失败回调
+ */
+-(void)MessList:(NSString *)Type success:(SuccessBlock)success failure:(FailureBlock)faileure;
+
+/**
+ *  查询已完成订单
+ *
+ *  @param UserId      用户GuId
+ *  @param success     成功回调
+ *  @param faileure    失败回调
+ */
+-(void)FinishOrder:(NSString *)UserId success:(SuccessBlock)success failure:(FailureBlock)faileure;
+
+/**
+ *  热词列表
+ *
+ *  @param success     成功回调
+ *  @param faileure    失败回调
+ */
+-(void)HotWord:(SuccessBlock)success failure:(FailureBlock)faileure;
 
 
 @end

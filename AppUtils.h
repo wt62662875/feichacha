@@ -11,6 +11,10 @@
 #import <QuartzCore/QuartzCore.h>
 #import <CoreImage/CoreImage.h>
 #import "Reachability.h"
+#import "WXApiObject.h"
+
+#import <ShareSDK/ShareSDK.h>
+#import <ShareSDKUI/ShareSDK+SSUI.h>
 
 @interface AppUtils : NSObject
 + (void) callPhone:(NSString *)number;
@@ -39,12 +43,12 @@
  */
 + (NSString *)generateUuidString;
 #pragma mark 分享链接
-//+ (BOOL)sendLinkURL:(NSString *)urlString
-//            TagName:(NSString *)tagName
-//              Title:(NSString *)title
-//        Description:(NSString *)description
-//         ThumbImage:(UIImage *)thumbImage
-//            InScene:(enum WXScene)scene;
++ (BOOL)sendLinkURL:(NSString *)urlString
+            TagName:(NSString *)tagName
+              Title:(NSString *)title
+        Description:(NSString *)description
+         ThumbImage:(UIImage *)thumbImage
+            InScene:(enum WXScene)scene;
 
 /**
  * 设置圆角

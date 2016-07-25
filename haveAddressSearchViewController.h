@@ -14,4 +14,6 @@
 @property (retain, nonatomic) NSString *lat;
 @property (retain, nonatomic) NSString *lon;
 
+@property (retain, nonatomic) NSString *whereGo;
+
 @end

@@ -67,14 +67,47 @@
     [actionsheet showInView:self.view];
 }
 -(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex{
-    if (buttonIndex == 0) {
+    NSMutableDictionary *shareParams = [NSMutableDictionary dictionary];
+    [shareParams SSDKEnableUseClientShare];
+    
+    
+    [shareParams SSDKSetupShareParamsByText:@"飞叉叉新鲜闪电送" images:@[[UIImage imageNamed:@"feichachaLogo"]] url:[NSURL URLWithString:@"http://manage.feichacha.com/html/shop/index.html"] title:@"飞叉叉" type:SSDKContentTypeAuto];
+    
+      if (buttonIndex == 0) {
         NSLog(@"微信好友");
+        [AppUtils sendLinkURL:@"http://manage.feichacha.com/html/shop/index.html" TagName:@"飞叉叉" Title:@"飞叉叉" Description:@"飞叉叉" ThumbImage:[UIImage imageNamed:@"feichachaLogo"] InScene:WXSceneSession];
     }else if (buttonIndex == 1){
         NSLog(@"微信朋友圈");
+        [AppUtils sendLinkURL:@"http://manage.feichacha.com/html/shop/index.html" TagName:@"飞叉叉" Title:@"飞叉叉" Description:@"飞叉叉" ThumbImage:[UIImage imageNamed:@"feichachaLogo"] InScene:WXSceneTimeline];
     }else if (buttonIndex == 2){
         NSLog(@"新浪微博");
+        [ShareSDK share:SSDKPlatformTypeSinaWeibo parameters:shareParams onStateChanged:^(SSDKResponseState state, NSDictionary *userData, SSDKContentEntity *contentEntity, NSError *error) {
+            switch (state) {
+                case SSDKResponseStateSuccess:
+                    NSLog(@"成功");
+                    break;
+                case SSDKResponseStateFail:
+                    NSLog(@"失败");
+                    break;
+                default:
+                    break;
+            }
+        }];
+        
     }else if (buttonIndex == 3){
         NSLog(@"QQ空间");
+        [ShareSDK share:SSDKPlatformTypeQQ parameters:shareParams onStateChanged:^(SSDKResponseState state, NSDictionary *userData, SSDKContentEntity *contentEntity, NSError *error) {
+            switch (state) {
+                case SSDKResponseStateSuccess:
+                    NSLog(@"成功");
+                    break;
+                case SSDKResponseStateFail:
+                    NSLog(@"失败");
+                    break;
+                default:
+                    break;
+            }
+        }];
     }
 }
 

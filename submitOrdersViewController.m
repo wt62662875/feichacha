@@ -83,7 +83,7 @@
     [[NetworkUtils shareNetworkUtils] UserLucky:^(id responseObject) {
         NSLog(@"数据:%@",responseObject);
         if ([[responseObject objectForKey:@"ResultType"]intValue] == 0) {
-            
+            userLuck = [responseObject objectForKey:@"AppendData"];
         }else {
             userLuck = nil;
         }
@@ -108,14 +108,14 @@
         }
         if (section == 2) {
             if ([self returnSituation] != 3 ||[self returnSituation] != 4 ) {
-                return  0;
+                return  1;
             }else{
                 return  notDirect.count;
             }
         }
         if (section == 3) {
             if (userLuck != nil) {
-                return 0;
+                return 1;
             }
         }
     }
@@ -150,7 +150,10 @@
     }
     if (indexPath.section == 2) {
         if ([self returnSituation] != 3 ||[self returnSituation] != 4 ) {
-
+            cell.goodsName.text = [userLuck objectForKey:@"LuckyProductName"];
+            cell.goodsDescribe.hidden = YES;
+            cell.goodsNumber.hidden = YES;
+            cell.goodsPrice.text = @"x1";
         }else{
             cell.goodsName.text = [notDirect[indexPath.row] objectForKey:@"Name"];
             cell.goodsNumber.text = [NSString stringWithFormat:@"x%@",[notDirect[indexPath.row] objectForKey:@"PurchaseQuantity"]];
@@ -161,6 +164,7 @@
     }
     if (indexPath.section == 3) {
         if (userLuck != nil) {
+            cell.goodsName.text = [userLuck objectForKey:@"LuckyProductName"];
             cell.goodsDescribe.hidden = YES;
             cell.goodsNumber.hidden = YES;
             cell.goodsPrice.text = @"x1";
@@ -229,6 +233,7 @@
         if (section == 2) {
             if ([self returnSituation] != 3 ||[self returnSituation] != 4 ) {
                 sectionHeadView.name.text = @"中奖商品";
+                
             }else{
                 sectionHeadView.name.text = @"其他商品";
             }
@@ -263,16 +268,16 @@
     }else{
         if (section == 1) {
             if ([self returnSituation] != 4) {
-                sectionFootView.allPrice.text = [NSString stringWithFormat:@"￥%.2f",dirMoney];
+                sectionFootView.allPrice.text = [NSString stringWithFormat:@"￥%.1f",dirMoney];
             }else{
-                sectionFootView.allPrice.text = [NSString stringWithFormat:@"￥%.2f",notDirMoney];
+                sectionFootView.allPrice.text = [NSString stringWithFormat:@"￥%.1f",notDirMoney];
             }
         }
         if (section == 2) {
             if ([self returnSituation] != 3 ||[self returnSituation] != 4 ) {
-
+                sectionFootView.allPrice.text = [NSString stringWithFormat:@"￥0.0"];
             }else{
-                sectionFootView.allPrice.text = [NSString stringWithFormat:@"￥%.2f",notDirMoney];
+                sectionFootView.allPrice.text = [NSString stringWithFormat:@"￥%.1f",notDirMoney];
             }
         }
                return sectionFootView;
@@ -353,7 +358,7 @@
     }
     
     [SVProgressHUD showWithStatus:@"加载中..."];
-    [[NetworkUtils shareNetworkUtils] SubmitOrder:[USERDEFAULTS objectForKey:@"UserID"] CompanyId:[USERDEFAULTS objectForKey:@"shopID"] Type:tempStr CouponId:@"0" IsCoupon:@"false" AddId:[[USERDEFAULTS objectForKey:@"delectDetailedAddress"] objectForKey:@"Id"] Remark:_Remark OrderType:_OrderType PresetTime:@"" OrderList:tempArray DeliveryType:[USERDEFAULTS objectForKey:@"DeliveryType"] success:^(id responseObject) {
+    [[NetworkUtils shareNetworkUtils] SubmitOrder:[USERDEFAULTS objectForKey:@"UserID"] CompanyId:[USERDEFAULTS objectForKey:@"shopID"] Type:tempStr CouponId:@"0" IsCoupon:@"false" AddId:[[USERDEFAULTS objectForKey:@"delectDetailedAddress"] objectForKey:@"Id"] Remark:_Remark OrderType:_OrderType PresetTime:_time OrderList:tempArray DeliveryType:[USERDEFAULTS objectForKey:@"DeliveryType"] success:^(id responseObject) {
         NSLog(@"数据:%@",responseObject);
 //        NSString* date;
 //        NSDateFormatter * formatter = [[NSDateFormatter alloc ] init];

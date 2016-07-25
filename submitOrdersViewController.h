@@ -13,6 +13,7 @@
 @property (weak, nonatomic) NSString* getFreight;
 @property (weak, nonatomic) NSString* OrderType;
 @property (weak, nonatomic) NSString* Remark;
+@property (weak, nonatomic) NSString* time;
 
 /**
  *  设置失败界面

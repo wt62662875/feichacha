@@ -20,4 +20,8 @@
 
 @property (nonatomic, assign) id <positioningDelegate> delegate;
 
+
+@property (strong, nonatomic) id sendDatas;
+
+
 @end

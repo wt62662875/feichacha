@@ -11,7 +11,8 @@
 
 @interface myMessageViewController ()
 {
-    NSArray *tempArray;
+    NSArray *Message;
+
 }
 @property (weak, nonatomic) IBOutlet UIView *titleView;
 @property (weak, nonatomic) IBOutlet UIButton *systemMessageButton;
@@ -29,18 +30,37 @@
     _titleView.layer.borderWidth = 1;
     _titleView.layer.borderColor = RGBCOLORA(255, 214, 0, 1).CGColor;
     // Do any additional setup after loading the view.
-    
-    tempArray = [[NSArray alloc]initWithObjects:@"亲爱的用户：你的10.00元优惠卷即将与明天过期，快去购物吧",@"亲爱的用户：你的10.00元优惠卷即将与明天过期，快去购物吧亲爱的用户：你的10.00元优惠卷即将与明天过期，快去购物吧",@"亲爱的用户：你的10.00元优惠卷即将与明天过期，快去购物吧亲爱的用户：你的10.00元优惠卷即将与明天过期，快去购物吧亲爱的用户：你的10.00元优惠卷即将与明天过期，快去购物吧", nil];
+
+    [self MessList:@"false"];
+}
+-(void)MessList:(NSString *)Type{
+    [SVProgressHUD showWithStatus:@"加载中..."];
+    [[NetworkUtils shareNetworkUtils] MessList:Type success:^(id responseObject) {
+        NSLog(@"数据:%@",responseObject);
+        if ([[responseObject objectForKey:@"ResultType"]intValue] == 0) {
+            Message = [responseObject objectForKey:@"AppendData"];
+
+            [_tableView reloadData];
+            
+        }else {
+            Message = nil;
+            [SVProgressHUD showErrorWithStatus:@"请求失败，请稍后重试" maskType:SVProgressHUDMaskTypeNone];
+            _tableView.hidden = YES;
+        }
+        [SVProgressHUD dismiss];
+    } failure:^(NSString *error) {
+        [SVProgressHUD dismiss];
+    }];
 }
 #pragma mark CELL的row数量
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 3;
+    return Message.count;
 }
 #pragma mark CELL的高度
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     NSDictionary *attribute = @{NSFontAttributeName: [UIFont systemFontOfSize:12]};
-    CGSize titleSize =[tempArray[indexPath.row]  boundingRectWithSize:CGSizeMake(SCREENWIDTH-16, MAXFLOAT) options:NSStringDrawingTruncatesLastVisibleLine | NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading attributes:attribute context:nil].size;
-    return titleSize.height + 60;
+    CGSize titleSize =[[Message[indexPath.row] objectForKey:@"Content"]  boundingRectWithSize:CGSizeMake(SCREENWIDTH-16, MAXFLOAT) options:NSStringDrawingTruncatesLastVisibleLine | NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading attributes:attribute context:nil].size;
+    return  titleSize.height+ 60;
     
 }
 #pragma mark CELL的数据
@@ -52,7 +72,8 @@
         cell = [[NSBundle mainBundle] loadNibNamed:@"myMessageTableViewCell" owner:self options:nil][0];
     }
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
-    cell.message.text = tempArray[indexPath.row];
+    cell.title.text = [Message[indexPath.row] objectForKey:@"Title"];
+    cell.message.text = [Message[indexPath.row] objectForKey:@"Content"];
     
     return cell;
 }
@@ -63,14 +84,16 @@
     [_userMessage setTitleColor:RGBCOLORA(111, 111, 111, 1) forState:UIControlStateNormal];
 
     _tableView.hidden = YES;
+    [self MessList:@"false"];
 }
 - (IBAction)userMessageClick:(id)sender {
     _userMessage.backgroundColor = RGBCOLORA(255, 214, 0, 1);
     _systemMessageButton.backgroundColor = [UIColor whiteColor];
     [_userMessage setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [_systemMessageButton setTitleColor:RGBCOLORA(111, 111, 111, 1) forState:UIControlStateNormal];
-    
+
     _tableView.hidden = NO;
+    [self MessList:@"true"];
 }
 
 - (void)didReceiveMemoryWarning {

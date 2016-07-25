@@ -10,6 +10,7 @@
 #import "haveAddressSerchTableViewCell.h"
 #import "noAddressSerchTableViewCell.h"
 #import "editOrAddAddressViewController.h"
+#import "addressManageViewController.h"
 
 @interface haveAddressSearchViewController ()<BMKMapViewDelegate,BMKGeoCodeSearchDelegate,BMKPoiSearchDelegate>
 {
@@ -176,10 +177,16 @@
     
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    
+    if ([_whereGo isEqualToString:@"3"]) {
+        addressManageViewController *addressManageVC = [self.navigationController.viewControllers objectAtIndex:self.navigationController.viewControllers.count-2];
+        [addressManageVC setSendDatas:datasList[indexPath.row]];
+        [self.navigationController popToViewController:addressManageVC animated:YES];
+
+    }else{
     editOrAddAddressViewController *editOrAddAddressVC = [self.navigationController.viewControllers objectAtIndex:self.navigationController.viewControllers.count-2];
     [editOrAddAddressVC setSendDatas:datasList[indexPath.row]];
     [self.navigationController popToViewController:editOrAddAddressVC animated:YES];
+    }
 }
 
 
