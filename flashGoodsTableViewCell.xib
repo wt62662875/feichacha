@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -21,8 +21,11 @@
                         </constraints>
                     </imageView>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Hr5-uI-VGe">
-                        <rect key="frame" x="286" y="55" width="26" height="26"/>
-                        <state key="normal" image="add_btn.png"/>
+                        <rect key="frame" x="287" y="56" width="25" height="25"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <state key="normal" image="add_btn.png">
+                            <color key="titleColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        </state>
                     </button>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="进" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fRQ-XM-5vh">
                         <rect key="frame" x="114" y="30" width="16" height="16"/>
@@ -86,11 +89,23 @@
                         <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EKJ-a1-q7j">
+                        <rect key="frame" x="270" y="60" width="9" height="17"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5aX-WC-tDm">
+                        <rect key="frame" x="236.5" y="56" width="25" height="25"/>
+                        <state key="normal" image="del_btn.png"/>
+                    </button>
                 </subviews>
                 <constraints>
                     <constraint firstAttribute="trailing" secondItem="Cqw-H4-bpt" secondAttribute="trailing" id="0LL-Jm-LLg"/>
                     <constraint firstItem="frc-5x-zSB" firstAttribute="leading" secondItem="QLQ-fC-JB1" secondAttribute="trailing" constant="8" id="2Yj-Yl-qdJ"/>
                     <constraint firstItem="J6P-6B-sGv" firstAttribute="top" secondItem="MHH-pt-RYd" secondAttribute="bottom" constant="7.5" id="64A-ft-t7J"/>
+                    <constraint firstItem="EKJ-a1-q7j" firstAttribute="leading" secondItem="5aX-WC-tDm" secondAttribute="trailing" constant="8" id="94d-bq-gyO"/>
+                    <constraint firstItem="Hr5-uI-VGe" firstAttribute="leading" secondItem="EKJ-a1-q7j" secondAttribute="trailing" constant="8" id="9PW-FY-uer"/>
                     <constraint firstAttribute="bottom" secondItem="Cqw-H4-bpt" secondAttribute="bottom" id="A19-Yi-ygO"/>
                     <constraint firstItem="QLQ-fC-JB1" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="8" id="CB4-tE-wTP"/>
                     <constraint firstItem="SGJ-hK-mqw" firstAttribute="leading" secondItem="QLQ-fC-JB1" secondAttribute="trailing" constant="8" id="F2o-HP-jx9"/>
@@ -105,9 +120,11 @@
                     <constraint firstItem="J6P-6B-sGv" firstAttribute="leading" secondItem="QLQ-fC-JB1" secondAttribute="trailing" constant="8" id="bKz-he-hMp"/>
                     <constraint firstItem="eN2-Nd-Jjz" firstAttribute="leading" secondItem="frc-5x-zSB" secondAttribute="trailing" constant="1.5" id="dAV-JP-sNN"/>
                     <constraint firstAttribute="bottom" secondItem="eN2-Nd-Jjz" secondAttribute="bottom" constant="9" id="dKE-FR-nlB"/>
+                    <constraint firstItem="Cqw-H4-bpt" firstAttribute="top" secondItem="EKJ-a1-q7j" secondAttribute="bottom" constant="11" id="fSz-2d-sR8"/>
                     <constraint firstAttribute="trailing" secondItem="Hr5-uI-VGe" secondAttribute="trailing" constant="8" id="gxO-Tp-GUU"/>
                     <constraint firstItem="MHH-pt-RYd" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="8" id="i6D-IV-FVZ"/>
                     <constraint firstItem="YGJ-Vl-1Gg" firstAttribute="leading" secondItem="fRQ-XM-5vh" secondAttribute="trailing" constant="8" id="pUW-eD-lUA"/>
+                    <constraint firstItem="Cqw-H4-bpt" firstAttribute="top" secondItem="5aX-WC-tDm" secondAttribute="bottom" constant="7" id="pVh-HJ-vnt"/>
                     <constraint firstItem="fRQ-XM-5vh" firstAttribute="leading" secondItem="J6P-6B-sGv" secondAttribute="trailing" constant="8" id="uWv-6O-jus"/>
                     <constraint firstAttribute="trailing" secondItem="MHH-pt-RYd" secondAttribute="trailing" constant="8" id="vsd-0I-WCC"/>
                     <constraint firstItem="MHH-pt-RYd" firstAttribute="leading" secondItem="QLQ-fC-JB1" secondAttribute="trailing" constant="8" id="xmH-Hk-3bi"/>
@@ -123,10 +140,13 @@
                 <outlet property="goodsName" destination="MHH-pt-RYd" id="A0f-tQ-ZYH"/>
                 <outlet property="goodsOldPrice" destination="eN2-Nd-Jjz" id="l4x-Gt-we7"/>
                 <outlet property="goodsPrice" destination="frc-5x-zSB" id="dRd-Hy-xuQ"/>
+                <outlet property="minShoppingCartButton" destination="5aX-WC-tDm" id="C9n-iJ-uPU"/>
+                <outlet property="numberLbael" destination="EKJ-a1-q7j" id="S4e-mm-6ca"/>
             </connections>
         </tableViewCell>
     </objects>
     <resources>
-        <image name="add_btn.png" width="26" height="26"/>
+        <image name="add_btn.png" width="25" height="25"/>
+        <image name="del_btn.png" width="25" height="25"/>
     </resources>
 </document>

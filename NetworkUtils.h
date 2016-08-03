@@ -15,7 +15,7 @@ typedef void(^FailureBlock)(NSString *error);
 
 +(instancetype)shareNetworkUtils;
 
--(AFHTTPRequestOperationManager *)baseHtppRequest;
+-(AFHTTPSessionManager *)baseHtppRequest;
 
 /**
  *  获取验证码
@@ -280,13 +280,13 @@ typedef void(^FailureBlock)(NSString *error);
  *  @param AddId        收货地址Id
  *  @param Remark       备注
  *  @param OrderType    1闪送小超订单，2新鲜预定订单
- *  @param PresetTime   预定送货时间 默认当前时间送达
+ *  @param PresetStartTime   预定送货时间 默认当前时间送达
  *  @param OrderList    商品集合  ProductId=商品Id   ProductCount=商品数量    SumMoney=商品总价
  *  @param DeliveryType 1送货上门  2自提
  *  @param success      成功回调
  *  @param faileure     失败回调
  */
--(void)SubmitOrder:(NSString *)UserId CompanyId:(NSString *)CompanyId Type:(NSString *)Type CouponId:(NSString *)CouponId IsCoupon:(NSString *)IsCoupon AddId:(NSString *)AddId Remark:(NSString *)Remark OrderType:(NSString *)OrderType PresetTime:(NSString *)PresetTime OrderList:(NSArray *)OrderList DeliveryType:(NSString *)DeliveryType success:(SuccessBlock)success failure:(FailureBlock)faileure;
+-(void)SubmitOrder:(NSString *)UserId CompanyId:(NSString *)CompanyId Type:(NSString *)Type CouponId:(NSString *)CouponId IsCoupon:(NSString *)IsCoupon AddId:(NSString *)AddId Remark:(NSString *)Remark OrderType:(NSString *)OrderType PresetStartTime:(NSString *)PresetStartTime OrderList:(NSArray *)OrderList DeliveryType:(NSString *)DeliveryType success:(SuccessBlock)success failure:(FailureBlock)faileure;
 
 /**
  *  支付宝支付接口
@@ -364,11 +364,10 @@ typedef void(^FailureBlock)(NSString *error);
 /**
  *  查询已完成订单
  *
- *  @param UserId      用户GuId
  *  @param success     成功回调
  *  @param faileure    失败回调
  */
--(void)FinishOrder:(NSString *)UserId success:(SuccessBlock)success failure:(FailureBlock)faileure;
+-(void)FinishOrder:(SuccessBlock)success failure:(FailureBlock)faileure;
 
 /**
  *  热词列表
@@ -377,6 +376,37 @@ typedef void(^FailureBlock)(NSString *error);
  *  @param faileure    失败回调
  */
 -(void)HotWord:(SuccessBlock)success failure:(FailureBlock)faileure;
+
+/**
+ *  查询已完成订单
+ *
+ *  @param UserId      用户GuId
+ *  @param success     成功回调
+ *  @param faileure    失败回调
+ */
+-(void)SubSugg:(NSString *)Name success:(SuccessBlock)success failure:(FailureBlock)faileure;
+
+/**
+ *  获取订单操作时间
+ *
+ *  @param OrderId     订单ID
+ *  @param success     成功回调
+ *  @param faileure    失败回调
+ */
+-(void)TimeList:(NSString *)OrderId success:(SuccessBlock)success failure:(FailureBlock)faileure;
+
+/**
+ *  申请退款
+ *
+ *  @param OrderId          订单ID
+ *  @param RefundType       退款类型 1:我要退款(无需退货) 2：我要退货(退款)
+ *  @param RefundReason     退款原因(200字符)
+ *  @param RefundRemark     退款说明
+ *  @param Images           图片路径集合-Imgurl图片路径
+ *  @param success     成功回调
+ *  @param faileure    失败回调
+ */
+-(void)ApplyOrder:(NSString *)OrderId RefundType:(NSString *)RefundType RefundReason:(NSString *)RefundReason RefundRemark:(NSString *)RefundRemark Images:(NSString *)Images success:(SuccessBlock)success failure:(FailureBlock)faileure;
 
 
 @end

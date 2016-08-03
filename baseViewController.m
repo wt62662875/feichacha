@@ -65,7 +65,7 @@
 
     _tableView.header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
         [self getStores:[USERDEFAULTS objectForKey:@"CurrentLatitude"] lon:[USERDEFAULTS objectForKey:@"CurrentLongitude"]];
-        
+
     }];
 }
 -(void)viewWillAppear:(BOOL)animated{
@@ -74,10 +74,16 @@
         [_titleAddress setTitle:[USERDEFAULTS objectForKey:@"CurrentAddress"] forState:UIControlStateNormal];
         [self initAddressTitleWidth:[USERDEFAULTS objectForKey:@"CurrentAddress"]];
     }
+    if ([[USERDEFAULTS objectForKey:@"DeliveryType"] intValue] == 2) {
+        _deliveryTo.text = @"自提点";
+    }else{
+        _deliveryTo.text = @"配送至";
+    }
 
 }
 //获取当前地址
 -(void)getCurrentAddress{
+    [USERDEFAULTS setObject:@"1" forKey:@"DeliveryType"];
     //初始化BMKLocationService
     _locService = [[BMKLocationService alloc]init];
     _locService.delegate = self;
@@ -125,6 +131,25 @@
                 [self initGuideView];
             }
             
+            NSDate *now = [NSDate date];
+            NSCalendar *calendar = [NSCalendar currentCalendar];
+            NSUInteger unitFlags = NSHourCalendarUnit | NSMinuteCalendarUnit;
+            NSDateComponents *dateComponent = [calendar components:unitFlags fromDate:now];
+            int hour = [dateComponent hour];
+            int minute = [dateComponent minute];
+            int ShopStartHour = [[[responseObject objectForKey:@"AppendData"] objectForKey:@"ShopStartHour"] intValue];
+            int ShopStartMinute = [[[responseObject objectForKey:@"AppendData"] objectForKey:@"ShopStartMinute"] intValue];
+            int ShopEndHour = [[[responseObject objectForKey:@"AppendData"] objectForKey:@"ShopEndHour"] intValue];
+            int ShopEndMinute = [[[responseObject objectForKey:@"AppendData"] objectForKey:@"ShopEndMinute"] intValue];
+
+            if (hour < ShopStartHour || hour > ShopEndHour) {
+                [self shutDoor];
+            }else if(hour == ShopStartHour && minute < ShopStartMinute){
+                [self shutDoor];
+            }else if(hour == ShopEndHour && minute > ShopEndMinute){
+                [self shutDoor];
+            }
+
             [USERDEFAULTS setObject:[[responseObject objectForKey:@"AppendData"] objectForKey:@"Id"] forKey:@"shopID"];
             _tableView.hidden = NO;
             [[NSNotificationCenter defaultCenter] postNotificationName:@"initFiveButton" object:nil];
@@ -139,6 +164,14 @@
         [SVProgressHUD dismiss];
     } failure:^(NSString *error) {
         [SVProgressHUD dismiss];
+    }];
+}
+#pragma mark 提示已经关门
+-(void)shutDoor{
+    [UIAlertView showWithTitle:@"温馨提示" message:@"商家打烊了，订单将在营业后及时送达" style:UIAlertViewStyleDefault cancelButtonTitle:@"继续下单" otherButtonTitles:@[@"切换地址"] tapBlock:^(UIAlertView * _Nonnull alertView, NSInteger buttonIndex) {
+        if (buttonIndex) {
+            [self performSegueWithIdentifier:@"baseViewToAddress" sender:self];            
+        }
     }];
 }
 #pragma mark 获取轮播图数据
@@ -217,6 +250,7 @@ errorCode:(BMKSearchErrorCode)error{
           [tempArray addObject:poiInfo.name];
       }
       [_titleAddress setTitle:tempArray[0] forState:UIControlStateNormal];
+      [self initAddressTitleWidth:tempArray[0]];
       [USERDEFAULTS setObject:tempArray[0] forKey:@"CurrentAddress"];
       [self initAddressTitleWidth:tempArray[0]];
   }
@@ -339,7 +373,7 @@ errorCode:(BMKSearchErrorCode)error{
             cell.goodsName1.text = [[[indexDatas[indexPath.row-4] objectForKey:@"CompanyProduct"] objectAtIndex:0] objectForKey:@"Name"];
             cell.goodsName2.text = [[[indexDatas[indexPath.row-4] objectForKey:@"CompanyProduct"] objectAtIndex:1] objectForKey:@"Name"];
             cell.goodsName3.text = [[[indexDatas[indexPath.row-4] objectForKey:@"CompanyProduct"] objectAtIndex:2] objectForKey:@"Name"];
-            if (![[[[indexDatas[indexPath.row-4] objectForKey:@"CompanyProduct"] objectAtIndex:0] objectForKey:@"IsDirect"] boolValue]) {
+            if ([[[[indexDatas[indexPath.row-4] objectForKey:@"CompanyProduct"] objectAtIndex:0] objectForKey:@"IsDirect"] boolValue]) {
                 cell.goodsDescribe1_1.layer.borderColor = RGBCOLORA(114, 172, 74, 1).CGColor;
                 cell.goodsDescribe1_1.layer.borderWidth = 1;
                 cell.goodsDescribe1_1.layer.cornerRadius = 8;
@@ -347,7 +381,7 @@ errorCode:(BMKSearchErrorCode)error{
                 cell.goodsDescribe1_1.textColor = RGBCOLORA(114, 172, 74, 1);
                 cell.goodsDescribe1_2.hidden = YES;
             }
-            if (![[[[indexDatas[indexPath.row-4] objectForKey:@"CompanyProduct"] objectAtIndex:1] objectForKey:@"IsDirect"] boolValue]) {
+            if ([[[[indexDatas[indexPath.row-4] objectForKey:@"CompanyProduct"] objectAtIndex:1] objectForKey:@"IsDirect"] boolValue]) {
                 cell.goodsDescribe2_1.layer.borderColor = RGBCOLORA(114, 172, 74, 1).CGColor;
                 cell.goodsDescribe2_1.layer.borderWidth = 1;
                 cell.goodsDescribe2_1.layer.cornerRadius = 8;
@@ -355,7 +389,7 @@ errorCode:(BMKSearchErrorCode)error{
                 cell.goodsDescribe2_1.textColor = RGBCOLORA(114, 172, 74, 1);
                 cell.goodsDescribe2_2.hidden = YES;
             }
-            if (![[[[indexDatas[indexPath.row-4] objectForKey:@"CompanyProduct"] objectAtIndex:2] objectForKey:@"IsDirect"] boolValue]) {
+            if ([[[[indexDatas[indexPath.row-4] objectForKey:@"CompanyProduct"] objectAtIndex:2] objectForKey:@"IsDirect"] boolValue]) {
                 cell.goodsDescribe3_1.layer.borderColor = RGBCOLORA(114, 172, 74, 1).CGColor;
                 cell.goodsDescribe3_1.layer.borderWidth = 1;
                 cell.goodsDescribe3_1.layer.cornerRadius = 8;
@@ -608,6 +642,8 @@ errorCode:(BMKSearchErrorCode)error{
     [self.navigationController pushViewController:goodsDetailsVC animated:YES];
 }
 -(void)allGoodsButton:(UIButton *)sender{
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"jumpToFlashSmallSupper" object:nil];
+
     NSLog(@"获取全部商品");
 }
 #pragma mark 分类图片点击事件
@@ -878,8 +914,14 @@ errorCode:(BMKSearchErrorCode)error{
 //        [self getStores:[USERDEFAULTS objectForKey:@"CurrentLatitude"] lon:[USERDEFAULTS objectForKey:@"CurrentLongitude"]];
 //        [self initAddressTitleWidth:[USERDEFAULTS objectForKey:@"CurrentAddress"]];
         NSLog(@"111");
+        if ([_titleAddress.titleLabel.text isEqualToString:@"选择收货地址"]) {
+            [self getStores:[USERDEFAULTS objectForKey:@"CurrentLatitude"] lon:[USERDEFAULTS objectForKey:@"CurrentLongitude"]];
+            [_titleAddress setTitle:[USERDEFAULTS objectForKey:@"CurrentAddress"] forState:UIControlStateNormal];
+            [self initAddressTitleWidth:[USERDEFAULTS objectForKey:@"CurrentAddress"]];
+        }
         _deliveryTo.text = @"配送至";
     }else{
+        
         _deliveryTo.text = @"自提点";
     }
 }

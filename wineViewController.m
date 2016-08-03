@@ -323,7 +323,7 @@
     NSIndexPath *indexpath = [self.collectionView indexPathForCell:tempcell];//获取cell对应的indexpath;
     wineCollectionViewCell *cell = (wineCollectionViewCell *)[_collectionView cellForItemAtIndexPath:indexpath];
     [baseVC addProductsAnimation:cell.image selfView:self.view pointX:SCREENWIDTH-44 pointY:SCREENHTIGHT-44];
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"FlashShoppingCartGoodsAdd" object:[allDatas[indexpath.section-1] objectForKey:@"ActivityProduct"][indexpath.row+1]];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"ReservationShoppingCartGoodsAdd" object:[allDatas[indexpath.section-1] objectForKey:@"ActivityProduct"][indexpath.row+1]];
     _badgeLabel.hidden = NO;
     _badgeLabel.text = [NSString stringWithFormat:@"%@",[USERDEFAULTS objectForKey:@"PurchaseQuantity"]];
     

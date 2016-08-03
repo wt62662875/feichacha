@@ -35,6 +35,7 @@
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UILabel *allPrice;
+@property (weak, nonatomic) IBOutlet UIButton *toPayButton;
 
 @end
 
@@ -53,6 +54,7 @@
     
     Direct = [[NSMutableArray alloc]init];
     notDirect = [[NSMutableArray alloc]init];
+    NSLog(@"%@",_getDatas);
     for (int i = 0; i<_getDatas.count; i++) {
         if (![[_getDatas[i] objectForKey:@"IsDeleted"] boolValue] && [[_getDatas[i] allKeys] containsObject:@"IsDeleted"]) {
             [Direct addObject:_getDatas[i]];
@@ -74,8 +76,8 @@
             dirMoney += ([[notDirect [i] objectForKey:@"PurchaseQuantity"] intValue]*[[notDirect [i] objectForKey:@"Price"] floatValue]);
         }
     }
-    footView.goodsTotalMoney.text = [NSString stringWithFormat:@"￥%.2f",dirMoney+notDirMoney];
-    _allPrice.text = [NSString stringWithFormat:@"￥%.2f",dirMoney+notDirMoney];
+    footView.goodsTotalMoney.text = [NSString stringWithFormat:@"￥%.1f",dirMoney+notDirMoney];
+    _allPrice.text = [NSString stringWithFormat:@"￥%.1f",dirMoney+notDirMoney+[_getFreight floatValue]];
     NSLog(@"%@",[USERDEFAULTS objectForKey:@"CurrentAddress"]);
 }
 -(void)getUserLuck{
@@ -337,6 +339,10 @@
 //    date = [formatter stringFromDate:[NSDate date]];
 //    NSString* timeNow = [[NSString alloc] initWithFormat:@"%@", date];
 //    NSLog(@"开始支付=======%@", timeNow);
+    _toPayButton.userInteractionEnabled = NO;
+    headView.aliPayButton.userInteractionEnabled = NO;
+    headView.weChatButton.userInteractionEnabled = NO;
+    headView.CashOnDeliveryButton.userInteractionEnabled = NO;
     
     NSString* tempStr;
     if ([selectPay isEqualToString:@"aliPay"]) {
@@ -353,12 +359,12 @@
         NSMutableDictionary *tempDic = [[NSMutableDictionary alloc]init];
         [tempDic setObject:[_getDatas[i] objectForKey:@"Fguid"] forKey:@"ProductId"];
         [tempDic setObject:[_getDatas[i] objectForKey:@"PurchaseQuantity"] forKey:@"ProductCount"];
-        [tempDic setObject:[NSString stringWithFormat:@"%.2f",[[_getDatas[i] objectForKey:@"Price"] floatValue]*[[_getDatas[i] objectForKey:@"PurchaseQuantity"] floatValue]] forKey:@"ProductMoney"];
+        [tempDic setObject:[NSString stringWithFormat:@"%.2f",[[_getDatas[i] objectForKey:@"Price"] floatValue]] forKey:@"ProductMoney"];
         [tempArray addObject:tempDic];
     }
     
     [SVProgressHUD showWithStatus:@"加载中..."];
-    [[NetworkUtils shareNetworkUtils] SubmitOrder:[USERDEFAULTS objectForKey:@"UserID"] CompanyId:[USERDEFAULTS objectForKey:@"shopID"] Type:tempStr CouponId:@"0" IsCoupon:@"false" AddId:[[USERDEFAULTS objectForKey:@"delectDetailedAddress"] objectForKey:@"Id"] Remark:_Remark OrderType:_OrderType PresetTime:_time OrderList:tempArray DeliveryType:[USERDEFAULTS objectForKey:@"DeliveryType"] success:^(id responseObject) {
+    [[NetworkUtils shareNetworkUtils] SubmitOrder:[USERDEFAULTS objectForKey:@"UserID"] CompanyId:[USERDEFAULTS objectForKey:@"shopID"] Type:tempStr CouponId:@"0" IsCoupon:@"false" AddId:[[USERDEFAULTS objectForKey:@"delectDetailedAddress"] objectForKey:@"Id"] Remark:_Remark OrderType:_OrderType PresetStartTime:_time OrderList:tempArray DeliveryType:[USERDEFAULTS objectForKey:@"DeliveryType"] success:^(id responseObject) {
         NSLog(@"数据:%@",responseObject);
 //        NSString* date;
 //        NSDateFormatter * formatter = [[NSDateFormatter alloc ] init];
@@ -400,6 +406,10 @@
     }];
 }
 -(void)PayDes:(NSString *)Order Type:(NSString *)Type{
+    _toPayButton.userInteractionEnabled = NO;
+    headView.aliPayButton.userInteractionEnabled = NO;
+    headView.weChatButton.userInteractionEnabled = NO;
+    headView.CashOnDeliveryButton.userInteractionEnabled = NO;
     [SVProgressHUD showWithStatus:@"加载中..."];
     [[NetworkUtils shareNetworkUtils] PayDes:Order Type:Type success:^(id responseObject) {
         NSLog(@"数据:%@",responseObject);
@@ -414,7 +424,7 @@
             }
             
         }else {
-            
+            [SVProgressHUD showErrorWithStatus:@"订单提交错误，请重试"];
         }
         [_tableView reloadData];
         [SVProgressHUD dismiss];
@@ -424,6 +434,10 @@
 
 }
 -(void)WxPayDes:(NSString *)order{
+    _toPayButton.userInteractionEnabled = NO;
+    headView.aliPayButton.userInteractionEnabled = NO;
+    headView.weChatButton.userInteractionEnabled = NO;
+    headView.CashOnDeliveryButton.userInteractionEnabled = NO;
     [SVProgressHUD showWithStatus:@"加载中..."];
     [[NetworkUtils shareNetworkUtils] WxPayDes:order success:^(id responseObject) {
         NSLog(@"数据:%@",responseObject);
@@ -445,7 +459,7 @@
                 [WXApi sendReq:req];
             
         }else {
-            
+            [SVProgressHUD showErrorWithStatus:@"订单提交错误，请重试"];
         }
         [_tableView reloadData];
         [SVProgressHUD dismiss];

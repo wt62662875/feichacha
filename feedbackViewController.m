@@ -9,6 +9,9 @@
 #import "feedbackViewController.h"
 
 @interface feedbackViewController ()<UITextViewDelegate>
+{
+    NSString * feedClass;
+}
 @property (weak, nonatomic) IBOutlet UIButton *goodsSpeciesButton;              //商品种类
 @property (weak, nonatomic) IBOutlet UIButton *goodsQualityButton;              //商品品质
 @property (weak, nonatomic) IBOutlet UIButton *goodsButton;                     //商品
@@ -57,6 +60,7 @@
 }
 #pragma mark 商品种类点击
 - (IBAction)goodsSpeciesButtonClick:(id)sender {
+    feedClass = @"商品种类";
     [self initButtonLayer];
     [sender setBackgroundColor:RGBCOLORA(249, 216, 72, 1)];
     [sender setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
@@ -64,6 +68,7 @@
 }
 #pragma mark 商品品质点击
 - (IBAction)goodsQualityButton:(id)sender {
+    feedClass = @"商品品质";
     [self initButtonLayer];
     [sender setBackgroundColor:RGBCOLORA(249, 216, 72, 1)];
     [sender setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
@@ -71,6 +76,7 @@
 }
 #pragma mark 商品点击
 - (IBAction)goodsButtonClick:(id)sender {
+    feedClass = @"商品";
     [self initButtonLayer];
     [sender setBackgroundColor:RGBCOLORA(249, 216, 72, 1)];
     [sender setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
@@ -78,6 +84,7 @@
 }
 #pragma mark 促销活动点击
 - (IBAction)SalesPromotionActivityButtonClick:(id)sender {
+    feedClass = @"促销活动";
     [self initButtonLayer];
     [sender setBackgroundColor:RGBCOLORA(249, 216, 72, 1)];
     [sender setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
@@ -85,6 +92,7 @@
 }
 #pragma mark 配送服务点击
 - (IBAction)shippingServiceButtonClick:(id)sender {
+    feedClass = @"配送服务";
     [self initButtonLayer];
     [sender setBackgroundColor:RGBCOLORA(249, 216, 72, 1)];
     [sender setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
@@ -92,10 +100,30 @@
 }
 #pragma mark 其他点击
 - (IBAction)otherButtonClick:(id)sender {
+    feedClass = @"其他";
     [self initButtonLayer];
     [sender setBackgroundColor:RGBCOLORA(249, 216, 72, 1)];
     [sender setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     _otherButton.layer.borderWidth = 0;
+}
+- (IBAction)submitButtonClick:(id)sender {
+    
+    if (_textView.text.length <= 0) {
+        [SVProgressHUD showInfoWithStatus:@"请填写您的宝贵意见"];
+    }else{
+        [SVProgressHUD showWithStatus:@"加载中..."];
+        [[NetworkUtils shareNetworkUtils] SubSugg:[NSString stringWithFormat:@"%@ %@",feedClass,_textView.text] success:^(id responseObject) {
+            NSLog(@"数据:%@",responseObject);
+            if ([[responseObject objectForKey:@"ResultType"]intValue] == 0) {
+                [SVProgressHUD showSuccessWithStatus:@"提交成功，非常感谢您对我们提出的宝贵意见！"];
+                [self.navigationController popViewControllerAnimated:YES];
+            }else {
+                [SVProgressHUD showErrorWithStatus:@"请求失败，请稍后重试" maskType:SVProgressHUDMaskTypeNone];
+            }
+        } failure:^(NSString *error) {
+            [SVProgressHUD dismiss];
+        }];
+    }
 }
 -(void)initButtonLayer{
     _goodsSpeciesButton.layer.cornerRadius = 13.5;

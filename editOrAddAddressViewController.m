@@ -58,6 +58,10 @@
 }
 #pragma mark 选择城市
 - (IBAction)selectCityClick:(id)sender {
+    [_addressDetailsTextField resignFirstResponder];
+    [_phoneNumberTextField resignFirstResponder];
+    [_addressDetailsTextField resignFirstResponder];
+
     CityPicker *picker = [[[NSBundle mainBundle]loadNibNamed:@"CityPickerView" owner:self options:nil] objectAtIndex:0];
     NSMutableArray *temp = [[NSMutableArray alloc]init];
     for (int i=0;i<areasArray.count ;i++ ) {
@@ -199,7 +203,16 @@
 //                NSLog(@"数据:%@",responseObject);
                 if ([[responseObject objectForKey:@"ResultType"]intValue] == 0) {
                     [SVProgressHUD showSuccessWithStatus:@"新增地址成功"];
-                    [self.navigationController popViewControllerAnimated:YES];
+                    
+                    
+                    [USERDEFAULTS setObject:_selectDetailsAddress.titleLabel.text forKey:@"CurrentAddress"];
+                    
+                    [USERDEFAULTS setObject:lat forKey:@"CurrentLatitude"];
+                    [USERDEFAULTS setObject:lon forKey:@"CurrentLongitude"];
+                    [USERDEFAULTS setObject:@"1" forKey:@"DeliveryType"];
+                    [self.navigationController popToRootViewControllerAnimated:YES];
+                    
+                    
                 }else {
                     [SVProgressHUD showErrorWithStatus:@"请求失败，请稍后重试" maskType:SVProgressHUDMaskTypeNone];
                 }

@@ -39,6 +39,14 @@
         if (buttonIndex) {
             [[SDImageCache sharedImageCache] clearDisk];
             [[SDImageCache sharedImageCache] clearMemory];
+            NSHTTPCookie *cookie;
+            NSHTTPCookieStorage *storage = [NSHTTPCookieStorage sharedHTTPCookieStorage];
+            for (cookie in [storage cookies])
+            {
+                [storage deleteCookie:cookie];
+            }
+            
+            [[NSURLCache sharedURLCache] removeAllCachedResponses];
             _cacheNumber.text = [NSString stringWithFormat:@"0.00M"];
             [SVProgressHUD showSuccessWithStatus:@"清理成功"];
         }

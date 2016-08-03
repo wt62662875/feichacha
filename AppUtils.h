@@ -26,7 +26,7 @@
  */
 + (NSString *)postRequestWithURL: (NSString *)url  // IN
                       postParems: (NSMutableDictionary *)postParems // IN 提交参数据集合
-                     picFilePath: (NSString *)picFilePath  // IN 上传图片路径
+                     picImage: (UIImage *)picImage  // IN 上传图片
                      picFileName: (NSString *)picFileName;  // IN 上传图片名称
 + (UIImage*) callOriginImage:(UIImage *)image scaleToSize:(CGSize)size;
 
@@ -64,7 +64,10 @@
 #pragma mark HTML码转换UIcolor
 + (UIColor *)colorWithHexString:(NSString *)stringToConvert;
 #pragma mark 根据图片url获取图片尺寸
-+(CGSize)getImageSizeWithURL:(id)imageURL;
+//+(CGSize)getImageSizeWithURL:(id)imageURL;
+#pragma mark 返回虚线
++(UIImage*)imageWithSize:(CGSize)size borderColor:(UIColor *)color borderWidth:(CGFloat)borderWidth;
+
 @end
 
 

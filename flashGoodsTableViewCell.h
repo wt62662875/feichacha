@@ -19,6 +19,8 @@
 @property (weak, nonatomic) IBOutlet UILabel *goodsPrice;              //商品价格
 @property (weak, nonatomic) IBOutlet UILabel *goodsOldPrice;           //商品原价
 @property (weak, nonatomic) IBOutlet UIButton *addShoppingCartButton;  //加入购物车按钮
+@property (weak, nonatomic) IBOutlet UIButton *minShoppingCartButton;  //减
+@property (weak, nonatomic) IBOutlet UILabel *numberLbael;             //数量
 
 
 @end

@@ -9,6 +9,7 @@
 #import "afterSalesViewController.h"
 #import "myOrderTableViewCell.h"
 #import "orderDetailsViewController.h"
+#import "toApplyForARefundViewController.h"
 
 
 @interface afterSalesViewController ()
@@ -26,11 +27,13 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+}
+-(void)viewWillAppear:(BOOL)animated{
     [self FinishOrder];
 }
 -(void)FinishOrder{
     [SVProgressHUD showWithStatus:@"加载中..."];
-    [[NetworkUtils shareNetworkUtils] FinishOrder:[USERDEFAULTS objectForKey:@"UserID"] success:^(id responseObject) {
+    [[NetworkUtils shareNetworkUtils] FinishOrder:^(id responseObject) {
         NSLog(@"数据:%@",responseObject);
         if ([[responseObject objectForKey:@"ResultType"]intValue] == 0) {
             datas = [responseObject objectForKey:@"AppendData"];
@@ -50,11 +53,11 @@
 }
 #pragma mark CELL的高度
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    if (indexPath.row == 0) {
-        return 146;
-    }else{
+//    if (indexPath.row == 0) {
+//        return 146;
+//    }else{
         return 187;
-    }
+//    }
 }
 #pragma mark CELL的数据
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -89,9 +92,9 @@
         [cell.iamge5 sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[[datas[indexPath.row] objectForKey:@"OrderList"][4]objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"loading_default"]];
     }
 
-    if (indexPath.row == 0) {
-        cell.footButtonView.hidden = YES;
-    }
+//    if (indexPath.row == 0) {
+//        cell.footButtonView.hidden = YES;
+//    }
     cell.timeLbael.text = [datas[indexPath.row] objectForKey:@"AddDates"];
     cell.goodsNumberLabel.text = [NSString stringWithFormat:@"共计%lu件商品",(unsigned long)tempArray.count];
     cell.priceLabel.text = [NSString stringWithFormat:@"￥%.1f",[[datas[indexPath.row] objectForKey:@"Money"] floatValue]];
@@ -112,11 +115,13 @@
 }
 #pragma mark 底部按钮
 -(void)footButton:(UIButton *)sender{
-    
+    toApplyForARefundViewController *toApplyForARefundVC = [[toApplyForARefundViewController alloc] initWithNibName:@"toApplyForARefundViewController"   bundle:nil];
+    [toApplyForARefundVC setGetDatas:datas[sender.tag]];
+    [self.navigationController pushViewController:toApplyForARefundVC animated:YES];
 }
 #pragma mark 底部按钮2
 -(void)footButton2:(UIButton *)sender{
-    
+    [AppUtils callPhone:@"400-017-2819"];
 }
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"afterSalesToOrderDetails"]) {

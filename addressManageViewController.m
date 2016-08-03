@@ -29,6 +29,8 @@
 @property (weak, nonatomic) IBOutlet UIView *positioningView;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *positioningViewHeigh;
+@property (weak, nonatomic) IBOutlet UIImageView *rightArrowImage;
+@property (weak, nonatomic) IBOutlet UIView *addAddressView;
 
 @property (weak, nonatomic) IBOutlet UILabel *positioningLabel;
 @end
@@ -47,6 +49,8 @@
         _positioningViewHeigh.constant = 0;
     }
     // Do any additional setup after loading the view.
+    _rightArrowImage.hidden = YES;
+    _addAddressView.hidden = NO;
 }
 -(void)viewWillAppear:(BOOL)animated{
     if (_sendDatas) {
@@ -220,6 +224,9 @@
 #pragma mark 送货上门
 - (IBAction)DoorToDoor:(id)sender {
     _positioningLabel.text = @"定位到当前位置";
+    _rightArrowImage.hidden = YES;
+    _addAddressView.hidden = NO;
+
     _DoorToDoor.backgroundColor = RGBCOLORA(255, 214, 0, 1);
     _ToTheShop.backgroundColor = [UIColor whiteColor];
     [_DoorToDoor setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
@@ -229,6 +236,10 @@
 }
 #pragma mark 到店自提
 - (IBAction)ToTheShop:(id)sender {
+    _positioningLabel.text = [USERDEFAULTS objectForKey:@"CurrentAddress"];
+    _rightArrowImage.hidden = NO;
+    _addAddressView.hidden = YES;
+
     _ToTheShop.backgroundColor = RGBCOLORA(255, 214, 0, 1);
     _DoorToDoor.backgroundColor = [UIColor whiteColor];
     [_ToTheShop setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];

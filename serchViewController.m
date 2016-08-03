@@ -14,7 +14,6 @@
 @interface serchViewController ()<JCTagViewDelegate,UITextFieldDelegate>
 {
     NSMutableArray *hotArray;
-    
     UIButton *comprehensiveButton;
     UIButton *salesButton;
     UIButton *thePriceButton;
@@ -55,6 +54,7 @@
     _serchView.layer.borderWidth = 1;
     _serchView.layer.borderColor = RGBCOLORA(190, 190, 190, 1).CGColor;
     [self HotWord];
+
     if ([[USERDEFAULTS objectForKey:@"PurchaseQuantity"] intValue] == 0) {
         _badgeLabel.hidden = YES;
     }else{
@@ -63,7 +63,6 @@
     // Do any additional setup after loading the view.
     _collectionView.hidden = YES;
     _badgeView.hidden = YES;
-    [self initJCTagView];
 }
 - (IBAction)changed:(id)sender {
     if (_serchTextField.text.length == 0) {
@@ -76,12 +75,14 @@
     [[NetworkUtils shareNetworkUtils] HotWord:^(id responseObject) {
         NSLog(@"数据:%@",responseObject);
         if ([[responseObject objectForKey:@"ResultType"]intValue] == 0) {
+            NSArray * tempArray = [responseObject objectForKey:@"AppendData"];
             hotArray = [[NSMutableArray alloc]init];
-            NSArray *tempArray = [responseObject objectForKey:@"AppendData"];
-            for (int i =0; i<tempArray.count; i++) {
+            for (int i = 0; i<tempArray.count; i++) {
                 [hotArray addObject:[tempArray[i] objectForKey:@"Word"]];
             }
+            self.dataSource = hotArray;
             [self initJCTagView];
+
         }else {
             hotArray = nil;
             [SVProgressHUD showErrorWithStatus:@"请求失败，请稍后重试" maskType:SVProgressHUDMaskTypeNone];
@@ -91,7 +92,6 @@
         [SVProgressHUD dismiss];
     }];
 }
-
 //搜索接口
 -(void)serchAPI:(NSString *)order{
     [SVProgressHUD showWithStatus:@"加载中..."];
@@ -122,16 +122,16 @@
 }
 ///懒加载
 - (NSArray *)dataSource {
-    self.dataSource = hotArray;
     if (!_dataSource) {
+
         self.dataSource = hotArray;
     }
     return _dataSource;
 }
 - (NSArray *)dataSource2 {
-//    if (!_dataSource2) {
+    if (!_dataSource2) {
         self.dataSource2 = [USERDEFAULTS objectForKey:@"SearchRecord"];
-//    }
+    }
     return _dataSource2;
 }
 //搜索记录增加变更
@@ -166,11 +166,12 @@
     JCView.delegate = self;
     JCView.JCSignalTagColor = [UIColor whiteColor];
     JCView.JCbackgroundColor = [UIColor clearColor];
-    [JCView setArrayTagWithLabelArray:self.dataSource];
+    NSLog(@"%@",hotArray);
+    [JCView setArrayTagWithLabelArray:hotArray];
     [_backScrollView addSubview:JCView];
     
     historySerch = [[UILabel alloc]initWithFrame:CGRectMake(8, JCView.frame.size.height+50, SCREENWIDTH, 22)];
-    historySerch = [[UILabel alloc]initWithFrame:CGRectMake(8, 8, SCREENWIDTH, 22)];
+//    historySerch = [[UILabel alloc]initWithFrame:CGRectMake(8, 8, SCREENWIDTH, 22)];
 
     historySerch.text = @"历史搜索";
     historySerch.font = [UIFont systemFontOfSize:15];
@@ -178,7 +179,7 @@
     [_backScrollView addSubview:historySerch];
     
     JCView2 = [[JCTagView alloc] initWithFrame:CGRectMake(0, historySerch.frame.origin.y+30, SCREENWIDTH, 0)];
-    JCView2 = [[JCTagView alloc] initWithFrame:CGRectMake(0,38, SCREENWIDTH, 0)];
+//    JCView2 = [[JCTagView alloc] initWithFrame:CGRectMake(0,38, SCREENWIDTH, 0)];
 
     JCView2.delegate = self;
     JCView2.JCSignalTagColor = [UIColor whiteColor];
@@ -347,6 +348,11 @@
         [self serchAPI:@"false"];
     }
     
+}
+- (IBAction)shoppingCartButton:(id)sender {
+    [self.navigationController popToRootViewControllerAnimated:YES];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"jumpToShoppingCart" object:nil];
+
 }
 
 

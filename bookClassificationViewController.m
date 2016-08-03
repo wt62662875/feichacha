@@ -27,6 +27,11 @@
     [super viewDidLoad];
     _badgeLabel.layer.cornerRadius = 8;
     _badgeLabel.layer.masksToBounds = YES;
+    if ([[USERDEFAULTS objectForKey:@"PurchaseQuantity"] intValue] == 0) {
+        _badgeLabel.hidden = YES;
+    }else{
+        _badgeLabel.text = [NSString stringWithFormat:@"%@",[USERDEFAULTS objectForKey:@"PurchaseQuantity"]];
+    }
     // Do any additional setup after loading the view.
     _titleLabel.text = [_getDatas objectForKey:@"Name"];
     [self ActivityListDatas];
@@ -65,6 +70,13 @@
     cell.name.text = [[datas objectForKey:@"ActivityProduct"][indexPath.row] objectForKey:@"Name"];
     cell.specifications.text = [[datas objectForKey:@"ActivityProduct"][indexPath.row] objectForKey:@"Size"];
     cell.price.text = [NSString stringWithFormat:@"￥%.1f",[[[datas objectForKey:@"ActivityProduct"][indexPath.row] objectForKey:@"Price"] floatValue]];
+    if ([[[datas objectForKey:@"ActivityProduct"][indexPath.row] objectForKey:@"Stock"] intValue] == 0) {
+        if ([[datas objectForKey:@"ActivityProduct"][indexPath.row] objectForKey:@"Stock"]) {
+            cell.buyButton.backgroundColor = [UIColor lightGrayColor];
+            [cell.buyButton setTitle:@"已抢光" forState:UIControlStateNormal];
+            cell.buyButton.userInteractionEnabled = NO;
+        }
+    }
     cell.oldPrice.hidden = YES;
 
     
@@ -148,7 +160,10 @@
     [goodsDetailsVC setGetID:[datas objectForKey:@"ActivityProduct"][indexpath.row]];
     [self.navigationController pushViewController:goodsDetailsVC animated:YES];
 }
-
+- (IBAction)goShoppingCart:(id)sender {
+    [self.navigationController popViewControllerAnimated:YES];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"jumpToShoppingCart" object:nil];
+}
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

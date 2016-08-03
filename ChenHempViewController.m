@@ -113,6 +113,13 @@
     headView.name.text = [datas[0] objectForKey:@"Name"];
     headView.size.text = [datas[0] objectForKey:@"Size"];
     headView.price.text = [NSString stringWithFormat:@"热卖价：%@",[datas[0] objectForKey:@"Price"]];
+    if ([[datas[0] objectForKey:@"Stock"] intValue] == 0) {
+        if ([datas[0] objectForKey:@"Stock"]) {
+            headView.buyButton.backgroundColor = [UIColor lightGrayColor];
+            [headView.buyButton setTitle:@"已抢光" forState:UIControlStateNormal];
+            headView.buyButton.userInteractionEnabled = NO;
+        }
+    }
     [headView.titleImage sd_setImageWithURL:[NSURL URLWithString:@"http://manage.feichacha.com/html/shop/images/chen_banner.jpg"]];
     [headView.buyButton addTarget:self action:@selector(buyButton:) forControlEvents:UIControlEventTouchUpInside];
     [headView.goodsClick addTarget:self action:@selector(titleGoodsClick:) forControlEvents:UIControlEventTouchUpInside];

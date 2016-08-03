@@ -34,4 +34,6 @@
 @property (weak, nonatomic) IBOutlet UIButton *goodsClick;
 @property (weak, nonatomic) IBOutlet UIButton *goodsClick2;
 
+@property (weak, nonatomic) IBOutlet UILabel *sellingLabel1;
+@property (weak, nonatomic) IBOutlet UILabel *sellinglbael2;
 @end

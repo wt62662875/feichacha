@@ -41,6 +41,9 @@
     [self.navigationController pushViewController:myOrderVC animated:YES];
 
 }
+- (IBAction)backButton:(id)sender {
+    [self.navigationController popToRootViewControllerAnimated:YES];
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

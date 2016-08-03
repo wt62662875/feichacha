@@ -111,13 +111,17 @@
     cell.name2.text = [[midDatas[indexPath.row] objectForKey:@"FreshCompany"][1] objectForKey:@"Name"];
     cell.name3.text = [[midDatas[indexPath.row] objectForKey:@"FreshCompany"][2] objectForKey:@"Name"];
 
-    cell.specifications1.text = [[midDatas[indexPath.row] objectForKey:@"FreshCompany"][0] objectForKey:@"Size"];
-    cell.specifications2.text = [[midDatas[indexPath.row] objectForKey:@"FreshCompany"][1] objectForKey:@"Size"];
-    cell.specifications3.text = [[midDatas[indexPath.row] objectForKey:@"FreshCompany"][2] objectForKey:@"Size"];
+    cell.message1.text = [[midDatas[indexPath.row] objectForKey:@"FreshCompany"][0] objectForKey:@"Size"];
+    cell.message2.text = [[midDatas[indexPath.row] objectForKey:@"FreshCompany"][1] objectForKey:@"Size"];
+    cell.message3.text = [[midDatas[indexPath.row] objectForKey:@"FreshCompany"][2] objectForKey:@"Size"];
     
-    cell.message1.hidden = YES;
-    cell.message2.hidden = YES;
-    cell.message3.hidden = YES;
+    cell.specifications1.text = [NSString stringWithFormat:@"￥%.1f",[[[midDatas[indexPath.row] objectForKey:@"FreshCompany"][0] objectForKey:@"Price"] floatValue]];
+    cell.specifications2.text = [NSString stringWithFormat:@"￥%.1f",[[[midDatas[indexPath.row] objectForKey:@"FreshCompany"][1] objectForKey:@"Price"] floatValue]];
+    cell.specifications3.text = [NSString stringWithFormat:@"￥%.1f",[[[midDatas[indexPath.row] objectForKey:@"FreshCompany"][2] objectForKey:@"Price"] floatValue]];
+    
+//    cell.message1.hidden = YES;
+//    cell.message2.hidden = YES;
+//    cell.message3.hidden = YES;
 
     
     cell.goodsButton1.tag = indexPath.row;

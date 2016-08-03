@@ -50,6 +50,7 @@
     _changeAddress.layer.cornerRadius = 4;
     _deliveryTo.layer.borderColor = [UIColor blackColor].CGColor;
     _deliveryTo.layer.borderWidth = 0.5;
+    
     if ([USERDEFAULTS objectForKey:@"shopID"]) {
         _leftTableView.hidden = NO;
         _rightTableView.hidden = NO;
@@ -76,6 +77,14 @@
             }
         }
     }
+    
+    if ([[USERDEFAULTS objectForKey:@"DeliveryType"] intValue] == 2) {
+        _deliveryTo.text = @"自提点";
+    }else{
+        _deliveryTo.text = @"配送至";
+    }
+    [_rightTableView reloadData];
+    
 }
 //获取当前地址
 -(void)getCurrentAddress{
@@ -153,6 +162,7 @@
             [tempArray addObject:poiInfo.name];
         }
         [_titleAddress setTitle:tempArray[0] forState:UIControlStateNormal];
+        [self initAddressTitleWidth:tempArray[0]];
         [USERDEFAULTS setObject:tempArray[0] forKey:@"CurrentAddress"];
         [self initAddressTitleWidth:tempArray[0]];
     }
@@ -180,7 +190,12 @@
     [USERDEFAULTS setObject:nil forKey:@"ChooseClass"];
 }
 - (IBAction)loginAddress:(id)sender {
-    [self performSegueWithIdentifier:@"flashSmallToAddress" sender:self];
+    if ([[USERDEFAULTS objectForKey:@"isRegister"] integerValue]) {
+        [self performSegueWithIdentifier:@"flashSmallToAddress" sender:self];
+    }else{
+        VerifyTheMobilePhoneViewController *VerifyTheMobilePhoneVC = [[VerifyTheMobilePhoneViewController alloc] initWithNibName:@"VerifyTheMobilePhoneViewController"   bundle:nil];
+        [self.navigationController pushViewController:VerifyTheMobilePhoneVC animated:YES];
+    }
 }
 - (IBAction)changeAddress:(id)sender {
     [self performSegueWithIdentifier:@"flashSmallToAddress" sender:self];
@@ -247,7 +262,11 @@
     if (tableView == _leftTableView) {
         return leftDatas.count;
     }else{
-        return rightDatas.count+1;
+        if (rightDatas.count >0) {
+            return rightDatas.count+2;
+        }else{
+            return rightDatas.count+1;
+        }
     }
 }
 #pragma mark CELL的高度
@@ -293,7 +312,7 @@
         cell.titleName.text = [leftDatas[selectCellTag] objectForKey:@"Name"];
         
         return cell;
-    }else if (indexPath.row == rightDatas.count){
+    }else if (indexPath.row == rightDatas.count+1){
         static NSString *cellIdentifier = @"footTitleTableViewCell";
         footTitleTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
         if (cell == nil) {
@@ -311,13 +330,27 @@
         }
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
         cell.addShoppingCartButton.tag = indexPath.row;
+        cell.minShoppingCartButton.tag = indexPath.row;
 
         if (page == 1 && indexPath.row > 15) {
             
         }else{
+            cell.minShoppingCartButton.hidden = YES;
+            cell.numberLbael.hidden = YES;
+//            NSLog(@"%@",[USERDEFAULTS objectForKey:@"FlashShoppingCartGoods"]);
+            NSArray *tempArray = [USERDEFAULTS objectForKey:@"FlashShoppingCartGoods"];
+            for (int i= 0; i<tempArray.count; i++) {
+                if ([[rightDatas[indexPath.row-1] objectForKey:@"Fguid"] isEqualToString:[tempArray[i] objectForKey:@"Fguid"]]) {
+                    cell.minShoppingCartButton.hidden = NO;
+                    cell.numberLbael.hidden = NO;
+                    cell.numberLbael.text = [tempArray[i] objectForKey:@"PurchaseQuantity"];
+                }
+            }
+           
             NSString *imageURL = [IMGURL stringByAppendingString:[rightDatas[indexPath.row-1] objectForKey:@"ImageUrl"]];
             [cell.goodsImage sd_setImageWithURL:[NSURL URLWithString:imageURL]];
             [cell.addShoppingCartButton addTarget:self action:@selector(addShoppingCartButton:) forControlEvents:UIControlEventTouchUpInside];
+            [cell.minShoppingCartButton addTarget:self action:@selector(minShoppingCartButton:) forControlEvents:UIControlEventTouchUpInside];
             cell.goodsName.text = [rightDatas[indexPath.row-1] objectForKey:@"Name"];
             cell.goodsPrice.text = [NSString stringWithFormat:@"￥%.1f",[[rightDatas[indexPath.row-1] objectForKey:@"Price"] floatValue]];
             cell.goodsMessage.text = [rightDatas[indexPath.row-1] objectForKey:@"Size"];
@@ -332,6 +365,14 @@
                 cell.goodsDescribe2.hidden = YES;
             }
             cell.goodsDescribe3.hidden = YES;
+            
+            if ([[rightDatas[indexPath.row-1] objectForKey:@"Stock"] intValue] <= 0) {
+                [cell.addShoppingCartButton setImage:nil forState:UIControlStateNormal];
+                [cell.addShoppingCartButton setTitle:@"补货中" forState:UIControlStateNormal];
+                cell.addShoppingCartButton.userInteractionEnabled = NO;
+                cell.minShoppingCartButton.hidden = YES;
+                cell.numberLbael.hidden = YES;
+            }
         }
         /**
          老价格加下划线
@@ -358,7 +399,23 @@
      flashGoodsTableViewCell *cell = (flashGoodsTableViewCell *)[_rightTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:sender.tag inSection:0]];
     [baseVC addProductsAnimation:cell.goodsImage selfView:self.view pointX:SCREENWIDTH/10*7 pointY:SCREENHTIGHT-40];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"FlashShoppingCartGoodsAdd" object:rightDatas[sender.tag-1]];
+    [_rightTableView reloadData];
  }
+#pragma mark 减
+-(void)minShoppingCartButton:(UIButton *)sender{
+    NSArray *tempArray = [USERDEFAULTS objectForKey:@"FlashShoppingCartGoods"];
+    for (int i=0; i<tempArray.count; i++) {
+        if ([[tempArray[i] objectForKey:@"Fguid"] isEqualToString:[rightDatas[sender.tag-1] objectForKey:@"Fguid"]]) {
+            if ([[tempArray[i] objectForKey:@"PurchaseQuantity"] intValue] <= 1) {
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"FlashShoppingCartGoodsDelete" object:tempArray[i]];
+            }
+        }
+    }
+
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"FlashShoppingCartGoodsMin" object:rightDatas[sender.tag-1]];
+    [_rightTableView reloadData];
+
+}
 #pragma mark 重置titleAddress宽度
 -(void)initAddressTitleWidth:(NSString *)str{
     CGSize titleSize =[str  boundingRectWithSize:CGSizeMake(MAXFLOAT, MAXFLOAT) options:NSStringDrawingTruncatesLastVisibleLine | NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading attributes:@{NSFontAttributeName: [UIFont systemFontOfSize:15]} context:nil].size;
@@ -377,10 +434,13 @@
         NSLog(@"%@",[leftDatas[indexPath.row] objectForKey:@"StringId"]);
         [self getRightDatas:[leftDatas[indexPath.row] objectForKey:@"StringId"] page:page];
     }else{
-        UIStoryboard *stroyBoard = GetStoryboard(@"Main");
-        goodsDetailsViewController *goodsDetailsVC = [stroyBoard instantiateViewControllerWithIdentifier:@"goodsDetailsViewController"];
-        [goodsDetailsVC setGetID:rightDatas[indexPath.row-1]];
-        [self.navigationController pushViewController:goodsDetailsVC animated:YES];
+        if (indexPath.row !=0 && indexPath.row != rightDatas.count+1) {
+            UIStoryboard *stroyBoard = GetStoryboard(@"Main");
+            goodsDetailsViewController *goodsDetailsVC = [stroyBoard instantiateViewControllerWithIdentifier:@"goodsDetailsViewController"];
+            [goodsDetailsVC setGetID:rightDatas[indexPath.row-1]];
+            [self.navigationController pushViewController:goodsDetailsVC animated:YES];
+        }
+       
     }
    
 }

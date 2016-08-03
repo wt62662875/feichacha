@@ -70,7 +70,7 @@
 
     cell.name.text = [datas[indexPath.row] objectForKey:@"Name"];
     cell.price.text = [NSString stringWithFormat:@"￥%.1f",[[datas[indexPath.row] objectForKey:@"Price"] floatValue]];
-    [cell.backImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[datas[indexPath.row] objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"beer_por1"]];
+    [cell.backImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[datas[indexPath.row] objectForKey:@"ImageUrl"]]]];
     if ([[datas[indexPath.row] objectForKey:@"Stock"] intValue] == 0) {
         cell.buyButton.backgroundColor = [UIColor lightGrayColor];
         [cell.buyButton setTitle:@"已抢光" forState:UIControlStateNormal];

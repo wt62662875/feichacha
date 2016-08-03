@@ -49,6 +49,12 @@
     NSMutableArray *rightTimeArray2;             //右边时间2
     
     NSString *sendTime;
+    NSString *AccordingTime;
+    
+    NSMutableArray *rightArray1;
+    NSMutableArray *rightArray2;
+    
+    NSString *BusinessHours;         //营业时间
 
 }
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -73,6 +79,7 @@
     }else{
         [self getDeliveryDatas];
     }
+    [_tableView reloadData];
 }
 -(void)getDeliveryDatas{
     [SVProgressHUD showWithStatus:@"加载中..."];
@@ -104,6 +111,7 @@
         
         if ([[responseObject objectForKey:@"ResultType"]intValue] == 0 && tempArray.count >0) {
             [USERDEFAULTS setObject:[[responseObject objectForKey:@"AppendData"][0] objectForKey:@"Id"] forKey:@"shopID"];
+            BusinessHours = [NSString stringWithFormat:@"%@:%@-%@:%@",[self fillA:[[responseObject objectForKey:@"AppendData"][0] objectForKey:@"ShopStartHour"]],[self fillA:[[responseObject objectForKey:@"AppendData"][0] objectForKey:@"ShopStartMinute"]],[self fillA:[[responseObject objectForKey:@"AppendData"][0] objectForKey:@"ShopEndHour"]],[self fillA:[[responseObject objectForKey:@"AppendData"][0] objectForKey:@"ShopEndMinute"]]];
             shopArray = [responseObject objectForKey:@"AppendData"];
             _tableView.hidden = NO;
             
@@ -274,8 +282,14 @@
                 cell.address.text = [NSString stringWithFormat:@"%@%@%@",[addressDatas objectForKey:@"CityName"],[addressDatas objectForKey:@"Address"],[addressDatas objectForKey:@"AddressDetail"]];
             }else{
                 cell.name.text = [addressDatas objectForKey:@"CompanyName"];
-                cell.phoneNumber.text = @"自提";
+                cell.phoneNumber.text = BusinessHours;
                 cell.address.text = [addressDatas objectForKey:@"Address"];
+                cell.hiddenLabel1.text = @"自";
+                cell.hiddenLabel2.text = @"提";
+                cell.hiddenLabel3.text = @"点";
+                cell.hiddenLabel4.text = @"营业时间";
+//                cell.hiddenLabel5.hidden = YES;
+                cell.hiddenLabel6.text = @"提货地址";
 
             }
            
@@ -287,7 +301,7 @@
             cell.hiddenLabel2.hidden = YES;
             cell.hiddenLabel3.hidden = YES;
             cell.hiddenLabel4.hidden = YES;
-            cell.hiddenLabel5.hidden = YES;
+//            cell.hiddenLabel5.hidden = YES;
             cell.hiddenLabel6.hidden = YES;
         }
         [cell.addressManage addTarget:self action:@selector(addressManage:) forControlEvents:UIControlEventTouchUpInside];
@@ -394,7 +408,21 @@
         }else{
             headView.shopName.text = [shopArray[0] objectForKey:@"CompanyName"];
         }
-        headView.theRulesLbael.text = [NSString stringWithFormat:@"￥%@起送，配送费：￥%@",[shopArray[0] objectForKey:@"FromGetPrice"],[shopArray[0] objectForKey:@"DeliveryPrice"]];
+        if ([[USERDEFAULTS objectForKey:@"DeliveryType"] intValue] == 2) {
+            headView.theRulesLbael.text = @"欢迎光临小超，我们等着你哦！";
+            headView.timeButton.userInteractionEnabled = NO;
+            headView.timeLabel1.text = @"请在小超营业时间内到店自提，谢谢！";
+            headView.shopName.hidden = YES;
+            headView.timeLabel2.hidden = YES;
+        }else{
+            if (rightArray1) {
+                headView.timeLabel1.text = AccordingTime;
+            }else{
+                headView.timeLabel1.text = @"新鲜 马上送达";
+            }
+            headView.theRulesLbael.text = [NSString stringWithFormat:@"￥%@起送，配送费：￥%@",[shopArray[0] objectForKey:@"FromGetPrice"],[shopArray[0] objectForKey:@"DeliveryPrice"]];
+        }
+        headView.shopName.text = [shopArray[0] objectForKey:@"CompanyName"];
         headView.noteTextField.text = FlashNoteText;
         headView.togetherButton.tag = 1;
         [headView.togetherButton addTarget:self action:@selector(togetherButton:) forControlEvents:UIControlEventTouchUpInside];
@@ -403,6 +431,13 @@
         [headView.timeButton addTarget:self action:@selector(timeButton:) forControlEvents:UIControlEventTouchUpInside];
         return headView;
     }else{
+        
+        if ([[USERDEFAULTS objectForKey:@"DeliveryType"] intValue] == 2) {
+            headView.timeButton.userInteractionEnabled = NO;
+            headView.timeLabel1.text = @"我们会在第一时间通知你，到店取货时间，谢谢！";
+        }else{
+            headView.timeLabel1.text = @"明天10：00-18：00";
+        }
         headView.theRulesLbael.text = [NSString stringWithFormat:@"￥%@起送，配送费：￥%@",[shopArray[0] objectForKey:@"FreshDeliveryPrice"],[shopArray[0] objectForKey:@"FreshFromGetPrice"]];
         [headView.flashImage setImage:[UIImage imageNamed:@"shop_cart_xxyd"]];
         [headView.flashButton setTitle:@"新鲜预定" forState:UIControlStateNormal];
@@ -410,7 +445,6 @@
         headView.shopName.hidden = YES;
         [headView.roundView setBackgroundColor:RGBCOLORA(131, 199, 252, 1)];
         headView.timeLabel2.hidden = YES;
-        headView.timeLabel1.text = @"明天10：00-20：00";
         headView.noteTextField.text = FreshNoteText;
         headView.togetherButton.tag = 2;
         [headView.togetherButton addTarget:self action:@selector(togetherButton:) forControlEvents:UIControlEventTouchUpInside];
@@ -423,10 +457,14 @@
 -(void)timeButton:(UIButton *)sender{
     NSLog(@"选时间");
     NSMutableArray *tempArray = [[NSMutableArray alloc]initWithObjects:@"今天",@"明天",@"后天",nil];
-    NSMutableArray *rightArray1 = [[NSMutableArray alloc]init];
-    NSMutableArray *rightArray2 = [[NSMutableArray alloc]init];
+    rightArray1 = [[NSMutableArray alloc]init];
+    rightArray2 = [[NSMutableArray alloc]init];
     for (int i = 0; i<rightTimeArray.count; i++) {
-        [rightArray1 addObject:[NSString stringWithFormat:@"%@-%@",[rightTimeArray[i] objectForKey:@"Key"],[rightTimeArray[i] objectForKey:@"Value"]]];
+        if (i == 0) {
+            [rightArray1 addObject:@"新鲜 马上送达"];
+        }else{
+            [rightArray1 addObject:[NSString stringWithFormat:@"%@-%@",[rightTimeArray[i] objectForKey:@"Key"],[rightTimeArray[i] objectForKey:@"Value"]]];
+        }
     }
     for (int i = 0; i<rightTimeArray2.count; i++) {
         [rightArray2 addObject:[NSString stringWithFormat:@"%@-%@",[rightTimeArray2[i] objectForKey:@"Key"],[rightTimeArray2[i] objectForKey:@"Value"]]];
@@ -445,6 +483,17 @@
 
 }
 -(void)sendtime:(NSString *)year hour:(NSString *)hour{
+    NSMutableArray *tempArray = [[NSMutableArray alloc]initWithObjects:@"今天",@"明天",@"后天",nil];
+
+    if ([year intValue] == 0 && [hour intValue]==0) {
+        AccordingTime = @"新鲜 马上送达";
+    }else{
+        if ([year intValue] == 0) {
+            AccordingTime = [NSString stringWithFormat:@"%@%@",tempArray[[year intValue]],rightArray1[[hour intValue]]];
+        }else{
+            AccordingTime = [NSString stringWithFormat:@"%@%@",tempArray[[year intValue]],rightArray2[[hour intValue]]];
+        }
+    }
     if ([year intValue] == 0) {
         NSLog(@"%@%@",leftTimeArray[[year intValue]],[rightTimeArray[[hour intValue]] objectForKey:@"Key"]);
         sendTime = [NSString stringWithFormat:@"%@%@",leftTimeArray[[year intValue]],[rightTimeArray[[hour intValue]] objectForKey:@"Key"]];
@@ -452,7 +501,8 @@
         NSLog(@"%@%@",leftTimeArray[[year intValue]],[rightTimeArray2[[hour intValue]] objectForKey:@"Key"]);
         sendTime = [NSString stringWithFormat:@"%@%@",leftTimeArray[[year intValue]],[rightTimeArray2[[hour intValue]] objectForKey:@"Key"]];
     }
-    [headView.timeButton setTitle:sendTime forState:UIControlStateNormal];
+    
+//    [headView.timeButton setTitle:sendTime forState:UIControlStateNormal];
     [_tableView reloadData];
 }
 #pragma mark  闪送小超按钮
@@ -528,8 +578,17 @@
         for (int i = 0; i<FlashShoppingCartGoodsBeforeDatas.count; i++) {
             tempPrice += [[FlashShoppingCartGoodsBeforeDatas[i] objectForKey:@"Price"] floatValue]*[[FlashShoppingCartGoodsBeforeDatas[i] objectForKey:@"PurchaseQuantity"] floatValue];
         }
-        footView.priceLabel.text = [NSString stringWithFormat:@"共￥%.2f",tempPrice];
-        
+        footView.priceLabel.text = [NSString stringWithFormat:@"共￥%.1f",tempPrice];
+        NSLog(@"%@",shopArray);
+        if ([[shopArray[0] objectForKey:@"FromGetPrice"] floatValue] > tempPrice) {
+            [footView.toPayButton setTitle:[NSString stringWithFormat:@"满￥%d元起送",[[shopArray[0] objectForKey:@"FromGetPrice"] intValue]] forState:UIControlStateNormal];
+            [footView.toPayButton setBackgroundColor:[UIColor lightGrayColor]];
+            footView.toPayButton.userInteractionEnabled = NO;
+        }else{
+            [footView.toPayButton setTitle:@"选好了" forState:UIControlStateNormal];
+            [footView.toPayButton setBackgroundColor:RGBCOLORA(255, 214, 0, 1)];
+            footView.toPayButton.userInteractionEnabled = YES;
+        }
         footView.toPayButton.tag = 10001;
         [footView.toPayButton addTarget:self action:@selector(toPayButtonClick:) forControlEvents:UIControlEventTouchUpInside];
         return footView;
@@ -538,7 +597,7 @@
         for (int i = 0; i<ReservationShoppingCartGoodsBeforeDatas.count; i++) {
             tempPrice += [[ReservationShoppingCartGoodsBeforeDatas[i] objectForKey:@"Price"] floatValue]*[[ReservationShoppingCartGoodsBeforeDatas[i] objectForKey:@"PurchaseQuantity"] floatValue];
         }
-        footView.priceLabel.text = [NSString stringWithFormat:@"共￥%.2f",tempPrice];
+        footView.priceLabel.text = [NSString stringWithFormat:@"共￥%.1f",tempPrice];
         
         footView.toPayButton.tag = 10002;
         [footView.toPayButton addTarget:self action:@selector(toPayButtonClick:) forControlEvents:UIControlEventTouchUpInside];
@@ -597,7 +656,8 @@
     
     [[NSNotificationCenter defaultCenter] postNotificationName:@"ReservationShoppingCartGoodsAdd" object:ReservationShoppingCartGoodsDatas[sender.tag]];
     
-    [_tableView reloadData];}
+    [_tableView reloadData];
+}
 -(void)ReservationShoppingMin:(UIButton *)sender{
     [[NSNotificationCenter defaultCenter] postNotificationName:@"ReservationShoppingCartGoodsMin" object:ReservationShoppingCartGoodsDatas[sender.tag]];
     
@@ -641,7 +701,7 @@
             [SVProgressHUD showInfoWithStatus:@"您还没有选择商品哟!"];
         }else{
             sendDatas = ReservationShoppingCartGoodsBeforeDatas;
-            sendShopFreight = [NSString stringWithFormat:@"%@",[shopArray[0] objectForKey:@"FreshFromGetPrice"]];
+            sendShopFreight = [NSString stringWithFormat:@"%@",[shopArray[0] objectForKey:@"FreshDeliveryPrice"]];
             OrderType = @"2";
             Remark = FreshNoteText;
             [self performSegueWithIdentifier:@"shoppingCartViewToSubmitOrders" sender:self];
@@ -677,6 +737,18 @@
         [submitOrdersVC setTime:sendTime];
     }
 }
+#pragma mark 时间补位
+-(NSString *)fillA:(NSString *)sender{
+    sender = [NSString stringWithFormat:@"%@",sender];
+    NSString *tempStr;
+    if (sender.length == 1) {
+        tempStr = [NSString stringWithFormat:@"%@0",sender];
+    }else{
+        tempStr = sender;
+    }
+    return tempStr;
+}
+
 /*
 #pragma mark - Navigation
 

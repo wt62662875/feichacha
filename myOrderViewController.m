@@ -96,20 +96,22 @@
     }
     cell.footButton2.hidden = YES;
 
-    //0未配送 1配送完成 2确认收货 3未接单 4正在配送 6未支付 7取消订单
+    //0未配送 1配送完成 2确认收货 3未接单 4正在配送 6未支付 7取消订单   8商家取消订单   9申请退款
     switch ([[datas[indexPath.row] objectForKey:@"State"]intValue]) {
         case 0:
-            cell.statelabel.text = @"待发货";
+            cell.statelabel.text = @"商家配送中";
             [cell.footButton setTitle:@"取消订单" forState:UIControlStateNormal];
 
             break;
         case 1:
             cell.statelabel.text = @"已发货";
             [cell.footButton setTitle:@"确定收货" forState:UIControlStateNormal];
-            
+            cell.footButton2.hidden = NO;
+            [cell.footButton2 setTitle:@"申请售后" forState:UIControlStateNormal];
+
             break;
         case 2:
-            cell.statelabel.text = @"订单完成";
+            cell.statelabel.text = @"订单已完成";
             cell.footButtonView.hidden = YES;
 
             break;
@@ -135,18 +137,28 @@
             cell.footButtonView.hidden = YES;
 
             break;
+        case 8:
+            cell.statelabel.text = @"商家取消订单";
+            cell.footButtonView.hidden = YES;
+            
+            break;
+        case 9:
+            cell.statelabel.text = @"申请退款中";
+            cell.footButtonView.hidden = YES;
+            
+            break;
         default:
             break;
     }
     
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     //输入格式
-    [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSSZ"];
-    dateFormatter.timeZone = [NSTimeZone timeZoneWithName:@"Asia/Shanghai"];
-    NSDate *dateFormatted = [dateFormatter dateFromString:[datas[indexPath.row] objectForKey:@"AddDate"]];
-    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-    NSString *locationTimeString=[dateFormatter stringFromDate:dateFormatted];
-    cell.timeLbael.text = locationTimeString;
+//    [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSSZ"];
+//    dateFormatter.timeZone = [NSTimeZone timeZoneWithName:@"Asia/Shanghai"];
+//    NSDate *dateFormatted = [dateFormatter dateFromString:[datas[indexPath.row] objectForKey:@"AddDate"]];
+//    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+//    NSString *locationTimeString=[dateFormatter stringFromDate:dateFormatted];
+    cell.timeLbael.text = [datas[indexPath.row] objectForKey:@"AddDates"];
     
     
     cell.goodsNumberLabel.text = [NSString stringWithFormat:@"共计%lu件商品",(unsigned long)tempArray.count];
@@ -183,8 +195,13 @@
     }
 }
 -(void)footButton2:(UIButton *)sender{
-    NSLog(@"取消订单%ld",(long)sender.tag);
-    [self ConfirmOrder:[datas[sender.tag] objectForKey:@"OrderId"] type:@"7"];
+    if([[datas[sender.tag] objectForKey:@"State"]intValue] == 1){
+        [AppUtils callPhone:@"400-017-2819"];
+    }else{
+        NSLog(@"取消订单%ld",(long)sender.tag);
+        [self ConfirmOrder:[datas[sender.tag] objectForKey:@"OrderId"] type:@"7"];
+    }
+    
     
 }
 -(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex{

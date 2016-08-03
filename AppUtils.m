@@ -13,6 +13,7 @@
 #import "WXApi.h"
 #import "WXMediaMessage+messageConstruct.h"
 #import "SendMessageToWXReq+requestWithTextOrMediaMessage.h"
+
 //#import "SendMessageToWXReq+requestWithTextOrMediaMessage.h"
 @implementation AppUtils
 static NSString * const FORM_FLE_INPUT = @"fileupload";
@@ -65,100 +66,33 @@ static NSString * const FORM_FLE_INPUT = @"fileupload";
     [alert show];
 }
 + (NSString *)postRequestWithURL: (NSString *)url  // IN
-                      postParems: (NSMutableDictionary *)postParems // IN
-                     picFilePath: (NSString *)picFilePath  // IN
-                     picFileName: (NSString *)picFileName;  // IN
-{
+                      postParems: (NSMutableDictionary *)postParems // IN 提交参数据集合
+                        picImage: (UIImage *)picImage  // IN 上传图片
+                     picFileName: (NSString *)picFileName{
     
+//        //截取图片
+    NSData *imageData = UIImageJPEGRepresentation(picImage, 0.001);
     
-    NSString *TWITTERFON_FORM_BOUNDARY = @"0xKhTmLbOuNdArY";
-    //根据url初始化request
-    NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]
-                                                           cachePolicy:NSURLRequestReloadIgnoringLocalCacheData
-                                                       timeoutInterval:10];
-    //分界线 --AaB03x
-    NSString *MPboundary=[[NSString alloc]initWithFormat:@"--%@",TWITTERFON_FORM_BOUNDARY];
-    //结束符 AaB03x--
-    NSString *endMPboundary=[[NSString alloc]initWithFormat:@"%@--",MPboundary];
-    //得到图片的data
-    NSData* data;
-    if(picFilePath){
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"text/html",@"text/plain", nil];
+    [manager.requestSerializer setValue:TOKEN forHTTPHeaderField:X_CLIENT_TOKEN];
+
+    [manager POST:url parameters:postParems constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+        // 上传文件
+        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+        formatter.dateFormat            = @"yyyyMMddHHmmss";
+        NSString *str                         = [formatter stringFromDate:[NSDate date]];
+        NSString *fileName               = [NSString stringWithFormat:@"%@.jpg", str];
         
-        UIImage *image=[UIImage imageWithContentsOfFile:picFilePath];
-        //判断图片是不是png格式的文件
-        if (UIImagePNGRepresentation(image)) {
-            //返回为png图像。
-            data = UIImagePNGRepresentation(image);
-        }else {
-            //返回为JPEG图像。
-            data = UIImageJPEGRepresentation(image, 1.0);
-        }
-    }
-    //http body的字符串
-    NSMutableString *body=[[NSMutableString alloc]init];
-    //参数的集合的所有key的集合
-    NSArray *keys= [postParems allKeys];
-    
-    //遍历keys
-    for(int i=0;i<[keys count];i++)
-    {
-        //得到当前key
-        NSString *key=[keys objectAtIndex:i];
-        
-        //添加分界线，换行
-        [body appendFormat:@"%@\r\n",MPboundary];
-        //添加字段名称，换2行
-        [body appendFormat:@"Content-Disposition: form-data; name=\"%@\"\r\n\r\n",key];
-        //添加字段的值
-        [body appendFormat:@"%@\r\n",[postParems objectForKey:key]];
-        
-        NSLog(@"添加字段的值==%@",[postParems objectForKey:key]);
-    }
-    
-    if(picFilePath){
-        ////添加分界线，换行
-        [body appendFormat:@"%@\r\n",MPboundary];
-        
-        //声明pic字段，文件名为boris.png
-        [body appendFormat:@"Content-Disposition: form-data; name=\"%@\"; filename=\"%@\"\r\n",FORM_FLE_INPUT,picFileName];
-        //声明上传文件的格式
-        [body appendFormat:@"Content-Type: image/jpge,image/gif, image/jpeg, image/pjpeg, image/pjpeg\r\n\r\n"];
-    }
-    
-    //声明结束符：--AaB03x--
-    NSString *end=[[NSString alloc]initWithFormat:@"\r\n%@",endMPboundary];
-    //声明myRequestData，用来放入http body
-    NSMutableData *myRequestData=[NSMutableData data];
-    
-    //将body字符串转化为UTF8格式的二进制
-    [myRequestData appendData:[body dataUsingEncoding:NSUTF8StringEncoding]];
-    if(picFilePath){
-        //将image的data加入
-        [myRequestData appendData:data];
-    }
-    //加入结束符--AaB03x--
-    [myRequestData appendData:[end dataUsingEncoding:NSUTF8StringEncoding]];
-    
-    //设置HTTPHeader中Content-Type的值
-    NSString *content=[[NSString alloc]initWithFormat:@"multipart/form-data; boundary=%@",TWITTERFON_FORM_BOUNDARY];
-    //设置HTTPHeader
-    [request setValue:content forHTTPHeaderField:@"Content-Type"];
-    //设置Content-Length
-    [request setValue:[NSString stringWithFormat:@"%lu", (unsigned long)[myRequestData length]] forHTTPHeaderField:@"Content-Length"];
-    //设置http body
-    [request setHTTPBody:myRequestData];
-    //http method
-    [request setHTTPMethod:@"POST"];
-    
-    
-    NSHTTPURLResponse *urlResponese = nil;
-    NSError *error = [[NSError alloc]init];
-    NSData* resultData = [NSURLConnection sendSynchronousRequest:request   returningResponse:&urlResponese error:&error];
-    NSString* result= [[NSString alloc] initWithData:resultData encoding:NSUTF8StringEncoding];
-    if([urlResponese statusCode] >=200&&[urlResponese statusCode]<300){
-        NSLog(@"返回结果=====%@",result);
-        return result;
-    }
+        [formData appendPartWithFileData:imageData name:@"photos" fileName:fileName mimeType:@"image/png"];
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject){
+        NSLog(@"上传成功");
+
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error)
+     {
+         NSLog(@"上传失败");
+
+     }];
     return nil;
 }
 
@@ -452,5 +386,28 @@ static NSString * const FORM_FLE_INPUT = @"fileupload";
             return CGSizeZero;
         }
     }  }
+
++ (UIImage*)imageWithSize:(CGSize)size borderColor:(UIColor *)color borderWidth:(CGFloat)borderWidth
+{
+    UIGraphicsBeginImageContextWithOptions(size, NO, 0.0);
+    [[UIColor clearColor] set];
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextBeginPath(context);
+    CGContextSetLineWidth(context, borderWidth);
+    CGContextSetStrokeColorWithColor(context, color.CGColor);
+    CGFloat lengths[] = { 3, 1 };
+    CGContextSetLineDash(context, 0, lengths, 1);
+    CGContextMoveToPoint(context, 0.0, 0.0);
+    CGContextAddLineToPoint(context, size.width, 0.0);
+    CGContextAddLineToPoint(context, size.width, size.height);
+    CGContextAddLineToPoint(context, 0, size.height);
+    CGContextAddLineToPoint(context, 0.0, 0.0);
+    CGContextStrokePath(context);
+    UIImage* image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return image;
+}
+
+
 @end
 

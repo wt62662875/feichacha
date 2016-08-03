@@ -54,6 +54,12 @@
             [datas setObject:[self getNumber] forKey:@"PurchaseQuantity"];
             _titleLabel.text = [datas objectForKey:@"Name"];
             _numberLabel.text = [self getNumber];
+            if ([[datas objectForKey:@"Stock"] intValue] <= 0) {
+                _plusButton.hidden = YES;
+                _numberLabel.hidden = YES;
+                [_minButton setTitle:@"已抢光" forState:UIControlStateNormal];
+                [_minButton setImage:nil forState:UIControlStateNormal];
+            }
             
             [self initHeadView];
             [self initFootView];
@@ -188,15 +194,33 @@
 - (IBAction)minButton:(id)sender {
     if (![[self getNumber]isEqualToString:@"0"]) {
         if ([[datas objectForKey:@"Library"] intValue] == 1) {
+            NSArray *tempArray = [USERDEFAULTS objectForKey:@"FlashShoppingCartGoods"];
+            for (int i=0; i<tempArray.count; i++) {
+                if ([[tempArray[i] objectForKey:@"Fguid"] isEqualToString:[datas objectForKey:@"Fguid"]]) {
+                    if ([[tempArray[i] objectForKey:@"PurchaseQuantity"] intValue] <= 1) {
+                        [[NSNotificationCenter defaultCenter] postNotificationName:@"FlashShoppingCartGoodsDelete" object:tempArray[i]];
+                    }
+                }
+            }
+            
             [[NSNotificationCenter defaultCenter] postNotificationName:@"FlashShoppingCartGoodsMin" object:datas];
             [datas setObject:[NSString stringWithFormat:@"%d",[[datas objectForKey:@"PurchaseQuantity"] intValue]-1] forKey:@"PurchaseQuantity"];
             _badgeLabel.hidden = NO;
             _badgeLabel.text = [NSString stringWithFormat:@"%@",[USERDEFAULTS objectForKey:@"PurchaseQuantity"]];
         }else{
+            NSArray *tempArray = [USERDEFAULTS objectForKey:@"ReservationShoppingCartGoods"];
+            for (int i=0; i<tempArray.count; i++) {
+                if ([[tempArray[i] objectForKey:@"Fguid"] isEqualToString:[datas objectForKey:@"Fguid"]]) {
+                    if ([[tempArray[i] objectForKey:@"PurchaseQuantity"] intValue] <= 1) {
+                        [[NSNotificationCenter defaultCenter] postNotificationName:@"ReservationShoppingCartGoodsDelete" object:tempArray[i]];
+                    }
+                }
+            }
             [[NSNotificationCenter defaultCenter] postNotificationName:@"ReservationShoppingCartGoodsMin" object:datas];
             [datas setObject:[NSString stringWithFormat:@"%d",[[datas objectForKey:@"PurchaseQuantity"] intValue]-1] forKey:@"PurchaseQuantity"];
             _badgeLabel.hidden = NO;
             _badgeLabel.text = [NSString stringWithFormat:@"%@",[USERDEFAULTS objectForKey:@"PurchaseQuantity"]];
+            
         }
     }
 

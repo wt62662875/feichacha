@@ -105,7 +105,7 @@
                                 <color key="textColor" red="0.66666666666666663" green="0.66666666666666663" blue="0.66666666666666663" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="adress_tip1.png" translatesAutoresizingMaskIntoConstraints="NO" id="qgl-yp-SwN">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="adress_tip1.png" translatesAutoresizingMaskIntoConstraints="NO" id="qgl-yp-SwN">
                                 <rect key="frame" x="260" y="200" width="80" height="80"/>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PqQ-Kr-K8b">
@@ -596,7 +596,7 @@
                                         <rect key="frame" x="0.0" y="0.0" width="44" height="44"/>
                                         <state key="normal" image="shop_cart_icon1.png"/>
                                         <connections>
-                                            <action selector="shoppingCarButton:" destination="BJN-Rs-83i" eventType="touchUpInside" id="IxG-nP-CCg"/>
+                                            <action selector="goShoppingCart:" destination="k9P-kV-0sc" eventType="touchUpInside" id="sH9-sn-znm"/>
                                         </connections>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="99" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="thY-JY-HDK">
@@ -1112,25 +1112,25 @@
                                 <rect key="frame" x="0.0" y="64" width="600" height="536"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="7v3-xU-0R2">
-                                    <size key="itemSize" width="204" height="303"/>
+                                    <size key="itemSize" width="144" height="220"/>
                                     <size key="headerReferenceSize" width="50" height="50"/>
                                     <size key="footerReferenceSize" width="50" height="50"/>
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="germanBeerCollectionViewCell" id="1Zd-nK-uih" customClass="germanBeerCollectionViewCell">
-                                        <rect key="frame" x="0.0" y="50" width="204" height="303"/>
+                                        <rect key="frame" x="0.0" y="50" width="144" height="220"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="0.0" y="0.0" width="204" height="303"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="144" height="220"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="z9L-U8-PM6">
-                                                    <rect key="frame" x="0.0" y="0.0" width="204" height="303"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="144" height="220"/>
                                                     <state key="normal" title="Button"/>
                                                 </button>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="beer_por1.png" translatesAutoresizingMaskIntoConstraints="NO" id="5PE-7j-VlE">
-                                                    <rect key="frame" x="0.0" y="0.0" width="204" height="303"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="144" height="220"/>
                                                 </imageView>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="isu-qe-U5I">
                                                     <rect key="frame" x="8" y="30" width="60" height="6"/>
@@ -1200,7 +1200,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                 </collectionReusableView>
                                 <collectionReusableView key="sectionFooterView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="germanBeerFootCollectionReusableView" id="KNc-Ig-lPQ" customClass="germanBeerFootCollectionReusableView">
-                                    <rect key="frame" x="0.0" y="353" width="600" height="50"/>
+                                    <rect key="frame" x="0.0" y="270" width="600" height="50"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </collectionReusableView>
                                 <connections>
@@ -2599,7 +2599,10 @@
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="B1b-ft-QP8">
                                         <rect key="frame" x="91" y="12" width="25" height="26"/>
-                                        <state key="normal" image="del_btn.png"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <state key="normal" image="del_btn.png">
+                                            <color key="titleColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                        </state>
                                         <connections>
                                             <action selector="minButton:" destination="LFS-6f-Xov" eventType="touchUpInside" id="rPV-7b-F7a"/>
                                         </connections>
@@ -3815,6 +3818,7 @@
                     <connections>
                         <outlet property="allPrice" destination="G3e-ad-TAH" id="8ZA-Gg-AJ5"/>
                         <outlet property="tableView" destination="trm-vS-Ob7" id="n6m-R7-riz"/>
+                        <outlet property="toPayButton" destination="KIH-E1-ZuF" id="LA1-Ii-awa"/>
                         <segue destination="FwP-EV-zpK" kind="push" identifier="submitOrdersToCoupons" id="DVu-Z3-xzU"/>
                     </connections>
                 </viewController>
@@ -4479,8 +4483,8 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gmj-6k-IW3">
                                         <rect key="frame" x="0.0" y="8" width="600" height="34"/>
                                         <subviews>
-                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="adress_icon1.png" translatesAutoresizingMaskIntoConstraints="NO" id="pqD-ff-QRz">
-                                                <rect key="frame" x="236" y="8.5" width="16" height="16"/>
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="adress_icon1.png" translatesAutoresizingMaskIntoConstraints="NO" id="pqD-ff-QRz">
+                                                <rect key="frame" x="236" y="8" width="16" height="16"/>
                                             </imageView>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WEO-CA-oST">
                                                 <rect key="frame" x="0.0" y="0.0" width="600" height="34"/>
@@ -4494,6 +4498,9 @@
                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="arrow_right.png" translatesAutoresizingMaskIntoConstraints="NO" id="gi4-6T-2q8">
+                                                <rect key="frame" x="587" y="13" width="5" height="9"/>
+                                            </imageView>
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
@@ -4502,7 +4509,9 @@
                                             <constraint firstItem="r1O-Fn-bcQ" firstAttribute="centerY" secondItem="gmj-6k-IW3" secondAttribute="centerY" id="FPr-ZK-zNK"/>
                                             <constraint firstItem="WEO-CA-oST" firstAttribute="leading" secondItem="gmj-6k-IW3" secondAttribute="leading" id="GD2-vN-Kuv"/>
                                             <constraint firstItem="r1O-Fn-bcQ" firstAttribute="leading" secondItem="pqD-ff-QRz" secondAttribute="trailing" constant="8" id="Lv0-HI-5r6"/>
+                                            <constraint firstAttribute="trailing" secondItem="gi4-6T-2q8" secondAttribute="trailing" constant="8" id="N2H-2l-VFv"/>
                                             <constraint firstItem="r1O-Fn-bcQ" firstAttribute="centerX" secondItem="gmj-6k-IW3" secondAttribute="centerX" constant="12.5" id="TdS-pn-Og9"/>
+                                            <constraint firstItem="gi4-6T-2q8" firstAttribute="top" secondItem="gmj-6k-IW3" secondAttribute="top" constant="13" id="UBR-Do-9s3"/>
                                             <constraint firstItem="WEO-CA-oST" firstAttribute="top" secondItem="gmj-6k-IW3" secondAttribute="top" id="aLw-ID-Vog"/>
                                             <constraint firstItem="r1O-Fn-bcQ" firstAttribute="top" secondItem="gmj-6k-IW3" secondAttribute="top" constant="8" id="aOX-dP-na4"/>
                                             <constraint firstItem="pqD-ff-QRz" firstAttribute="centerX" secondItem="gmj-6k-IW3" secondAttribute="centerX" constant="-56" id="qjn-Ul-eNp"/>
@@ -4566,9 +4575,11 @@
                         <outlet property="DoorToDoor" destination="WKz-fm-QFC" id="3S8-nv-4I8"/>
                         <outlet property="ToTheShop" destination="Lo4-OM-lK4" id="9U4-w8-GRW"/>
                         <outlet property="addAddressButton" destination="XFJ-fU-Bhm" id="FqO-g3-pNg"/>
+                        <outlet property="addAddressView" destination="jEz-fl-dsq" id="qIs-Kt-HNi"/>
                         <outlet property="positioningLabel" destination="r1O-Fn-bcQ" id="cad-Sv-0z5"/>
                         <outlet property="positioningView" destination="BEi-in-aWt" id="JAA-rq-TVf"/>
                         <outlet property="positioningViewHeigh" destination="4ZX-eE-mzA" id="BDa-9g-3yQ"/>
+                        <outlet property="rightArrowImage" destination="gi4-6T-2q8" id="aSe-rQ-wEV"/>
                         <outlet property="tableView" destination="Mt9-7g-2sP" id="RST-fb-KLR"/>
                         <outlet property="titleView" destination="sJZ-5U-NkZ" id="GJL-Eo-eCo"/>
                         <segue destination="sa4-Nc-z9P" kind="push" identifier="addressManageToEditOrAddAddress" id="Pis-df-dmU"/>
@@ -5465,6 +5476,9 @@
                                         <state key="normal" title="提交">
                                             <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
+                                        <connections>
+                                            <action selector="submitButtonClick:" destination="Djf-rq-IBu" eventType="touchUpInside" id="ayV-Kj-Ayc"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -5645,15 +5659,32 @@
                                             <action selector="button2Click:" destination="ped-qg-bGi" eventType="touchUpInside" id="Q4Y-wk-99P"/>
                                         </connections>
                                     </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YZ9-Xi-n8F">
+                                        <rect key="frame" x="8" y="5" width="70" height="30"/>
+                                        <color key="backgroundColor" red="1" green="0.86274509799999999" blue="0.17254901959999999" alpha="1" colorSpace="calibratedRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="70" id="w1H-0j-bwX"/>
+                                            <constraint firstAttribute="height" constant="30" id="y3r-38-11M"/>
+                                        </constraints>
+                                        <state key="normal" title="联系商家">
+                                            <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="leftButtonClick:" destination="ped-qg-bGi" eventType="touchUpInside" id="HDU-iq-Qwr"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstItem="rkS-r0-ZEK" firstAttribute="leading" secondItem="jED-o7-0sh" secondAttribute="trailing" constant="8" id="2SM-L8-btL"/>
+                                    <constraint firstAttribute="bottom" secondItem="YZ9-Xi-n8F" secondAttribute="bottom" constant="5" id="4rq-FG-zst"/>
+                                    <constraint firstItem="YZ9-Xi-n8F" firstAttribute="top" secondItem="bDi-bP-yKp" secondAttribute="top" constant="5" id="7JS-PF-dSX"/>
                                     <constraint firstAttribute="trailing" secondItem="rkS-r0-ZEK" secondAttribute="trailing" constant="8" id="RIq-7a-Ytg"/>
                                     <constraint firstAttribute="height" constant="40" id="arO-hl-LBM"/>
                                     <constraint firstAttribute="bottom" secondItem="jED-o7-0sh" secondAttribute="bottom" constant="5" id="bxi-5G-HMc"/>
                                     <constraint firstItem="jED-o7-0sh" firstAttribute="top" secondItem="bDi-bP-yKp" secondAttribute="top" constant="5" id="ghz-ec-7tx"/>
                                     <constraint firstItem="rkS-r0-ZEK" firstAttribute="top" secondItem="bDi-bP-yKp" secondAttribute="top" constant="5" id="h1s-st-oPm"/>
+                                    <constraint firstItem="YZ9-Xi-n8F" firstAttribute="leading" secondItem="bDi-bP-yKp" secondAttribute="leading" constant="8" id="jKx-oY-rFd"/>
                                     <constraint firstAttribute="bottom" secondItem="rkS-r0-ZEK" secondAttribute="bottom" constant="5" id="mNY-7D-D78"/>
                                 </constraints>
                             </view>
@@ -5684,6 +5715,7 @@
                     <connections>
                         <outlet property="footButton1" destination="rkS-r0-ZEK" id="JOp-QZ-dfJ"/>
                         <outlet property="footButton2" destination="jED-o7-0sh" id="avJ-5q-0qh"/>
+                        <outlet property="leftButton" destination="YZ9-Xi-n8F" id="3De-Jt-e8K"/>
                         <outlet property="orderDetailsButton" destination="TKe-PA-gvh" id="NfC-oz-Pt3"/>
                         <outlet property="orderStateButton" destination="W9b-5B-UUJ" id="zNs-pA-2No"/>
                         <outlet property="tableView" destination="OJc-9h-5pY" id="Gag-ZX-PXp"/>
@@ -6492,7 +6524,7 @@
                                         <rect key="frame" x="0.0" y="0.0" width="44" height="44"/>
                                         <state key="normal" image="shop_cart_icon1.png"/>
                                         <connections>
-                                            <action selector="shoppingCarButton:" destination="BJN-Rs-83i" eventType="touchUpInside" id="Y7f-u6-EWx"/>
+                                            <action selector="shoppingCartButton:" destination="ALd-17-taX" eventType="touchUpInside" id="4rE-QC-CHH"/>
                                         </connections>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="99" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0TP-nr-ep5">
@@ -6621,7 +6653,7 @@
                                     <constraint firstAttribute="bottom" secondItem="dvX-8i-424" secondAttribute="bottom" constant="8" id="x45-1X-Pv6"/>
                                 </constraints>
                             </view>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="adress_tip1.png" translatesAutoresizingMaskIntoConstraints="NO" id="Ux6-ca-LCo">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="adress_tip1.png" translatesAutoresizingMaskIntoConstraints="NO" id="Ux6-ca-LCo">
                                 <rect key="frame" x="260" y="200" width="80" height="80"/>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="抱歉，当前地址暂未开通服务，敬请期待哦～" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="F53-e7-2yo">
@@ -9554,6 +9586,7 @@
         <image name="adress_tip1.png" width="80" height="80"/>
         <image name="adress_tip2.png" width="80" height="80"/>
         <image name="arrow_left.png" width="7" height="11"/>
+        <image name="arrow_right.png" width="5" height="9"/>
         <image name="beer_por1.png" width="290" height="427"/>
         <image name="beverages_title.png" width="188" height="41"/>
         <image name="cake_title.png" width="186" height="40"/>

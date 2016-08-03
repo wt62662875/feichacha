@@ -35,6 +35,7 @@
 #import "IQKeyboardManager.h"
 #import "SDCycleScrollView.h"
 #import "UIAlertView+Blocks.h"
+#import "AFHTTPSessionManager.h"
 
 
 #ifndef LiuLiuGanXi_Operation_Public_h
