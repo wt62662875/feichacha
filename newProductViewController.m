@@ -124,7 +124,7 @@
             }
         }
         
-
+        cell.goodsMessage2.hidden = YES;
         cell.buyButton.tag = indexPath.row;
         [cell.buyButton addTarget:self action:@selector(buyButton:) forControlEvents:UIControlEventTouchUpInside];
         cell.goodsClick.tag = indexPath.row;
