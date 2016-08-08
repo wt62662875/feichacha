@@ -97,6 +97,11 @@
             [cell.buyButton setTitle:@"已抢光" forState:UIControlStateNormal];
             cell.buyButton.userInteractionEnabled = NO;
         }
+        if ([[datas[0] objectForKey:@"Stock"] intValue] == 0) {
+            cell.buyButton2.backgroundColor = [UIColor lightGrayColor];
+            [cell.buyButton2 setTitle:@"已抢光" forState:UIControlStateNormal];
+            cell.buyButton2.userInteractionEnabled = NO;
+        }
         cell.roundView.layer.cornerRadius = 7;
     }else{
         [cell.image1 sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[lastDatas[indexPath.row*2] objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"loading_default"]];
