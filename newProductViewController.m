@@ -171,7 +171,7 @@
         [cell.goodsImage1 sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[lastDatas[(indexPath.row-6)*2] objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"loading_default"]];
         cell.goodsName1.text = [lastDatas[(indexPath.row-6)*2] objectForKey:@"Name"];
         cell.goodsSpecifications1.text = [lastDatas[(indexPath.row-6)*2] objectForKey:@"Size"];
-        cell.price1.text = [NSString stringWithFormat:@"￥%.1f",[[lastDatas[(indexPath.row-6)*2] objectForKey:@"Price"] floatValue]];
+        cell.price1.text = [NSString stringWithFormat:@"%.1f",[[lastDatas[(indexPath.row-6)*2] objectForKey:@"Price"] floatValue]];
         if ([[lastDatas[(indexPath.row-6)*2] objectForKey:@"Stock"] intValue] == 0) {
             cell.buyButton1.backgroundColor = [UIColor lightGrayColor];
             [cell.buyButton1 setTitle:@"已抢光" forState:UIControlStateNormal];
@@ -184,7 +184,7 @@
             [cell.goodsImage2 sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[lastDatas[(indexPath.row-6)*2+1] objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"loading_default"]];
             cell.goodsName2.text = [lastDatas[(indexPath.row-6)*2+1] objectForKey:@"Name"];
             cell.goodsSpecifications2.text = [lastDatas[(indexPath.row-6)*2+1] objectForKey:@"Size"];
-            cell.price2.text = [NSString stringWithFormat:@"￥%.1f",[[lastDatas[(indexPath.row-6)*2+1] objectForKey:@"Price"] floatValue]];
+            cell.price2.text = [NSString stringWithFormat:@"%.1f",[[lastDatas[(indexPath.row-6)*2+1] objectForKey:@"Price"] floatValue]];
             if ([[lastDatas[(indexPath.row-6)*2+1] objectForKey:@"Stock"] intValue] == 0) {
                 cell.buyButton2.backgroundColor = [UIColor lightGrayColor];
                 [cell.buyButton2 setTitle:@"已抢光" forState:UIControlStateNormal];
@@ -256,7 +256,7 @@
 -(void)goodsClick1:(UIButton *)sender{
     UIStoryboard *stroyBoard = GetStoryboard(@"Main");
     goodsDetailsViewController *goodsDetailsVC = [stroyBoard instantiateViewControllerWithIdentifier:@"goodsDetailsViewController"];
-    [goodsDetailsVC setIsAct:@"1"];
+    [goodsDetailsVC setIsAct:@"0"];
     if (sender.tag == 1) {
         [goodsDetailsVC setGetID:datas[0]];
     }else if (sender.tag == 3) {
@@ -270,14 +270,14 @@
 -(void)goodsClick2:(UIButton *)sender{
     UIStoryboard *stroyBoard = GetStoryboard(@"Main");
     goodsDetailsViewController *goodsDetailsVC = [stroyBoard instantiateViewControllerWithIdentifier:@"goodsDetailsViewController"];
-    [goodsDetailsVC setIsAct:@"1"];
+    [goodsDetailsVC setIsAct:@"0"];
     [goodsDetailsVC setGetID:lastDatas[(sender.tag-6)*2]];
     [self.navigationController pushViewController:goodsDetailsVC animated:YES];
 }
 -(void)goodsClick3:(UIButton *)sender{
     UIStoryboard *stroyBoard = GetStoryboard(@"Main");
     goodsDetailsViewController *goodsDetailsVC = [stroyBoard instantiateViewControllerWithIdentifier:@"goodsDetailsViewController"];
-    [goodsDetailsVC setIsAct:@"1"];
+    [goodsDetailsVC setIsAct:@"0"];
     [goodsDetailsVC setGetID:lastDatas[(sender.tag-6)*2+1]];
     [self.navigationController pushViewController:goodsDetailsVC animated:YES];
 }

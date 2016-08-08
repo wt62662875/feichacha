@@ -36,7 +36,9 @@
 -(void)getVerificationCode:(NSString *)phoneNumber success:(SuccessBlock)success failure:(FailureBlock)faileure{
     AFHTTPSessionManager *manager = [self baseHtppRequest];
     NSString *url = [SeviceURL stringByAppendingFormat:@"/User/SendMobileMessage?mobile=%@",phoneNumber];
-    [manager GET:url parameters:nil success:^(NSURLSessionTask*task,id responseObject) {
+    [manager GET:url parameters:nil progress:^(NSProgress * _Nonnull downloadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         success(responseObject);
     }failure:^(NSURLSessionTask *operation,NSError*error){
         NSString *errorStr = [error.userInfo objectForKey:@"NSLocalizedDescription"];
@@ -46,8 +48,9 @@
 -(void)login:(NSString *)phoneNumber code:(NSString *)code success:(SuccessBlock)success failure:(FailureBlock)faileure{
     AFHTTPSessionManager *manager = [self baseHtppRequest];
     NSString *url = [SeviceURL stringByAppendingFormat:@"/User/CheckCode?mobile=%@&code=%@",phoneNumber,code];
-    [manager GET:url parameters:nil success:^(NSURLSessionTask*task,id responseObject) {
-        success(responseObject);
+    [manager GET:url parameters:nil progress:^(NSProgress * _Nonnull downloadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {        success(responseObject);
     }failure:^(NSURLSessionTask *operation,NSError*error){
         NSString *errorStr = [error.userInfo objectForKey:@"NSLocalizedDescription"];
         faileure(errorStr);
@@ -57,8 +60,9 @@
     AFHTTPSessionManager *manager = [self baseHtppRequest];
     NSString *url = [SeviceURL stringByAppendingFormat:@"/CompanyDetail/Company?lat=%@&lon=%@&Type=%@",lat,lon,Type];
     
-    [manager GET:url parameters:nil success:^(NSURLSessionTask*task,id responseObject) {
-        success(responseObject);
+    [manager GET:url parameters:nil progress:^(NSProgress * _Nonnull downloadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {        success(responseObject);
     }failure:^(NSURLSessionTask *operation,NSError*error){
         NSString *errorStr = [error.userInfo objectForKey:@"NSLocalizedDescription"];
         faileure(errorStr);
@@ -67,8 +71,9 @@
 -(void)listProClass:(SuccessBlock)success failure:(FailureBlock)faileure{
     AFHTTPSessionManager *manager = [self baseHtppRequest];
     NSString *url = [SeviceURL stringByAppendingFormat:@"/ProClass/ListProClass?CompanyId=%@",[USERDEFAULTS objectForKey:@"shopID"]];
-    [manager GET:url parameters:nil success:^(NSURLSessionTask*task,id responseObject) {
-        success(responseObject);
+    [manager GET:url parameters:nil progress:^(NSProgress * _Nonnull downloadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {        success(responseObject);
     }failure:^(NSURLSessionTask *operation,NSError*error){
         NSString *errorStr = [error.userInfo objectForKey:@"NSLocalizedDescription"];
         faileure(errorStr);
@@ -77,8 +82,9 @@
 -(void)ClassProductList:(NSString *)compnayId classId:(NSString *)classId page:(NSString *)page success:(SuccessBlock)success failure:(FailureBlock)faileure{
     AFHTTPSessionManager *manager = [self baseHtppRequest];
     NSString *url = [SeviceURL stringByAppendingFormat:@"/ProClass/ClassProductList?CompnayId=%@&ClassId=%@&page=%@",compnayId,classId,page];
-    [manager GET:url parameters:nil success:^(NSURLSessionTask*task,id responseObject) {
-        success(responseObject);
+    [manager GET:url parameters:nil progress:^(NSProgress * _Nonnull downloadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {        success(responseObject);
     }failure:^(NSURLSessionTask *operation,NSError*error){
         NSString *errorStr = [error.userInfo objectForKey:@"NSLocalizedDescription"];
         faileure(errorStr);
@@ -88,8 +94,9 @@
     AFHTTPSessionManager *manager = [self baseHtppRequest];
     NSString *url = [SeviceURL stringByAppendingFormat:@"/Search/SearchtList"];
     NSDictionary *dic = [[NSDictionary alloc]initWithObjectsAndKeys:compnayId,@"CompnayId",Order,@"Order",serchStr,@"str", nil];
-    [manager POST:url parameters:dic success:^(NSURLSessionTask*task,id responseObject) {
-        success(responseObject);
+    [manager POST:url parameters:dic progress:^(NSProgress * _Nonnull downloadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {        success(responseObject);
     }failure:^(NSURLSessionTask *operation,NSError*error){
         NSString *errorStr = [error.userInfo objectForKey:@"NSLocalizedDescription"];
         faileure(errorStr);
@@ -98,8 +105,9 @@
 -(void)ProDetail:(NSString *)FGuId ActType:(NSString *)ActType IsAct:(NSString*)IsAct success:(SuccessBlock)success failure:(FailureBlock)faileure{
     AFHTTPSessionManager *manager = [self baseHtppRequest];
     NSString *url = [SeviceURL stringByAppendingFormat:@"/Product/ProDetail?FGuId=%@&ActType=%@&IsAct=%@&CompanyId=%@",FGuId,ActType,IsAct,[USERDEFAULTS objectForKey:@"shopID"]];
-    [manager GET:url parameters:nil success:^(NSURLSessionTask*task,id responseObject) {
-        success(responseObject);
+    [manager GET:url parameters:nil progress:^(NSProgress * _Nonnull downloadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {        success(responseObject);
     }failure:^(NSURLSessionTask *operation,NSError*error){
         NSString *errorStr = [error.userInfo objectForKey:@"NSLocalizedDescription"];
         faileure(errorStr);
@@ -109,8 +117,9 @@
     AFHTTPSessionManager *manager = [self baseHtppRequest];
     [manager.requestSerializer setValue:TOKEN forHTTPHeaderField:X_CLIENT_TOKEN];
     NSString *url = [SeviceURL stringByAppendingFormat:@"/Addlist/UserAddList?lat=%@&lon=%@",lat,lon];
-    [manager GET:url parameters:nil success:^(NSURLSessionTask*task,id responseObject) {
-        success(responseObject);
+    [manager GET:url parameters:nil progress:^(NSProgress * _Nonnull downloadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {        success(responseObject);
     }failure:^(NSURLSessionTask *operation,NSError*error){
         NSString *errorStr = [error.userInfo objectForKey:@"NSLocalizedDescription"];
         faileure(errorStr);
@@ -119,8 +128,9 @@
 -(void)addressDetails:(NSString *)addID success:(SuccessBlock)success failure:(FailureBlock)faileure{
     AFHTTPSessionManager *manager = [self baseHtppRequest];
     NSString *url = [SeviceURL stringByAppendingFormat:@"/UserAdd/AddDetail?Id=%@",addID];
-    [manager GET:url parameters:nil success:^(NSURLSessionTask*task,id responseObject) {
-        success(responseObject);
+    [manager GET:url parameters:nil progress:^(NSProgress * _Nonnull downloadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {        success(responseObject);
     }failure:^(NSURLSessionTask *operation,NSError*error){
         NSString *errorStr = [error.userInfo objectForKey:@"NSLocalizedDescription"];
         faileure(errorStr);
@@ -129,8 +139,9 @@
 -(void)areasList:(SuccessBlock)success failure:(FailureBlock)faileure{
     AFHTTPSessionManager *manager = [self baseHtppRequest];
     NSString *url = [SeviceURL stringByAppendingFormat:@"/Areas/AreasList"];
-    [manager GET:url parameters:nil success:^(NSURLSessionTask*task,id responseObject) {
-        success(responseObject);
+    [manager GET:url parameters:nil progress:^(NSProgress * _Nonnull downloadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {        success(responseObject);
     }failure:^(NSURLSessionTask *operation,NSError*error){
         NSString *errorStr = [error.userInfo objectForKey:@"NSLocalizedDescription"];
         faileure(errorStr);
@@ -141,8 +152,9 @@
     AFHTTPSessionManager *manager = [self baseHtppRequest];
     NSString *url = [SeviceURL stringByAppendingFormat:@"/UpdateAdd/UpdateAdd"];
     NSDictionary *dic = [[NSDictionary alloc]initWithObjectsAndKeys:Id,@"Id",lat,@"lat",lon,@"lon", Address,@"Address",Sex,@"Sex",Mobile,@"Mobile",Tablet,@"Tablet",Name,@"Name",IsDefault,@"IsDefault",CityId,@"CityId",nil];
-    [manager POST:url parameters:dic success:^(NSURLSessionTask*task,id responseObject) {
-        success(responseObject);
+    [manager POST:url parameters:dic progress:^(NSProgress * _Nonnull downloadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {        success(responseObject);
     }failure:^(NSURLSessionTask *operation,NSError*error){
         NSString *errorStr = [error.userInfo objectForKey:@"NSLocalizedDescription"];
         faileure(errorStr);
@@ -155,8 +167,9 @@
     NSString *url = [SeviceURL stringByAppendingFormat:@"/UserAdd/InsertAdd"];
     NSDictionary *dic = [[NSDictionary alloc]initWithObjectsAndKeys:lat,@"lat",lon,@"lon",CityId,@"CityId",Address,@"Address",Sex,@"Sex",Mobile,@"Mobile",Tablet,@"Tablet",Name,@"Name",IsDefault,@"IsDefault", nil];
     url = [url stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    [manager POST:url parameters:dic success:^(NSURLSessionTask*task,id responseObject) {
-        success(responseObject);
+    [manager POST:url parameters:dic progress:^(NSProgress * _Nonnull downloadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {        success(responseObject);
     }failure:^(NSURLSessionTask *operation,NSError*error){
         NSString *errorStr = [error.userInfo objectForKey:@"NSLocalizedDescription"];
         faileure(errorStr);
@@ -166,8 +179,9 @@
 -(void)delAddress:(NSString *)Id success:(SuccessBlock)success failure:(FailureBlock)faileure{
     AFHTTPSessionManager *manager = [self baseHtppRequest];
     NSString *url = [SeviceURL stringByAppendingFormat:@"/DelAddress/DelAdd?Id=%@",Id];
-    [manager GET:url parameters:nil success:^(NSURLSessionTask*task,id responseObject) {
-        success(responseObject);
+    [manager GET:url parameters:nil progress:^(NSProgress * _Nonnull downloadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {        success(responseObject);
     }failure:^(NSURLSessionTask *operation,NSError*error){
         NSString *errorStr = [error.userInfo objectForKey:@"NSLocalizedDescription"];
         faileure(errorStr);
@@ -177,8 +191,9 @@
 -(void)scrollList:(NSString *)Id success:(SuccessBlock)success failure:(FailureBlock)faileure{
     AFHTTPSessionManager *manager = [self baseHtppRequest];
     NSString *url = [SeviceURL stringByAppendingFormat:@"/Scroll/ScrollList?Id=%@",Id];
-    [manager GET:url parameters:nil success:^(NSURLSessionTask*task,id responseObject) {
-        success(responseObject);
+    [manager GET:url parameters:nil progress:^(NSProgress * _Nonnull downloadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {        success(responseObject);
     }failure:^(NSURLSessionTask *operation,NSError*error){
         NSString *errorStr = [error.userInfo objectForKey:@"NSLocalizedDescription"];
         faileure(errorStr);
@@ -188,8 +203,9 @@
 -(void)sevenList:(NSString *)Id success:(SuccessBlock)success failure:(FailureBlock)faileure{
     AFHTTPSessionManager *manager = [self baseHtppRequest];
     NSString *url = [SeviceURL stringByAppendingFormat:@"/IndexSeven/SevenList?Id=%@",Id];
-    [manager GET:url parameters:nil success:^(NSURLSessionTask*task,id responseObject) {
-        success(responseObject);
+    [manager GET:url parameters:nil progress:^(NSProgress * _Nonnull downloadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {        success(responseObject);
     }failure:^(NSURLSessionTask *operation,NSError*error){
         NSString *errorStr = [error.userInfo objectForKey:@"NSLocalizedDescription"];
         faileure(errorStr);
@@ -199,8 +215,9 @@
 -(void)indexList:(NSString *)Id success:(SuccessBlock)success failure:(FailureBlock)faileure{
     AFHTTPSessionManager *manager = [self baseHtppRequest];
     NSString *url = [SeviceURL stringByAppendingFormat:@"/index/IndexList?CompanyId=%@",Id];
-    [manager GET:url parameters:nil success:^(NSURLSessionTask*task,id responseObject) {
-        success(responseObject);
+    [manager GET:url parameters:nil progress:^(NSProgress * _Nonnull downloadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {        success(responseObject);
     }failure:^(NSURLSessionTask *operation,NSError*error){
         NSString *errorStr = [error.userInfo objectForKey:@"NSLocalizedDescription"];
         faileure(errorStr);
@@ -210,8 +227,9 @@
 -(void)proHeat:(NSString *)Id success:(SuccessBlock)success failure:(FailureBlock)faileure{
     AFHTTPSessionManager *manager = [self baseHtppRequest];
     NSString *url = [SeviceURL stringByAppendingFormat:@"/ProHeat/IndexHeat?CompanyId=%@",Id];
-    [manager GET:url parameters:nil success:^(NSURLSessionTask*task,id responseObject) {
-        success(responseObject);
+    [manager GET:url parameters:nil progress:^(NSProgress * _Nonnull downloadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {        success(responseObject);
     }failure:^(NSURLSessionTask *operation,NSError*error){
         NSString *errorStr = [error.userInfo objectForKey:@"NSLocalizedDescription"];
         faileure(errorStr);
@@ -221,8 +239,9 @@
 -(void)FreshScroll:(NSString *)compnayId success:(SuccessBlock)success failure:(FailureBlock)faileure{
     AFHTTPSessionManager *manager = [self baseHtppRequest];
     NSString *url = [SeviceURL stringByAppendingFormat:@"/FreshScroll/Scroll?CompanyId=%@",compnayId];
-    [manager GET:url parameters:nil success:^(NSURLSessionTask*task,id responseObject) {
-        success(responseObject);
+    [manager GET:url parameters:nil progress:^(NSProgress * _Nonnull downloadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {        success(responseObject);
     }failure:^(NSURLSessionTask *operation,NSError*error){
         NSString *errorStr = [error.userInfo objectForKey:@"NSLocalizedDescription"];
         faileure(errorStr);
@@ -232,8 +251,10 @@
 -(void)FreshList:(NSString *)compnayId success:(SuccessBlock)success failure:(FailureBlock)faileure{
     AFHTTPSessionManager *manager = [self baseHtppRequest];
     NSString *url = [SeviceURL stringByAppendingFormat:@"/Fresh/FreshList?CompanyId=%@",compnayId];
-    [manager GET:url parameters:nil success:^(NSURLSessionTask*task,id responseObject) {
-        success(responseObject);
+    NSLog(@"%@",url);
+    [manager GET:url parameters:nil progress:^(NSProgress * _Nonnull downloadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {        success(responseObject);
     }failure:^(NSURLSessionTask *operation,NSError*error){
         NSString *errorStr = [error.userInfo objectForKey:@"NSLocalizedDescription"];
         faileure(errorStr);
@@ -243,8 +264,9 @@
 -(void)newList:(NSString *)Id success:(SuccessBlock)success failure:(FailureBlock)faileure{
     AFHTTPSessionManager *manager = [self baseHtppRequest];
     NSString *url = [SeviceURL stringByAppendingFormat:@"/New/NewList?Id=%@",Id];
-    [manager GET:url parameters:nil success:^(NSURLSessionTask*task,id responseObject) {
-        success(responseObject);
+    [manager GET:url parameters:nil progress:^(NSProgress * _Nonnull downloadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {        success(responseObject);
     }failure:^(NSURLSessionTask *operation,NSError*error){
         NSString *errorStr = [error.userInfo objectForKey:@"NSLocalizedDescription"];
         faileure(errorStr);
@@ -254,8 +276,9 @@
 -(void)PromotionsList:(NSString *)Id success:(SuccessBlock)success failure:(FailureBlock)faileure{
     AFHTTPSessionManager *manager = [self baseHtppRequest];
     NSString *url = [SeviceURL stringByAppendingFormat:@"/Promotions/PromotionsList?Id=%@",Id];
-    [manager GET:url parameters:nil success:^(NSURLSessionTask*task,id responseObject) {
-        success(responseObject);
+    [manager GET:url parameters:nil progress:^(NSProgress * _Nonnull downloadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {        success(responseObject);
     }failure:^(NSURLSessionTask *operation,NSError*error){
         NSString *errorStr = [error.userInfo objectForKey:@"NSLocalizedDescription"];
         faileure(errorStr);
@@ -265,8 +288,9 @@
 -(void)ActivityList:(NSString *)ActivityId ActType:(NSString *)ActType success:(SuccessBlock)success failure:(FailureBlock)faileure{
     AFHTTPSessionManager *manager = [self baseHtppRequest];
     NSString *url = [SeviceURL stringByAppendingFormat:@"/Activitys/ActivityList?ActivityId=%@&ActType=%@&CompanyId=%@",ActivityId,ActType,[USERDEFAULTS objectForKey:@"shopID"]];
-    [manager GET:url parameters:nil success:^(NSURLSessionTask*task,id responseObject) {
-        success(responseObject);
+    [manager GET:url parameters:nil progress:^(NSProgress * _Nonnull downloadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {        success(responseObject);
     }failure:^(NSURLSessionTask *operation,NSError*error){
         NSString *errorStr = [error.userInfo objectForKey:@"NSLocalizedDescription"];
         faileure(errorStr);
@@ -281,8 +305,9 @@
                                                          error:nil];
     NSString *jsonStr = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
     NSDictionary * dic = [[NSDictionary alloc]initWithObjectsAndKeys:CompanyId,@"CompanyId" ,OrderType,@"OrderType",jsonStr,@"OrderList",nil];
-    [manager POST:url parameters:dic success:^(NSURLSessionTask*task,id responseObject) {
-        success(responseObject);
+    [manager POST:url parameters:dic progress:^(NSProgress * _Nonnull downloadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {        success(responseObject);
     }failure:^(NSURLSessionTask *operation,NSError*error){
         NSString *errorStr = [error.userInfo objectForKey:@"NSLocalizedDescription"];
         faileure(errorStr);
@@ -292,8 +317,9 @@
 -(void)MinatoList:(NSString *)Id Library:(NSString *)Library Maxmoney:(NSString *)Maxmoney Minmoney:(NSString *)Minmoney success:(SuccessBlock)success failure:(FailureBlock)faileure{
     AFHTTPSessionManager *manager = [self baseHtppRequest];
     NSString *url = [SeviceURL stringByAppendingFormat:@"/Minato/MinatoList?Id=%@&Maxmoney=%@&Minmoney=%@&Library=%@",Id,Maxmoney,Minmoney,Library];
-    [manager GET:url parameters:nil success:^(NSURLSessionTask*task,id responseObject) {
-        success(responseObject);
+    [manager GET:url parameters:nil progress:^(NSProgress * _Nonnull downloadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {        success(responseObject);
     }failure:^(NSURLSessionTask *operation,NSError*error){
         NSString *errorStr = [error.userInfo objectForKey:@"NSLocalizedDescription"];
         faileure(errorStr);
@@ -304,8 +330,9 @@
     AFHTTPSessionManager *manager = [self baseHtppRequest];
     NSString *url = [SeviceURL stringByAppendingFormat:@"/UserLucky/UserLucky"];
     [manager.requestSerializer setValue:TOKEN forHTTPHeaderField:X_CLIENT_TOKEN];
-    [manager GET:url parameters:nil success:^(NSURLSessionTask*task,id responseObject) {
-        success(responseObject);
+    [manager GET:url parameters:nil progress:^(NSProgress * _Nonnull downloadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {        success(responseObject);
     }failure:^(NSURLSessionTask *operation,NSError*error){
         NSString *errorStr = [error.userInfo objectForKey:@"NSLocalizedDescription"];
         faileure(errorStr);
@@ -322,8 +349,9 @@
     NSString *jsonStr = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
     NSDictionary * dic = [[NSDictionary alloc]initWithObjectsAndKeys:UserId,@"UserId" ,CompanyId,@"CompanyId",Type,@"Type",CouponId,@"CouponId",IsCoupon,@"IsCoupon",AddId,@"AddId",Remark,@"Remark",OrderType,@"OrderType",PresetStartTime,@"PresetStartTime",jsonStr,@"OrderList",DeliveryType,@"DeliveryType",nil];
     NSLog(@"%@",dic);
-    [manager POST:url parameters:dic success:^(NSURLSessionTask*task,id responseObject) {
-        success(responseObject);
+    [manager POST:url parameters:dic progress:^(NSProgress * _Nonnull downloadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {        success(responseObject);
     }failure:^(NSURLSessionTask *operation,NSError*error){
         NSString *errorStr = [error.userInfo objectForKey:@"NSLocalizedDescription"];
         faileure(errorStr);
@@ -335,8 +363,9 @@
     AFHTTPSessionManager *manager = [self baseHtppRequest];
     [manager.requestSerializer setValue:TOKEN forHTTPHeaderField:X_CLIENT_TOKEN];
     NSString *url = [SeviceURL stringByAppendingFormat:@"/Payment/PayDes?Order=%@&Type=%@",Order,Type];
-    [manager GET:url parameters:nil success:^(NSURLSessionTask*task,id responseObject) {
-        success(responseObject);
+    [manager GET:url parameters:nil progress:^(NSProgress * _Nonnull downloadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {        success(responseObject);
     }failure:^(NSURLSessionTask *operation,NSError*error){
         NSString *errorStr = [error.userInfo objectForKey:@"NSLocalizedDescription"];
         faileure(errorStr);
@@ -347,8 +376,9 @@
     AFHTTPSessionManager *manager = [self baseHtppRequest];
     NSString *url = [SeviceURL stringByAppendingFormat:@"/UserOrder/OrderList?Type=%@",Type];
     [manager.requestSerializer setValue:TOKEN forHTTPHeaderField:X_CLIENT_TOKEN];
-    [manager GET:url parameters:nil success:^(NSURLSessionTask*task,id responseObject) {
-        success(responseObject);
+    [manager GET:url parameters:nil progress:^(NSProgress * _Nonnull downloadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {        success(responseObject);
     }failure:^(NSURLSessionTask *operation,NSError*error){
         NSString *errorStr = [error.userInfo objectForKey:@"NSLocalizedDescription"];
         faileure(errorStr);
@@ -359,8 +389,9 @@
     AFHTTPSessionManager *manager = [self baseHtppRequest];
     [manager.requestSerializer setValue:TOKEN forHTTPHeaderField:X_CLIENT_TOKEN];
     NSString *url = [SeviceURL stringByAppendingFormat:@"/WxPayment/WxPayDes?Order=%@",Order];
-    [manager GET:url parameters:nil success:^(NSURLSessionTask*task,id responseObject) {
-        success(responseObject);
+    [manager GET:url parameters:nil progress:^(NSProgress * _Nonnull downloadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {        success(responseObject);
     }failure:^(NSURLSessionTask *operation,NSError*error){
         NSString *errorStr = [error.userInfo objectForKey:@"NSLocalizedDescription"];
         faileure(errorStr);
@@ -371,8 +402,9 @@
     AFHTTPSessionManager *manager = [self baseHtppRequest];
     [manager.requestSerializer setValue:TOKEN forHTTPHeaderField:X_CLIENT_TOKEN];
     NSString *url = [SeviceURL stringByAppendingFormat:@"/Product/StoresList?lat=%@&lon=%@",lat,lon];
-    [manager GET:url parameters:nil success:^(NSURLSessionTask*task,id responseObject) {
-        success(responseObject);
+    [manager GET:url parameters:nil progress:^(NSProgress * _Nonnull downloadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {        success(responseObject);
     }failure:^(NSURLSessionTask *operation,NSError*error){
         NSString *errorStr = [error.userInfo objectForKey:@"NSLocalizedDescription"];
         faileure(errorStr);
@@ -383,8 +415,9 @@
     AFHTTPSessionManager *manager = [self baseHtppRequest];
     [manager.requestSerializer setValue:TOKEN forHTTPHeaderField:X_CLIENT_TOKEN];
     NSString *url = [SeviceURL stringByAppendingFormat:@"/Confirm/ConfirmOrder?OrderId=%@&Type=%@",OrderId,Type];
-    [manager GET:url parameters:nil success:^(NSURLSessionTask*task,id responseObject) {
-        success(responseObject);
+    [manager GET:url parameters:nil progress:^(NSProgress * _Nonnull downloadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {        success(responseObject);
     }failure:^(NSURLSessionTask *operation,NSError*error){
         NSString *errorStr = [error.userInfo objectForKey:@"NSLocalizedDescription"];
         faileure(errorStr);
@@ -395,8 +428,9 @@
     AFHTTPSessionManager *manager = [self baseHtppRequest];
     [manager.requestSerializer setValue:TOKEN forHTTPHeaderField:X_CLIENT_TOKEN];
     NSString *url = [SeviceURL stringByAppendingFormat:@"/Lucky/UserLuckyList"];
-    [manager GET:url parameters:nil success:^(NSURLSessionTask*task,id responseObject) {
-        success(responseObject);
+    [manager GET:url parameters:nil progress:^(NSProgress * _Nonnull downloadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {        success(responseObject);
     }failure:^(NSURLSessionTask *operation,NSError*error){
         NSString *errorStr = [error.userInfo objectForKey:@"NSLocalizedDescription"];
         faileure(errorStr);
@@ -406,8 +440,9 @@
 -(void)prestList:(NSString*)shopID success:(SuccessBlock)success failure:(FailureBlock)faileure{
     AFHTTPSessionManager *manager = [self baseHtppRequest];
     NSString *url = [SeviceURL stringByAppendingFormat:@"/Preset/PresetList?CompanyId=%@",shopID];
-    [manager GET:url parameters:nil success:^(NSURLSessionTask*task,id responseObject) {
-        success(responseObject);
+    [manager GET:url parameters:nil progress:^(NSProgress * _Nonnull downloadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {        success(responseObject);
     }failure:^(NSURLSessionTask *operation,NSError*error){
         NSString *errorStr = [error.userInfo objectForKey:@"NSLocalizedDescription"];
         faileure(errorStr);
@@ -418,8 +453,9 @@
     AFHTTPSessionManager *manager = [self baseHtppRequest];
     [manager.requestSerializer setValue:TOKEN forHTTPHeaderField:X_CLIENT_TOKEN];
     NSString *url = [SeviceURL stringByAppendingFormat:@"/Message/MessList?Type=%@",Type];
-    [manager GET:url parameters:nil success:^(NSURLSessionTask*task,id responseObject) {
-        success(responseObject);
+    [manager GET:url parameters:nil progress:^(NSProgress * _Nonnull downloadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {        success(responseObject);
     }failure:^(NSURLSessionTask *operation,NSError*error){
         NSString *errorStr = [error.userInfo objectForKey:@"NSLocalizedDescription"];
         faileure(errorStr);
@@ -430,8 +466,9 @@
     AFHTTPSessionManager *manager = [self baseHtppRequest];
     [manager.requestSerializer setValue:TOKEN forHTTPHeaderField:X_CLIENT_TOKEN];
     NSString *url = [SeviceURL stringByAppendingFormat:@"/UserOrder/FinishOrder"];
-    [manager GET:url parameters:nil success:^(NSURLSessionTask*task,id responseObject) {
-        success(responseObject);
+    [manager GET:url parameters:nil progress:^(NSProgress * _Nonnull downloadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {        success(responseObject);
     }failure:^(NSURLSessionTask *operation,NSError*error){
         NSString *errorStr = [error.userInfo objectForKey:@"NSLocalizedDescription"];
         faileure(errorStr);
@@ -442,8 +479,9 @@
     AFHTTPSessionManager *manager = [self baseHtppRequest];
     [manager.requestSerializer setValue:TOKEN forHTTPHeaderField:X_CLIENT_TOKEN];
     NSString *url = [SeviceURL stringByAppendingFormat:@"/HotWord/HotWordList"];
-    [manager GET:url parameters:nil success:^(NSURLSessionTask*task,id responseObject) {
-        success(responseObject);
+    [manager GET:url parameters:nil progress:^(NSProgress * _Nonnull downloadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {        success(responseObject);
     }failure:^(NSURLSessionTask *operation,NSError*error){
         NSString *errorStr = [error.userInfo objectForKey:@"NSLocalizedDescription"];
         faileure(errorStr);
@@ -455,8 +493,9 @@
     [manager.requestSerializer setValue:TOKEN forHTTPHeaderField:X_CLIENT_TOKEN];
     NSString *url = [SeviceURL stringByAppendingFormat:@"/Sugg/SubSugg"];
     NSDictionary *dic = [[NSDictionary alloc]initWithObjectsAndKeys:Name,@"Name" ,nil];
-    [manager POST:url parameters:dic success:^(NSURLSessionTask*task,id responseObject) {
-        success(responseObject);
+    [manager POST:url parameters:dic progress:^(NSProgress * _Nonnull downloadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {        success(responseObject);
     }failure:^(NSURLSessionTask *operation,NSError*error){
         NSString *errorStr = [error.userInfo objectForKey:@"NSLocalizedDescription"];
         faileure(errorStr);
@@ -467,8 +506,9 @@
     AFHTTPSessionManager *manager = [self baseHtppRequest];
     [manager.requestSerializer setValue:TOKEN forHTTPHeaderField:X_CLIENT_TOKEN];
     NSString *url = [SeviceURL stringByAppendingFormat:@"/OrderTime/TimeList?OrderId=%@",OrderId];
-    [manager GET:url parameters:nil success:^(NSURLSessionTask*task,id responseObject) {
-        success(responseObject);
+    [manager GET:url parameters:nil progress:^(NSProgress * _Nonnull downloadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {        success(responseObject);
     }failure:^(NSURLSessionTask *operation,NSError*error){
         NSString *errorStr = [error.userInfo objectForKey:@"NSLocalizedDescription"];
         faileure(errorStr);
@@ -481,8 +521,9 @@
     NSString *url = [SeviceURL stringByAppendingFormat:@"/ApplyRefund/ApplyOrder"];
     NSDictionary * dic = [[NSDictionary alloc]initWithObjectsAndKeys:OrderId,@"OrderId",RefundType,@"RefundType",RefundReason,@"RefundReason",RefundRemark,@"RefundRemark",Images,@"Images", nil];
     NSLog(@"%@",dic);
-    [manager POST:url parameters:dic success:^(NSURLSessionTask*task,id responseObject) {
-        success(responseObject);
+    [manager POST:url parameters:dic progress:^(NSProgress * _Nonnull downloadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {        success(responseObject);
     }failure:^(NSURLSessionTask *operation,NSError*error){
         NSString *errorStr = [error.userInfo objectForKey:@"NSLocalizedDescription"];
         faileure(errorStr);

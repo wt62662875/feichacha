@@ -192,7 +192,7 @@
     [imageData writeToFile:fullPath atomically:NO];
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSString *key = [userDefaults objectForKey:@"key"];
-    NSMutableDictionary * pas=[[NSMutableDictionary alloc]initWithObjectsAndKeys:key,@"key",nil];
+//    NSMutableDictionary * pas=[[NSMutableDictionary alloc]initWithObjectsAndKeys:key,@"key",nil];
     
     [AppUtils postRequestWithURL:@"http://api.feichacha.com/api/ImgFile/ImgUpload" postParems:nil picImage:currentImage picFileName:@"fileupload.jpg"];
 }

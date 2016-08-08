@@ -104,7 +104,7 @@
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     NSArray* tempArray = [_getDatas objectForKey:@"OrderList"];
     if (stateOrDetails) {
-        return Timelist.count;
+        return Timelist.count+1;
     }else{
         return 2+tempArray.count;
     }
@@ -140,68 +140,78 @@
         if (indexPath.row == 0) {
             cell.line1.hidden = YES;
             [cell.roundImageView setImage:[UIImage imageNamed:@"yuan_1.png"]];
-        }else if (indexPath.row == Timelist.count-1){
+        }else if (indexPath.row == Timelist.count){
             cell.line2.hidden = YES;
         }
-        switch ([[Timelist[indexPath.row] objectForKey:@"OptType"] intValue]) {
-            case 0:
-                cell.timeLbael.text = [Timelist[indexPath.row] objectForKey:@"OptDatetimes"];
-                cell.message1.text = @"商家配送中～";
-                cell.message2.text = @"配送中，我们跑的飞叉叉的...";
-                break;
-            case 1:
-                cell.timeLbael.text = [Timelist[indexPath.row] objectForKey:@"OptDatetimes"];
-                cell.message1.text = @"商品已送达";
-                cell.message2.text = @"商品已送达";
-                break;
-            case 2:
-                cell.timeLbael.text = [Timelist[indexPath.row] objectForKey:@"OptDatetimes"];
-                cell.message1.text = @"用户确认收货";
-                cell.message2.text = @"用户确认收货";
-                break;
-            case 3:
-                cell.timeLbael.text = [Timelist[indexPath.row] objectForKey:@"OptDatetimes"];
-                cell.message1.text = @"商家接单中...";
-                cell.message2.text = @"商家接单中...";
-                break;
-            case 4:
-                cell.timeLbael.text = [Timelist[indexPath.row] objectForKey:@"OptDatetimes"];
-                cell.message1.text = @"正在配送";
-                cell.message2.text = @"正在配送";
-                break;
-            case 6:
-                cell.timeLbael.text = [Timelist[indexPath.row] objectForKey:@"OptDatetimes"];
-                cell.message1.text = @"待支付";
-                cell.message2.text = @"待支付";
-                break;
-            case 7:
-                cell.timeLbael.text = [Timelist[indexPath.row] objectForKey:@"OptDatetimes"];
-                cell.message1.text = @"订单已取消";
-                cell.message2.text = @"订单已取消";
-                break;
-            case 8:
-                cell.timeLbael.text = [Timelist[indexPath.row] objectForKey:@"OptDatetimes"];
-                cell.message1.text = @"商家取消接单";
-                cell.message2.text = @"商家取消接单";
-                break;
-            case 9:
-                cell.timeLbael.text = [Timelist[indexPath.row] objectForKey:@"OptDatetimes"];
-                cell.message1.text = @"申请退款中";
-                cell.message2.text = @"申请退款中";
-                break;
-            case 10:
-                cell.timeLbael.text = [Timelist[indexPath.row] objectForKey:@"OptDatetimes"];
-                cell.message1.text = @"退款完成";
-                cell.message2.text = @"退款完成";
-                break;
-            case 11:
-                cell.timeLbael.text = [Timelist[indexPath.row] objectForKey:@"OptDatetimes"];
-                cell.message1.text = @"退款失败";
-                cell.message2.text = @"退款失败";
-                break;
-                
-            default:
-                break;
+        if (indexPath.row == Timelist.count) {
+            cell.timeLbael.text = [Timelist[Timelist.count-1] objectForKey:@"OptDatetimes"];
+            cell.message1.text = @"下单成功";
+            cell.message2.text = @"下单成功";
+        }else{
+            switch ([[Timelist[indexPath.row] objectForKey:@"OptType"] intValue]) {
+                case 0:
+                    cell.timeLbael.text = [Timelist[indexPath.row] objectForKey:@"OptDatetimes"];
+                    cell.message1.text = @"商家配送中～";
+                    cell.message2.text = @"配送中，我们跑的飞叉叉的...";
+                    break;
+                case 1:
+                    cell.timeLbael.text = [Timelist[indexPath.row] objectForKey:@"OptDatetimes"];
+                    cell.message1.text = @"配送完成";
+                    cell.message2.text = @"配送完成";
+                    break;
+                case 2:
+                    cell.timeLbael.text = [Timelist[indexPath.row] objectForKey:@"OptDatetimes"];
+                    cell.message1.text = @"交易成功";
+                    cell.message2.text = @"交易成功";
+                    break;
+                case 3:
+                    cell.timeLbael.text = [Timelist[indexPath.row] objectForKey:@"OptDatetimes"];
+                    cell.message1.text = @"商家接单中...";
+                    cell.message2.text = @"商家接单中...";
+                    break;
+                case 4:
+                    cell.timeLbael.text = [Timelist[indexPath.row] objectForKey:@"OptDatetimes"];
+                    cell.message1.text = @"正在配送";
+                    cell.message2.text = @"正在配送";
+                    break;
+                case 5:
+                    cell.timeLbael.text = [Timelist[indexPath.row] objectForKey:@"OptDatetimes"];
+                    cell.message1.text = @"商家取消订单";
+                    cell.message2.text = @"商家取消订单";
+                case 6:
+                    cell.timeLbael.text = [Timelist[indexPath.row] objectForKey:@"OptDatetimes"];
+                    cell.message1.text = @"待支付";
+                    cell.message2.text = @"待支付";
+                    break;
+                case 7:
+                    cell.timeLbael.text = [Timelist[indexPath.row] objectForKey:@"OptDatetimes"];
+                    cell.message1.text = @"订单已取消";
+                    cell.message2.text = @"订单已取消";
+                    break;
+                case 8:
+                    cell.timeLbael.text = [Timelist[indexPath.row] objectForKey:@"OptDatetimes"];
+                    cell.message1.text = @"商家取消接单";
+                    cell.message2.text = @"商家取消接单";
+                    break;
+                case 9:
+                    cell.timeLbael.text = [Timelist[indexPath.row] objectForKey:@"OptDatetimes"];
+                    cell.message1.text = @"申请退款中";
+                    cell.message2.text = @"申请退款中";
+                    break;
+                case 10:
+                    cell.timeLbael.text = [Timelist[indexPath.row] objectForKey:@"OptDatetimes"];
+                    cell.message1.text = @"退款完成";
+                    cell.message2.text = @"退款完成";
+                    break;
+                case 11:
+                    cell.timeLbael.text = [Timelist[indexPath.row] objectForKey:@"OptDatetimes"];
+                    cell.message1.text = @"退款失败";
+                    cell.message2.text = @"退款失败";
+                    break;
+                    
+                default:
+                    break;
+            }
         }
         
         

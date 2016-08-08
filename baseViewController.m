@@ -30,7 +30,7 @@
     NSArray *scrollDatas;           //轮播图数据
     NSArray *sevenDatas;            //顶部7条数据
     NSArray *indexDatas;            //活动列表数据
-    NSArray *proHeatDatas;            //叉叉热卖数据
+    NSArray *proHeatDatas;          //叉叉热卖数据
 
 }
 @property (weak, nonatomic) IBOutlet UILabel *deliveryTo;   //配送至
@@ -367,87 +367,353 @@ errorCode:(BMKSearchErrorCode)error{
         cell.titleName.text = [indexDatas[indexPath.row-4] objectForKey:@"Name"];
         
         if ([[indexDatas[indexPath.row-4] objectForKey:@"ActType"] intValue] == 1) {
-            [cell.goodsImage1 sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[[[indexDatas[indexPath.row-4] objectForKey:@"CompanyProduct"] objectAtIndex:0] objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"loading_default"]];
-            [cell.goodsImage2 sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[[[indexDatas[indexPath.row-4] objectForKey:@"CompanyProduct"] objectAtIndex:1] objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"loading_default"]];
-            [cell.goodsImage3 sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[[[indexDatas[indexPath.row-4] objectForKey:@"CompanyProduct"] objectAtIndex:2] objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"loading_default"]];
-            cell.goodsName1.text = [[[indexDatas[indexPath.row-4] objectForKey:@"CompanyProduct"] objectAtIndex:0] objectForKey:@"Name"];
-            cell.goodsName2.text = [[[indexDatas[indexPath.row-4] objectForKey:@"CompanyProduct"] objectAtIndex:1] objectForKey:@"Name"];
-            cell.goodsName3.text = [[[indexDatas[indexPath.row-4] objectForKey:@"CompanyProduct"] objectAtIndex:2] objectForKey:@"Name"];
-            if ([[[[indexDatas[indexPath.row-4] objectForKey:@"CompanyProduct"] objectAtIndex:0] objectForKey:@"IsDirect"] boolValue]) {
-                cell.goodsDescribe1_1.layer.borderColor = RGBCOLORA(114, 172, 74, 1).CGColor;
-                cell.goodsDescribe1_1.layer.borderWidth = 1;
-                cell.goodsDescribe1_1.layer.cornerRadius = 8;
-                cell.goodsDescribe1_1.text = @"进";
-                cell.goodsDescribe1_1.textColor = RGBCOLORA(114, 172, 74, 1);
-                cell.goodsDescribe1_2.hidden = YES;
-            }
-            if ([[[[indexDatas[indexPath.row-4] objectForKey:@"CompanyProduct"] objectAtIndex:1] objectForKey:@"IsDirect"] boolValue]) {
-                cell.goodsDescribe2_1.layer.borderColor = RGBCOLORA(114, 172, 74, 1).CGColor;
-                cell.goodsDescribe2_1.layer.borderWidth = 1;
-                cell.goodsDescribe2_1.layer.cornerRadius = 8;
-                cell.goodsDescribe2_1.text = @"进";
-                cell.goodsDescribe2_1.textColor = RGBCOLORA(114, 172, 74, 1);
-                cell.goodsDescribe2_2.hidden = YES;
-            }
-            if ([[[[indexDatas[indexPath.row-4] objectForKey:@"CompanyProduct"] objectAtIndex:2] objectForKey:@"IsDirect"] boolValue]) {
-                cell.goodsDescribe3_1.layer.borderColor = RGBCOLORA(114, 172, 74, 1).CGColor;
-                cell.goodsDescribe3_1.layer.borderWidth = 1;
-                cell.goodsDescribe3_1.layer.cornerRadius = 8;
-                cell.goodsDescribe3_1.text = @"进";
-                cell.goodsDescribe3_1.textColor = RGBCOLORA(114, 172, 74, 1);
-                cell.goodsDescribe3_2.hidden = YES;
-            }
-            if (![[[[indexDatas[indexPath.row-4] objectForKey:@"CompanyProduct"] objectAtIndex:0] objectForKey:@"IsImport"] boolValue]) {
+            NSArray *indexDatasArray = [indexDatas[indexPath.row-4] objectForKey:@"CompanyProduct"];
+            
+            if (indexDatasArray.count == 0) {
+                cell.goodsImage1.hidden = YES;
+                cell.goodsName1.hidden = YES;
                 cell.goodsDescribe1_1.hidden = YES;
-            }
-            if (![[[[indexDatas[indexPath.row-4] objectForKey:@"CompanyProduct"] objectAtIndex:1] objectForKey:@"IsImport"] boolValue]) {
+                cell.goodsDescribe1_2.hidden = YES;
+                cell.goodsDescribe1_3.hidden = YES;
+                cell.goodsMessage1.hidden = YES;
+                cell.goodsPrice1.hidden = YES;
+                cell.goodsOldPrice1.hidden = YES;
+                cell.addShoppingCartButton1.hidden = YES;
+                cell.goodsButton1.hidden = YES;
+                
+                cell.goodsImage2.hidden = YES;
+                cell.goodsName2.hidden = YES;
                 cell.goodsDescribe2_1.hidden = YES;
-            }
-            if (![[[[indexDatas[indexPath.row-4] objectForKey:@"CompanyProduct"] objectAtIndex:2] objectForKey:@"IsImport"] boolValue]) {
+                cell.goodsDescribe2_2.hidden = YES;
+                cell.goodsDescribe2_3.hidden = YES;
+                cell.goodsMessage2.hidden = YES;
+                cell.goodsPrice2.hidden = YES;
+                cell.goodsOldPrice2.hidden = YES;
+                cell.addShoppingCartButton2.hidden = YES;
+                cell.goodsButton2.hidden = YES;
+                
+                cell.goodsImage3.hidden = YES;
+                cell.goodsName3.hidden = YES;
                 cell.goodsDescribe3_1.hidden = YES;
+                cell.goodsDescribe3_2.hidden = YES;
+                cell.goodsDescribe3_3.hidden = YES;
+                cell.goodsMessage3.hidden = YES;
+                cell.goodsPrice3.hidden = YES;
+                cell.goodsOldPrice3.hidden = YES;
+                cell.addShoppingCartButton3.hidden = YES;
+                cell.goodsButton3.hidden = YES;
+            }else if(indexDatasArray.count == 1){
+                cell.goodsImage2.hidden = YES;
+                cell.goodsName2.hidden = YES;
+                cell.goodsDescribe2_1.hidden = YES;
+                cell.goodsDescribe2_2.hidden = YES;
+                cell.goodsDescribe2_3.hidden = YES;
+                cell.goodsMessage2.hidden = YES;
+                cell.goodsPrice2.hidden = YES;
+                cell.goodsOldPrice2.hidden = YES;
+                cell.addShoppingCartButton2.hidden = YES;
+                cell.goodsButton2.hidden = YES;
+                
+                cell.goodsImage3.hidden = YES;
+                cell.goodsName3.hidden = YES;
+                cell.goodsDescribe3_1.hidden = YES;
+                cell.goodsDescribe3_2.hidden = YES;
+                cell.goodsDescribe3_3.hidden = YES;
+                cell.goodsMessage3.hidden = YES;
+                cell.goodsPrice3.hidden = YES;
+                cell.goodsOldPrice3.hidden = YES;
+                cell.addShoppingCartButton3.hidden = YES;
+                cell.goodsButton3.hidden = YES;
+                [cell.goodsImage1 sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[[[indexDatas[indexPath.row-4] objectForKey:@"CompanyProduct"] objectAtIndex:0] objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"loading_default"]];
+                cell.goodsName1.text = [[[indexDatas[indexPath.row-4] objectForKey:@"CompanyProduct"] objectAtIndex:0] objectForKey:@"Name"];
+                if ([[[[indexDatas[indexPath.row-4] objectForKey:@"CompanyProduct"] objectAtIndex:0] objectForKey:@"IsDirect"] boolValue]) {
+                    cell.goodsDescribe1_1.layer.borderColor = RGBCOLORA(114, 172, 74, 1).CGColor;
+                    cell.goodsDescribe1_1.layer.borderWidth = 1;
+                    cell.goodsDescribe1_1.layer.cornerRadius = 8;
+                    cell.goodsDescribe1_1.text = @"进";
+                    cell.goodsDescribe1_1.textColor = RGBCOLORA(114, 172, 74, 1);
+                    cell.goodsDescribe1_2.hidden = YES;
+                }
+                if (![[[[indexDatas[indexPath.row-4] objectForKey:@"CompanyProduct"] objectAtIndex:0] objectForKey:@"IsImport"] boolValue]) {
+                    cell.goodsDescribe1_1.hidden = YES;
+                }
+                cell.goodsMessage1.text = [[[indexDatas[indexPath.row-4] objectForKey:@"CompanyProduct"] objectAtIndex:0] objectForKey:@"Size"];
+                cell.goodsPrice1.text = [NSString stringWithFormat:@"￥%.1f",[[[[indexDatas[indexPath.row-4] objectForKey:@"CompanyProduct"] objectAtIndex:0] objectForKey:@"Price"] floatValue]];
+                if ([[[[indexDatas[indexPath.row-4] objectForKey:@"CompanyProduct"] objectAtIndex:0] objectForKey:@"Stock"] intValue] == 0) {
+                    [cell.addShoppingCartButton1 setImage:nil forState:UIControlStateNormal];
+                    [cell.addShoppingCartButton1 setTitle:@"已抢光" forState:UIControlStateNormal];
+                    cell.addShoppingCartButton1.userInteractionEnabled = NO;
+                }
+                
+            }else if(indexDatasArray.count == 2){
+                cell.goodsImage3.hidden = YES;
+                cell.goodsName3.hidden = YES;
+                cell.goodsDescribe3_1.hidden = YES;
+                cell.goodsDescribe3_2.hidden = YES;
+                cell.goodsDescribe3_3.hidden = YES;
+                cell.goodsMessage3.hidden = YES;
+                cell.goodsPrice3.hidden = YES;
+                cell.goodsOldPrice3.hidden = YES;
+                cell.addShoppingCartButton3.hidden = YES;
+                cell.goodsButton3.hidden = YES;
+                [cell.goodsImage1 sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[[[indexDatas[indexPath.row-4] objectForKey:@"CompanyProduct"] objectAtIndex:0] objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"loading_default"]];
+                [cell.goodsImage2 sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[[[indexDatas[indexPath.row-4] objectForKey:@"CompanyProduct"] objectAtIndex:1] objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"loading_default"]];
+                cell.goodsName1.text = [[[indexDatas[indexPath.row-4] objectForKey:@"CompanyProduct"] objectAtIndex:0] objectForKey:@"Name"];
+                cell.goodsName2.text = [[[indexDatas[indexPath.row-4] objectForKey:@"CompanyProduct"] objectAtIndex:1] objectForKey:@"Name"];
+                if ([[[[indexDatas[indexPath.row-4] objectForKey:@"CompanyProduct"] objectAtIndex:0] objectForKey:@"IsDirect"] boolValue]) {
+                    cell.goodsDescribe1_1.layer.borderColor = RGBCOLORA(114, 172, 74, 1).CGColor;
+                    cell.goodsDescribe1_1.layer.borderWidth = 1;
+                    cell.goodsDescribe1_1.layer.cornerRadius = 8;
+                    cell.goodsDescribe1_1.text = @"进";
+                    cell.goodsDescribe1_1.textColor = RGBCOLORA(114, 172, 74, 1);
+                    cell.goodsDescribe1_2.hidden = YES;
+                }
+                if ([[[[indexDatas[indexPath.row-4] objectForKey:@"CompanyProduct"] objectAtIndex:1] objectForKey:@"IsDirect"] boolValue]) {
+                    cell.goodsDescribe2_1.layer.borderColor = RGBCOLORA(114, 172, 74, 1).CGColor;
+                    cell.goodsDescribe2_1.layer.borderWidth = 1;
+                    cell.goodsDescribe2_1.layer.cornerRadius = 8;
+                    cell.goodsDescribe2_1.text = @"进";
+                    cell.goodsDescribe2_1.textColor = RGBCOLORA(114, 172, 74, 1);
+                    cell.goodsDescribe2_2.hidden = YES;
+                }
+                if (![[[[indexDatas[indexPath.row-4] objectForKey:@"CompanyProduct"] objectAtIndex:0] objectForKey:@"IsImport"] boolValue]) {
+                    cell.goodsDescribe1_1.hidden = YES;
+                }
+                if (![[[[indexDatas[indexPath.row-4] objectForKey:@"CompanyProduct"] objectAtIndex:1] objectForKey:@"IsImport"] boolValue]) {
+                    cell.goodsDescribe2_1.hidden = YES;
+                }
+                cell.goodsMessage1.text = [[[indexDatas[indexPath.row-4] objectForKey:@"CompanyProduct"] objectAtIndex:0] objectForKey:@"Size"];
+                cell.goodsMessage2.text = [[[indexDatas[indexPath.row-4] objectForKey:@"CompanyProduct"] objectAtIndex:1] objectForKey:@"Size"];
+                cell.goodsPrice1.text = [NSString stringWithFormat:@"￥%.1f",[[[[indexDatas[indexPath.row-4] objectForKey:@"CompanyProduct"] objectAtIndex:0] objectForKey:@"Price"] floatValue]];
+                cell.goodsPrice2.text = [NSString stringWithFormat:@"￥%.1f",[[[[indexDatas[indexPath.row-4] objectForKey:@"CompanyProduct"] objectAtIndex:1] objectForKey:@"Price"] floatValue]];
+                if ([[[[indexDatas[indexPath.row-4] objectForKey:@"CompanyProduct"] objectAtIndex:0] objectForKey:@"Stock"] intValue] == 0) {
+                    [cell.addShoppingCartButton1 setImage:nil forState:UIControlStateNormal];
+                    [cell.addShoppingCartButton1 setTitle:@"已抢光" forState:UIControlStateNormal];
+                    cell.addShoppingCartButton1.userInteractionEnabled = NO;
+                }
+                if ([[[[indexDatas[indexPath.row-4] objectForKey:@"CompanyProduct"] objectAtIndex:1] objectForKey:@"Stock"] intValue] == 0) {
+                    [cell.addShoppingCartButton2 setImage:nil forState:UIControlStateNormal];
+                    [cell.addShoppingCartButton2 setTitle:@"已抢光" forState:UIControlStateNormal];
+                    cell.addShoppingCartButton2.userInteractionEnabled = NO;
+                }
+
+            }else{
+                [cell.goodsImage1 sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[[[indexDatas[indexPath.row-4] objectForKey:@"CompanyProduct"] objectAtIndex:0] objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"loading_default"]];
+                [cell.goodsImage2 sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[[[indexDatas[indexPath.row-4] objectForKey:@"CompanyProduct"] objectAtIndex:1] objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"loading_default"]];
+                [cell.goodsImage3 sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[[[indexDatas[indexPath.row-4] objectForKey:@"CompanyProduct"] objectAtIndex:2] objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"loading_default"]];
+                cell.goodsName1.text = [[[indexDatas[indexPath.row-4] objectForKey:@"CompanyProduct"] objectAtIndex:0] objectForKey:@"Name"];
+                cell.goodsName2.text = [[[indexDatas[indexPath.row-4] objectForKey:@"CompanyProduct"] objectAtIndex:1] objectForKey:@"Name"];
+                cell.goodsName3.text = [[[indexDatas[indexPath.row-4] objectForKey:@"CompanyProduct"] objectAtIndex:2] objectForKey:@"Name"];
+                if ([[[[indexDatas[indexPath.row-4] objectForKey:@"CompanyProduct"] objectAtIndex:0] objectForKey:@"IsDirect"] boolValue]) {
+                    cell.goodsDescribe1_1.layer.borderColor = RGBCOLORA(114, 172, 74, 1).CGColor;
+                    cell.goodsDescribe1_1.layer.borderWidth = 1;
+                    cell.goodsDescribe1_1.layer.cornerRadius = 8;
+                    cell.goodsDescribe1_1.text = @"进";
+                    cell.goodsDescribe1_1.textColor = RGBCOLORA(114, 172, 74, 1);
+                    cell.goodsDescribe1_2.hidden = YES;
+                }
+                if ([[[[indexDatas[indexPath.row-4] objectForKey:@"CompanyProduct"] objectAtIndex:1] objectForKey:@"IsDirect"] boolValue]) {
+                    cell.goodsDescribe2_1.layer.borderColor = RGBCOLORA(114, 172, 74, 1).CGColor;
+                    cell.goodsDescribe2_1.layer.borderWidth = 1;
+                    cell.goodsDescribe2_1.layer.cornerRadius = 8;
+                    cell.goodsDescribe2_1.text = @"进";
+                    cell.goodsDescribe2_1.textColor = RGBCOLORA(114, 172, 74, 1);
+                    cell.goodsDescribe2_2.hidden = YES;
+                }
+                if ([[[[indexDatas[indexPath.row-4] objectForKey:@"CompanyProduct"] objectAtIndex:2] objectForKey:@"IsDirect"] boolValue]) {
+                    cell.goodsDescribe3_1.layer.borderColor = RGBCOLORA(114, 172, 74, 1).CGColor;
+                    cell.goodsDescribe3_1.layer.borderWidth = 1;
+                    cell.goodsDescribe3_1.layer.cornerRadius = 8;
+                    cell.goodsDescribe3_1.text = @"进";
+                    cell.goodsDescribe3_1.textColor = RGBCOLORA(114, 172, 74, 1);
+                    cell.goodsDescribe3_2.hidden = YES;
+                }
+                if (![[[[indexDatas[indexPath.row-4] objectForKey:@"CompanyProduct"] objectAtIndex:0] objectForKey:@"IsImport"] boolValue]) {
+                    cell.goodsDescribe1_1.hidden = YES;
+                }
+                if (![[[[indexDatas[indexPath.row-4] objectForKey:@"CompanyProduct"] objectAtIndex:1] objectForKey:@"IsImport"] boolValue]) {
+                    cell.goodsDescribe2_1.hidden = YES;
+                }
+                if (![[[[indexDatas[indexPath.row-4] objectForKey:@"CompanyProduct"] objectAtIndex:2] objectForKey:@"IsImport"] boolValue]) {
+                    cell.goodsDescribe3_1.hidden = YES;
+                }
+                
+                cell.goodsMessage1.text = [[[indexDatas[indexPath.row-4] objectForKey:@"CompanyProduct"] objectAtIndex:0] objectForKey:@"Size"];
+                cell.goodsMessage2.text = [[[indexDatas[indexPath.row-4] objectForKey:@"CompanyProduct"] objectAtIndex:1] objectForKey:@"Size"];
+                cell.goodsMessage3.text = [[[indexDatas[indexPath.row-4] objectForKey:@"CompanyProduct"] objectAtIndex:2] objectForKey:@"Size"];
+                
+                cell.goodsPrice1.text = [NSString stringWithFormat:@"￥%.1f",[[[[indexDatas[indexPath.row-4] objectForKey:@"CompanyProduct"] objectAtIndex:0] objectForKey:@"Price"] floatValue]];
+                cell.goodsPrice2.text = [NSString stringWithFormat:@"￥%.1f",[[[[indexDatas[indexPath.row-4] objectForKey:@"CompanyProduct"] objectAtIndex:1] objectForKey:@"Price"] floatValue]];
+                cell.goodsPrice3.text = [NSString stringWithFormat:@"￥%.1f",[[[[indexDatas[indexPath.row-4] objectForKey:@"CompanyProduct"] objectAtIndex:2] objectForKey:@"Price"] floatValue]];
+                if ([[[[indexDatas[indexPath.row-4] objectForKey:@"CompanyProduct"] objectAtIndex:0] objectForKey:@"Stock"] intValue] == 0) {
+                    [cell.addShoppingCartButton1 setImage:nil forState:UIControlStateNormal];
+                    [cell.addShoppingCartButton1 setTitle:@"已抢光" forState:UIControlStateNormal];
+                    cell.addShoppingCartButton1.userInteractionEnabled = NO;
+                }
+                if ([[[[indexDatas[indexPath.row-4] objectForKey:@"CompanyProduct"] objectAtIndex:1] objectForKey:@"Stock"] intValue] == 0) {
+                    [cell.addShoppingCartButton2 setImage:nil forState:UIControlStateNormal];
+                    [cell.addShoppingCartButton2 setTitle:@"已抢光" forState:UIControlStateNormal];
+                    cell.addShoppingCartButton2.userInteractionEnabled = NO;
+                }
+                if ([[[[indexDatas[indexPath.row-4] objectForKey:@"CompanyProduct"] objectAtIndex:2] objectForKey:@"Stock"] intValue] == 0) {
+                    [cell.addShoppingCartButton3 setImage:nil forState:UIControlStateNormal];
+                    [cell.addShoppingCartButton3 setTitle:@"已抢光" forState:UIControlStateNormal];
+                    cell.addShoppingCartButton3.userInteractionEnabled = NO;
+                }
             }
-            
-            cell.goodsMessage1.text = [[[indexDatas[indexPath.row-4] objectForKey:@"CompanyProduct"] objectAtIndex:0] objectForKey:@"Size"];
-            cell.goodsMessage2.text = [[[indexDatas[indexPath.row-4] objectForKey:@"CompanyProduct"] objectAtIndex:1] objectForKey:@"Size"];
-            cell.goodsMessage3.text = [[[indexDatas[indexPath.row-4] objectForKey:@"CompanyProduct"] objectAtIndex:2] objectForKey:@"Size"];
-            
-            cell.goodsPrice1.text = [NSString stringWithFormat:@"￥%.1f",[[[[indexDatas[indexPath.row-4] objectForKey:@"CompanyProduct"] objectAtIndex:0] objectForKey:@"Price"] floatValue]];
-            cell.goodsPrice2.text = [NSString stringWithFormat:@"￥%.1f",[[[[indexDatas[indexPath.row-4] objectForKey:@"CompanyProduct"] objectAtIndex:1] objectForKey:@"Price"] floatValue]];
-            cell.goodsPrice3.text = [NSString stringWithFormat:@"￥%.1f",[[[[indexDatas[indexPath.row-4] objectForKey:@"CompanyProduct"] objectAtIndex:2] objectForKey:@"Price"] floatValue]];
 
         }else{
-            [cell.goodsImage1 sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[[[indexDatas[indexPath.row-4] objectForKey:@"FreshCompany"] objectAtIndex:0] objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"loading_default"]];
-            [cell.goodsImage2 sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[[[indexDatas[indexPath.row-4] objectForKey:@"FreshCompany"] objectAtIndex:1] objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"loading_default"]];
-            [cell.goodsImage3 sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[[[indexDatas[indexPath.row-4] objectForKey:@"FreshCompany"] objectAtIndex:2] objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"loading_default"]];
-            cell.goodsName1.text = [[[indexDatas[indexPath.row-4] objectForKey:@"FreshCompany"] objectAtIndex:0] objectForKey:@"Name"];
-            cell.goodsName2.text = [[[indexDatas[indexPath.row-4] objectForKey:@"FreshCompany"] objectAtIndex:1] objectForKey:@"Name"];
-            cell.goodsName3.text = [[[indexDatas[indexPath.row-4] objectForKey:@"FreshCompany"] objectAtIndex:2] objectForKey:@"Name"];
-            if (![[[[indexDatas[indexPath.row-4] objectForKey:@"FreshCompany"] objectAtIndex:0] objectForKey:@"IsDirect"] boolValue]) {
+            
+            NSArray *FreshCompanyArray = [indexDatas[indexPath.row-4] objectForKey:@"FreshCompany"];
+            if (FreshCompanyArray.count == 0) {
+                cell.goodsImage1.hidden = YES;
+                cell.goodsName1.hidden = YES;
                 cell.goodsDescribe1_1.hidden = YES;
-            }
-            if (![[[[indexDatas[indexPath.row-4] objectForKey:@"FreshCompany"] objectAtIndex:1] objectForKey:@"IsDirect"] boolValue]) {
-                cell.goodsDescribe2_1.hidden = YES;
-            }
-            if (![[[[indexDatas[indexPath.row-4] objectForKey:@"FreshCompany"] objectAtIndex:2] objectForKey:@"IsDirect"] boolValue]) {
-                cell.goodsDescribe3_1.hidden = YES;
-            }
-            if (![[[[indexDatas[indexPath.row-4] objectForKey:@"FreshCompany"] objectAtIndex:0] objectForKey:@"IsImport"] boolValue]) {
                 cell.goodsDescribe1_2.hidden = YES;
-            }
-            if (![[[[indexDatas[indexPath.row-4] objectForKey:@"FreshCompany"] objectAtIndex:1] objectForKey:@"IsImport"] boolValue]) {
+                cell.goodsDescribe1_3.hidden = YES;
+                cell.goodsMessage1.hidden = YES;
+                cell.goodsPrice1.hidden = YES;
+                cell.goodsOldPrice1.hidden = YES;
+                cell.addShoppingCartButton1.hidden = YES;
+                cell.goodsButton1.hidden = YES;
+                
+                cell.goodsImage2.hidden = YES;
+                cell.goodsName2.hidden = YES;
+                cell.goodsDescribe2_1.hidden = YES;
                 cell.goodsDescribe2_2.hidden = YES;
-            }
-            if (![[[[indexDatas[indexPath.row-4] objectForKey:@"FreshCompany"] objectAtIndex:2] objectForKey:@"IsImport"] boolValue]) {
+                cell.goodsDescribe2_3.hidden = YES;
+                cell.goodsMessage2.hidden = YES;
+                cell.goodsPrice2.hidden = YES;
+                cell.goodsOldPrice2.hidden = YES;
+                cell.addShoppingCartButton2.hidden = YES;
+                cell.goodsButton2.hidden = YES;
+                
+                cell.goodsImage3.hidden = YES;
+                cell.goodsName3.hidden = YES;
+                cell.goodsDescribe3_1.hidden = YES;
                 cell.goodsDescribe3_2.hidden = YES;
+                cell.goodsDescribe3_3.hidden = YES;
+                cell.goodsMessage3.hidden = YES;
+                cell.goodsPrice3.hidden = YES;
+                cell.goodsOldPrice3.hidden = YES;
+                cell.addShoppingCartButton3.hidden = YES;
+                cell.goodsButton3.hidden = YES;
+
+            }else if (FreshCompanyArray.count == 1) {
+                cell.goodsImage2.hidden = YES;
+                cell.goodsName2.hidden = YES;
+                cell.goodsDescribe2_1.hidden = YES;
+                cell.goodsDescribe2_2.hidden = YES;
+                cell.goodsDescribe2_3.hidden = YES;
+                cell.goodsMessage2.hidden = YES;
+                cell.goodsPrice2.hidden = YES;
+                cell.goodsOldPrice2.hidden = YES;
+                cell.addShoppingCartButton2.hidden = YES;
+                cell.goodsButton2.hidden = YES;
+                
+                cell.goodsImage3.hidden = YES;
+                cell.goodsName3.hidden = YES;
+                cell.goodsDescribe3_1.hidden = YES;
+                cell.goodsDescribe3_2.hidden = YES;
+                cell.goodsDescribe3_3.hidden = YES;
+                cell.goodsMessage3.hidden = YES;
+                cell.goodsPrice3.hidden = YES;
+                cell.goodsOldPrice3.hidden = YES;
+                cell.addShoppingCartButton3.hidden = YES;
+                cell.goodsButton3.hidden = YES;
+
+            }else if (FreshCompanyArray.count == 2) {
+                cell.goodsImage3.hidden = YES;
+                cell.goodsName3.hidden = YES;
+                cell.goodsDescribe3_1.hidden = YES;
+                cell.goodsDescribe3_2.hidden = YES;
+                cell.goodsDescribe3_3.hidden = YES;
+                cell.goodsMessage3.hidden = YES;
+                cell.goodsPrice3.hidden = YES;
+                cell.goodsOldPrice3.hidden = YES;
+                cell.addShoppingCartButton3.hidden = YES;
+                cell.goodsButton3.hidden = YES;
+                
+                [cell.goodsImage1 sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[[[indexDatas[indexPath.row-4] objectForKey:@"FreshCompany"] objectAtIndex:0] objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"loading_default"]];
+                [cell.goodsImage2 sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[[[indexDatas[indexPath.row-4] objectForKey:@"FreshCompany"] objectAtIndex:1] objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"loading_default"]];
+                cell.goodsName1.text = [[[indexDatas[indexPath.row-4] objectForKey:@"FreshCompany"] objectAtIndex:0] objectForKey:@"Name"];
+                cell.goodsName2.text = [[[indexDatas[indexPath.row-4] objectForKey:@"FreshCompany"] objectAtIndex:1] objectForKey:@"Name"];
+                if (![[[[indexDatas[indexPath.row-4] objectForKey:@"FreshCompany"] objectAtIndex:0] objectForKey:@"IsDirect"] boolValue]) {
+                    cell.goodsDescribe1_1.hidden = YES;
+                }
+                if (![[[[indexDatas[indexPath.row-4] objectForKey:@"FreshCompany"] objectAtIndex:1] objectForKey:@"IsDirect"] boolValue]) {
+                    cell.goodsDescribe2_1.hidden = YES;
+                }
+                if (![[[[indexDatas[indexPath.row-4] objectForKey:@"FreshCompany"] objectAtIndex:0] objectForKey:@"IsImport"] boolValue]) {
+                    cell.goodsDescribe1_2.hidden = YES;
+                }
+                if (![[[[indexDatas[indexPath.row-4] objectForKey:@"FreshCompany"] objectAtIndex:1] objectForKey:@"IsImport"] boolValue]) {
+                    cell.goodsDescribe2_2.hidden = YES;
+                }
+                cell.goodsMessage1.text = [[[indexDatas[indexPath.row-4] objectForKey:@"FreshCompany"] objectAtIndex:0] objectForKey:@"Size"];
+                cell.goodsMessage2.text = [[[indexDatas[indexPath.row-4] objectForKey:@"FreshCompany"] objectAtIndex:1] objectForKey:@"Size"];
+                cell.goodsPrice1.text = [NSString stringWithFormat:@"￥%.1f",[[[[indexDatas[indexPath.row-4] objectForKey:@"FreshCompany"] objectAtIndex:0] objectForKey:@"Price"] floatValue]];
+                cell.goodsPrice2.text = [NSString stringWithFormat:@"￥%.1f",[[[[indexDatas[indexPath.row-4] objectForKey:@"FreshCompany"] objectAtIndex:1] objectForKey:@"Price"] floatValue]];
+                if ([[[[indexDatas[indexPath.row-4] objectForKey:@"FreshCompany"] objectAtIndex:0] objectForKey:@"Price"] intValue] == 0) {
+                    [cell.addShoppingCartButton1 setImage:nil forState:UIControlStateNormal];
+                    [cell.addShoppingCartButton1 setTitle:@"已抢光" forState:UIControlStateNormal];
+                    cell.addShoppingCartButton1.userInteractionEnabled = NO;
+                }
+                if ([[[[indexDatas[indexPath.row-4] objectForKey:@"FreshCompany"] objectAtIndex:1] objectForKey:@"Price"] intValue] == 0) {
+                    [cell.addShoppingCartButton2 setImage:nil forState:UIControlStateNormal];
+                    [cell.addShoppingCartButton2 setTitle:@"已抢光" forState:UIControlStateNormal];
+                    cell.addShoppingCartButton2.userInteractionEnabled = NO;
+                }
+            }else{
+                [cell.goodsImage1 sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[[[indexDatas[indexPath.row-4] objectForKey:@"FreshCompany"] objectAtIndex:0] objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"loading_default"]];
+                [cell.goodsImage2 sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[[[indexDatas[indexPath.row-4] objectForKey:@"FreshCompany"] objectAtIndex:1] objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"loading_default"]];
+                [cell.goodsImage3 sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[[[indexDatas[indexPath.row-4] objectForKey:@"FreshCompany"] objectAtIndex:2] objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"loading_default"]];
+                cell.goodsName1.text = [[[indexDatas[indexPath.row-4] objectForKey:@"FreshCompany"] objectAtIndex:0] objectForKey:@"Name"];
+                cell.goodsName2.text = [[[indexDatas[indexPath.row-4] objectForKey:@"FreshCompany"] objectAtIndex:1] objectForKey:@"Name"];
+                cell.goodsName3.text = [[[indexDatas[indexPath.row-4] objectForKey:@"FreshCompany"] objectAtIndex:2] objectForKey:@"Name"];
+                if (![[[[indexDatas[indexPath.row-4] objectForKey:@"FreshCompany"] objectAtIndex:0] objectForKey:@"IsDirect"] boolValue]) {
+                    cell.goodsDescribe1_1.hidden = YES;
+                }
+                if (![[[[indexDatas[indexPath.row-4] objectForKey:@"FreshCompany"] objectAtIndex:1] objectForKey:@"IsDirect"] boolValue]) {
+                    cell.goodsDescribe2_1.hidden = YES;
+                }
+                if (![[[[indexDatas[indexPath.row-4] objectForKey:@"FreshCompany"] objectAtIndex:2] objectForKey:@"IsDirect"] boolValue]) {
+                    cell.goodsDescribe3_1.hidden = YES;
+                }
+                if (![[[[indexDatas[indexPath.row-4] objectForKey:@"FreshCompany"] objectAtIndex:0] objectForKey:@"IsImport"] boolValue]) {
+                    cell.goodsDescribe1_2.hidden = YES;
+                }
+                if (![[[[indexDatas[indexPath.row-4] objectForKey:@"FreshCompany"] objectAtIndex:1] objectForKey:@"IsImport"] boolValue]) {
+                    cell.goodsDescribe2_2.hidden = YES;
+                }
+                if (![[[[indexDatas[indexPath.row-4] objectForKey:@"FreshCompany"] objectAtIndex:2] objectForKey:@"IsImport"] boolValue]) {
+                    cell.goodsDescribe3_2.hidden = YES;
+                }
+                
+                cell.goodsMessage1.text = [[[indexDatas[indexPath.row-4] objectForKey:@"FreshCompany"] objectAtIndex:0] objectForKey:@"Size"];
+                cell.goodsMessage2.text = [[[indexDatas[indexPath.row-4] objectForKey:@"FreshCompany"] objectAtIndex:1] objectForKey:@"Size"];
+                cell.goodsMessage3.text = [[[indexDatas[indexPath.row-4] objectForKey:@"FreshCompany"] objectAtIndex:2] objectForKey:@"Size"];
+                
+                cell.goodsPrice1.text = [NSString stringWithFormat:@"￥%.1f",[[[[indexDatas[indexPath.row-4] objectForKey:@"FreshCompany"] objectAtIndex:0] objectForKey:@"Price"] floatValue]];
+                cell.goodsPrice2.text = [NSString stringWithFormat:@"￥%.1f",[[[[indexDatas[indexPath.row-4] objectForKey:@"FreshCompany"] objectAtIndex:1] objectForKey:@"Price"] floatValue]];
+                cell.goodsPrice3.text = [NSString stringWithFormat:@"￥%.1f",[[[[indexDatas[indexPath.row-4] objectForKey:@"FreshCompany"] objectAtIndex:2] objectForKey:@"Price"] floatValue]];
+                if ([[[[indexDatas[indexPath.row-4] objectForKey:@"FreshCompany"] objectAtIndex:0] objectForKey:@"Price"] intValue] == 0) {
+                    [cell.addShoppingCartButton1 setImage:nil forState:UIControlStateNormal];
+                    [cell.addShoppingCartButton1 setTitle:@"已抢光" forState:UIControlStateNormal];
+                    cell.addShoppingCartButton1.userInteractionEnabled = NO;
+                }
+                if ([[[[indexDatas[indexPath.row-4] objectForKey:@"FreshCompany"] objectAtIndex:1] objectForKey:@"Price"] intValue] == 0) {
+                    [cell.addShoppingCartButton2 setImage:nil forState:UIControlStateNormal];
+                    [cell.addShoppingCartButton2 setTitle:@"已抢光" forState:UIControlStateNormal];
+                    cell.addShoppingCartButton2.userInteractionEnabled = NO;
+                }
+                if ([[[[indexDatas[indexPath.row-4] objectForKey:@"FreshCompany"] objectAtIndex:2] objectForKey:@"Price"] intValue] == 0) {
+                    [cell.addShoppingCartButton3 setImage:nil forState:UIControlStateNormal];
+                    [cell.addShoppingCartButton3 setTitle:@"已抢光" forState:UIControlStateNormal];
+                    cell.addShoppingCartButton3.userInteractionEnabled = NO;
+                }
             }
             
-            cell.goodsMessage1.text = [[[indexDatas[indexPath.row-4] objectForKey:@"FreshCompany"] objectAtIndex:0] objectForKey:@"Size"];
-            cell.goodsMessage2.text = [[[indexDatas[indexPath.row-4] objectForKey:@"FreshCompany"] objectAtIndex:1] objectForKey:@"Size"];
-            cell.goodsMessage3.text = [[[indexDatas[indexPath.row-4] objectForKey:@"FreshCompany"] objectAtIndex:2] objectForKey:@"Size"];
-            
-            cell.goodsPrice1.text = [NSString stringWithFormat:@"￥%.1f",[[[[indexDatas[indexPath.row-4] objectForKey:@"FreshCompany"] objectAtIndex:0] objectForKey:@"Price"] floatValue]];
-            cell.goodsPrice2.text = [NSString stringWithFormat:@"￥%.1f",[[[[indexDatas[indexPath.row-4] objectForKey:@"FreshCompany"] objectAtIndex:1] objectForKey:@"Price"] floatValue]];
-            cell.goodsPrice3.text = [NSString stringWithFormat:@"￥%.1f",[[[[indexDatas[indexPath.row-4] objectForKey:@"FreshCompany"] objectAtIndex:2] objectForKey:@"Price"] floatValue]];
         }
         cell.goodsDescribe1_3.hidden = YES;
         cell.goodsDescribe2_3.hidden = YES;
@@ -563,6 +829,26 @@ errorCode:(BMKSearchErrorCode)error{
         cell.goodsPrice2.text = [NSString stringWithFormat:@"￥%.1f",[[proHeatDatas[1] objectForKey:@"Price"] floatValue]];
         cell.goodsPrice3.text = [NSString stringWithFormat:@"￥%.1f",[[proHeatDatas[2] objectForKey:@"Price"] floatValue]];
         cell.goodsPrice4.text = [NSString stringWithFormat:@"￥%.1f",[[proHeatDatas[3] objectForKey:@"Price"] floatValue]];
+        if ([[proHeatDatas[0] objectForKey:@"Stock"] intValue] == 0) {
+            [cell.addShoppingCartButton1 setImage:nil forState:UIControlStateNormal];
+            [cell.addShoppingCartButton1 setTitle:@"已抢光" forState:UIControlStateNormal];
+            cell.addShoppingCartButton1.userInteractionEnabled = NO;
+        }
+        if ([[proHeatDatas[1] objectForKey:@"Stock"] intValue] == 0) {
+            [cell.addShoppingCartButton2 setImage:nil forState:UIControlStateNormal];
+            [cell.addShoppingCartButton2 setTitle:@"已抢光" forState:UIControlStateNormal];
+            cell.addShoppingCartButton2.userInteractionEnabled = NO;
+        }
+        if ([[proHeatDatas[2] objectForKey:@"Stock"] intValue] == 0) {
+            [cell.addShoppingCartButton3 setImage:nil forState:UIControlStateNormal];
+            [cell.addShoppingCartButton3 setTitle:@"已抢光" forState:UIControlStateNormal];
+            cell.addShoppingCartButton3.userInteractionEnabled = NO;
+        }
+        if ([[proHeatDatas[3] objectForKey:@"Stock"] intValue] == 0) {
+            [cell.addShoppingCartButton4 setImage:nil forState:UIControlStateNormal];
+            [cell.addShoppingCartButton4 setTitle:@"已抢光" forState:UIControlStateNormal];
+            cell.addShoppingCartButton4.userInteractionEnabled = NO;
+        }
 
         cell.goodsOldPrice1.hidden = YES;
         cell.goodsOldPrice2.hidden = YES;
@@ -928,10 +1214,11 @@ errorCode:(BMKSearchErrorCode)error{
 #pragma mark 重置titleAddress宽度
 -(void)initAddressTitleWidth:(NSString *)str{
     CGSize titleSize =[str  boundingRectWithSize:CGSizeMake(MAXFLOAT, MAXFLOAT) options:NSStringDrawingTruncatesLastVisibleLine | NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading attributes:@{NSFontAttributeName: [UIFont systemFontOfSize:15]} context:nil].size;
+    NSLog(@"%f",titleSize.width);
     if (titleSize.width > SCREENWIDTH-170) {
         _titleAddressWidth.constant = SCREENWIDTH-170;
     }else{
-        _titleAddressWidth.constant = titleSize.width;
+        _titleAddressWidth.constant = titleSize.width+10;
     }
 }
 

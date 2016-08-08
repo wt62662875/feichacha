@@ -104,14 +104,14 @@
 
             break;
         case 1:
-            cell.statelabel.text = @"已发货";
+            cell.statelabel.text = @"商品已送达";
             [cell.footButton setTitle:@"确定收货" forState:UIControlStateNormal];
             cell.footButton2.hidden = NO;
             [cell.footButton2 setTitle:@"申请售后" forState:UIControlStateNormal];
 
             break;
         case 2:
-            cell.statelabel.text = @"订单已完成";
+            cell.statelabel.text = @"交易成功";
             cell.footButtonView.hidden = YES;
 
             break;
@@ -125,8 +125,13 @@
             [cell.footButton setTitle:@"取消订单" forState:UIControlStateNormal];
 
             break;
+        case 5:
+            cell.statelabel.text = @"商家取消订单";
+            cell.footButtonView.hidden = YES;
+            
+            break;
         case 6:
-            cell.statelabel.text = @"未支付";
+            cell.statelabel.text = @"待支付";
             [cell.footButton setTitle:@"去支付" forState:UIControlStateNormal];
             cell.footButton2.hidden = NO;
             [cell.footButton2 setTitle:@"取消订单" forState:UIControlStateNormal];
@@ -151,7 +156,7 @@
             break;
     }
     
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+//    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     //输入格式
 //    [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSSZ"];
 //    dateFormatter.timeZone = [NSTimeZone timeZoneWithName:@"Asia/Shanghai"];

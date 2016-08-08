@@ -24,4 +24,5 @@
 @property (weak, nonatomic) IBOutlet UILabel *goodsOldPrice1;           //商品原价
 
 @property (weak, nonatomic) IBOutlet UIButton *addShoppingCartButton1;  //加入购物车按钮
+@property (weak, nonatomic) IBOutlet UIButton *goodsClick;
 @end

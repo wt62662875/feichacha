@@ -10,7 +10,6 @@
 #import "AppDelegate.h"
 #import <QuartzCore/QuartzCore.h>
 #import <CoreImage/CoreImage.h>
-#import "Reachability.h"
 #import "WXApiObject.h"
 
 #import <ShareSDK/ShareSDK.h>
@@ -18,7 +17,7 @@
 
 @interface AppUtils : NSObject
 + (void) callPhone:(NSString *)number;
-+ (BOOL)checkNetWorkingState;//判断连接
+//+ (BOOL)checkNetWorkingState;//判断连接
 + (void) showAlertView:(NSString *)Titile STR:(NSString*)str BtnTxt:(NSString *)btntxt;//提示框
 + (BOOL)isValidateMobile:(NSString *)mobile;//手机号
 /**

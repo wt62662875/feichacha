@@ -46,9 +46,7 @@
 
 #pragma mark 验证码
 - (IBAction)getVerificationCodeClick:(id)sender {
-    if (![AppUtils checkNetWorkingState]) {
-        [SVProgressHUD showErrorWithStatus:@"当前无网络" maskType:SVProgressHUDMaskTypeNone];
-    }else if (![AppUtils isValidateMobile:_phoneNumberTextField.text] ) {
+     if (![AppUtils isValidateMobile:_phoneNumberTextField.text] ) {
         [SVProgressHUD showErrorWithStatus:@"请输入正确手机号" maskType:SVProgressHUDMaskTypeNone];
     }else{
         [SVProgressHUD showWithStatus:@"加载中..."];
@@ -102,9 +100,7 @@
 
 #pragma mark 确定
 - (IBAction)determineClick:(id)sender {
-    if (![AppUtils checkNetWorkingState]) {
-        [SVProgressHUD showErrorWithStatus:@"当前无网络" maskType:SVProgressHUDMaskTypeNone];
-    }else if (![AppUtils isValidateMobile:_phoneNumberTextField.text] ) {
+    if (![AppUtils isValidateMobile:_phoneNumberTextField.text] ) {
         [SVProgressHUD showErrorWithStatus:@"请输入正确手机号" maskType:SVProgressHUDMaskTypeNone];
     }else if (_VerificationCodeTextField.text.length<4){
         [SVProgressHUD showErrorWithStatus:@"请输入完整的验证码" maskType:SVProgressHUDMaskTypeNone];

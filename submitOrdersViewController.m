@@ -56,26 +56,33 @@
     notDirect = [[NSMutableArray alloc]init];
     NSLog(@"%@",_getDatas);
     for (int i = 0; i<_getDatas.count; i++) {
-        if (![[_getDatas[i] objectForKey:@"IsDeleted"] boolValue] && [[_getDatas[i] allKeys] containsObject:@"IsDeleted"]) {
+        if (![[_getDatas[i] objectForKey:@"IsDirect"] boolValue] && [[_getDatas[i] allKeys] containsObject:@"IsDirect"]) {
             [Direct addObject:_getDatas[i]];
         }else{
             [notDirect addObject:_getDatas[i]];
         }
     }
-    
+
+    NSLog(@"%@",Direct);
+    NSLog(@"%@",notDirect);
+
     // Do any additional setup after loading the view.
     dirMoney = 0;
     notDirMoney = 0;
     if (Direct.count != 0) {
         for (int i = 0; i<Direct.count; i++) {
             dirMoney += ([[Direct [i] objectForKey:@"PurchaseQuantity"] floatValue]*[[Direct [i] objectForKey:@"Price"] floatValue]);
+            NSLog(@"%f",dirMoney);
         }
     }
     if (notDirect.count != 0) {
         for (int i = 0; i<notDirect.count; i++) {
-            dirMoney += ([[notDirect [i] objectForKey:@"PurchaseQuantity"] intValue]*[[notDirect [i] objectForKey:@"Price"] floatValue]);
+            notDirMoney += ([[notDirect [i] objectForKey:@"PurchaseQuantity"] intValue]*[[notDirect [i] objectForKey:@"Price"] floatValue]);
         }
     }
+    NSLog(@"%f",dirMoney);
+    NSLog(@"%f",notDirMoney);
+
     footView.goodsTotalMoney.text = [NSString stringWithFormat:@"￥%.1f",dirMoney+notDirMoney];
     _allPrice.text = [NSString stringWithFormat:@"￥%.1f",dirMoney+notDirMoney+[_getFreight floatValue]];
     NSLog(@"%@",[USERDEFAULTS objectForKey:@"CurrentAddress"]);
@@ -102,14 +109,14 @@
         return 0;
     }else {
         if (section == 1) {
-            if ([self returnSituation] != 4) {
+            if ([self returnSituation] != 4 && [self returnSituation] != 2) {
                 return  Direct.count;
             }else{
                 return  notDirect.count;
             }
         }
         if (section == 2) {
-            if ([self returnSituation] != 3 ||[self returnSituation] != 4 ) {
+            if ([self returnSituation] == 3 ||[self returnSituation] == 4 )  {
                 return  1;
             }else{
                 return  notDirect.count;
@@ -136,9 +143,9 @@
         cell = [[NSBundle mainBundle] loadNibNamed:@"submitOrderGoodsTableViewCell" owner:self options:nil][0];
     }
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    
+    NSLog(@"%d",[self returnSituation]);
     if (indexPath.section == 1) {
-        if ([self returnSituation] != 4) {
+        if ([self returnSituation] != 4 && [self returnSituation] != 2) {
             cell.goodsName.text = [Direct[indexPath.row] objectForKey:@"Name"];
             cell.goodsNumber.text = [NSString stringWithFormat:@"x%@",[Direct[indexPath.row] objectForKey:@"PurchaseQuantity"]];
             cell.goodsPrice.text = [NSString stringWithFormat:@"%.2f",[[Direct[indexPath.row] objectForKey:@"Price"] floatValue]];
@@ -146,12 +153,11 @@
             cell.goodsName.text = [notDirect[indexPath.row] objectForKey:@"Name"];
             cell.goodsNumber.text = [NSString stringWithFormat:@"x%@",[notDirect[indexPath.row] objectForKey:@"PurchaseQuantity"]];
             cell.goodsPrice.text = [NSString stringWithFormat:@"%.2f",[[notDirect[indexPath.row] objectForKey:@"Price"] floatValue]];
-
-
+            cell.goodsDescribe.hidden = YES;
         }
     }
     if (indexPath.section == 2) {
-        if ([self returnSituation] != 3 ||[self returnSituation] != 4 ) {
+        if ([self returnSituation] == 3 ||[self returnSituation] == 4 )  {
             cell.goodsName.text = [userLuck objectForKey:@"LuckyProductName"];
             cell.goodsDescribe.hidden = YES;
             cell.goodsNumber.hidden = YES;
@@ -160,8 +166,7 @@
             cell.goodsName.text = [notDirect[indexPath.row] objectForKey:@"Name"];
             cell.goodsNumber.text = [NSString stringWithFormat:@"x%@",[notDirect[indexPath.row] objectForKey:@"PurchaseQuantity"]];
             cell.goodsPrice.text = [NSString stringWithFormat:@"%.2f",[[notDirect[indexPath.row] objectForKey:@"Price"] floatValue]];
-
-
+            cell.goodsDescribe.hidden = YES;
         }
     }
     if (indexPath.section == 3) {
@@ -184,7 +189,7 @@
     }else if ([self returnSituation] == 1){
         return 2;
     }else if ([self returnSituation] == 2){
-        return 3;
+        return 2;
     }else if ([self returnSituation] == 3){
         return 3;
     }else if ([self returnSituation] == 4){
@@ -226,16 +231,15 @@
         submitOrderSectionHeadView *sectionHeadView = [[NSBundle mainBundle] loadNibNamed:@"submitOrderSectionHeadView" owner:self options:nil][0];
 
         if (section == 1) {
-            if ([self returnSituation] != 4) {
+            if ([self returnSituation] != 4 && [self returnSituation] != 2) {
                 sectionHeadView.name.text = @"叉叉精选";
             }else{
                 sectionHeadView.name.text = @"其他商品";
             }
         }
         if (section == 2) {
-            if ([self returnSituation] != 3 ||[self returnSituation] != 4 ) {
+            if ([self returnSituation] == 3 ||[self returnSituation] == 4 )  {
                 sectionHeadView.name.text = @"中奖商品";
-                
             }else{
                 sectionHeadView.name.text = @"其他商品";
             }
@@ -252,7 +256,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
     if (section == 0) {
         return 0.001;
-    }else if(section == 4){
+    }else if(section == 4 || section == 3){
         return 0.001;
     }else{
         return 45;
@@ -269,14 +273,14 @@
         return nil;
     }else{
         if (section == 1) {
-            if ([self returnSituation] != 4) {
+            if ([self returnSituation] != 4 && [self returnSituation] != 2) {
                 sectionFootView.allPrice.text = [NSString stringWithFormat:@"￥%.1f",dirMoney];
             }else{
                 sectionFootView.allPrice.text = [NSString stringWithFormat:@"￥%.1f",notDirMoney];
             }
         }
         if (section == 2) {
-            if ([self returnSituation] != 3 ||[self returnSituation] != 4 ) {
+            if ([self returnSituation] == 3 ||[self returnSituation] == 4 ) {
                 sectionFootView.allPrice.text = [NSString stringWithFormat:@"￥0.0"];
             }else{
                 sectionFootView.allPrice.text = [NSString stringWithFormat:@"￥%.1f",notDirMoney];

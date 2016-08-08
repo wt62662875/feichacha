@@ -96,19 +96,29 @@
         [cell.goodsImage1 sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[lastDatas[indexPath.row*2] objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"loading_default"]];
         cell.goodsName1.text = [lastDatas[indexPath.row*2] objectForKey:@"Name"];
         cell.goodsSpecifications1.text = [lastDatas[indexPath.row*2] objectForKey:@"Size"];
-        cell.price1.text = [NSString stringWithFormat:@"%@",[lastDatas[indexPath.row*2] objectForKey:@"PromotionPrice"]];
-        cell.goodsOldPrice1.text =[NSString stringWithFormat:@"原价:￥%@",[lastDatas[indexPath.row*2] objectForKey:@"Price"]];
+        cell.price1.text = [NSString stringWithFormat:@"%@",[lastDatas[indexPath.row*2] objectForKey:@"Price"]];
+        cell.goodsOldPrice1.text =[NSString stringWithFormat:@"原价:￥%@",[lastDatas[indexPath.row*2] objectForKey:@"PromotionPrice"]];
         cell.sellingLabel1.text = @"活动价：￥";
-
+        if ([[lastDatas[indexPath.row*2] objectForKey:@"Stock"] intValue] == 0) {
+            cell.buyButton1.backgroundColor = [UIColor lightGrayColor];
+            [cell.buyButton1 setTitle:@"已抢光" forState:UIControlStateNormal];
+            cell.buyButton1.userInteractionEnabled = NO;
+        }
+        
         if (lastDatas.count %2 != 0 && lastDatas.count/2 == indexPath.row) {
             cell.backView2.hidden = YES;
         }else{
             [cell.goodsImage2 sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[lastDatas[indexPath.row*2+1] objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"loading_default"]];
             cell.goodsName2.text = [lastDatas[indexPath.row*2+1] objectForKey:@"Name"];
             cell.goodsSpecifications2.text = [lastDatas[indexPath.row*2+1] objectForKey:@"Size"];
-            cell.price2.text = [NSString stringWithFormat:@"%@",[lastDatas[indexPath.row*2+1] objectForKey:@"PromotionPrice"]];
-            cell.goodsOldPrice1.text =[NSString stringWithFormat:@"原价:￥%@",[lastDatas[indexPath.row*2+1] objectForKey:@"Price"]];
+            cell.price2.text = [NSString stringWithFormat:@"%@",[lastDatas[indexPath.row*2+1] objectForKey:@"Price"]];
+            cell.goodsOldPrice2.text =[NSString stringWithFormat:@"原价:￥%@",[lastDatas[indexPath.row*2+1] objectForKey:@"PromotionPrice"]];
             cell.sellinglbael2.text = @"活动价：￥";
+            if ([[lastDatas[indexPath.row*2+1] objectForKey:@"Stock"] intValue] == 0) {
+                cell.buyButton2.backgroundColor = [UIColor lightGrayColor];
+                [cell.buyButton2 setTitle:@"已抢光" forState:UIControlStateNormal];
+                cell.buyButton2.userInteractionEnabled = NO;
+            }
         }
         
         [cell.buyButton1 setBackgroundColor:RGBCOLORA(246, 170, 0, 1)];
@@ -132,16 +142,24 @@
         [cell.goodsImage sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[datas[0] objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"loading_default"]];
         cell.goodsName.text = [datas[0] objectForKey:@"Name"];
         cell.goodsSpecifications.text = [datas[0] objectForKey:@"Size"];
-        cell.goodsPrice.text = [NSString stringWithFormat:@"%@",[datas[0] objectForKey:@"PromotionPrice"]];
-        cell.goodsOldPrice.text = [NSString stringWithFormat:@"原价￥%@",[datas[0] objectForKey:@"Price"]];
-
+        cell.goodsPrice.text = [NSString stringWithFormat:@"%@",[datas[0] objectForKey:@"Price"]];
+        cell.goodsOldPrice.text = [NSString stringWithFormat:@"原价￥%@",[datas[0] objectForKey:@"PromotionPrice"]];
+        if ([[datas[0] objectForKey:@"Stock"] intValue] == 0) {
+            cell.buyButton.backgroundColor = [UIColor lightGrayColor];
+            [cell.buyButton setTitle:@"已抢光" forState:UIControlStateNormal];
+            cell.buyButton.userInteractionEnabled = NO;
+        }
     }else{
         [cell.goodsImage sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[datas[1] objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"loading_default"]];
         cell.goodsName.text = [datas[1] objectForKey:@"Name"];
         cell.goodsSpecifications.text = [datas[1] objectForKey:@"Size"];
-        cell.goodsPrice.text = [NSString stringWithFormat:@"%@",[datas[1] objectForKey:@"PromotionPrice"]];
-        cell.goodsOldPrice.text = [NSString stringWithFormat:@"原价￥%@",[datas[1] objectForKey:@"Price"]];
-
+        cell.goodsPrice.text = [NSString stringWithFormat:@"%@",[datas[1] objectForKey:@"Price"]];
+        cell.goodsOldPrice.text = [NSString stringWithFormat:@"原价￥%@",[datas[1] objectForKey:@"PromotionPrice"]];
+        if ([[datas[1] objectForKey:@"Stock"] intValue] == 0) {
+            cell.buyButton.backgroundColor = [UIColor lightGrayColor];
+            [cell.buyButton setTitle:@"已抢光" forState:UIControlStateNormal];
+            cell.buyButton.userInteractionEnabled = NO;
+        }
     }
     
     
@@ -206,7 +224,7 @@
 -(void)goodsClick1:(UIButton *)sender{
     UIStoryboard *stroyBoard = GetStoryboard(@"Main");
     goodsDetailsViewController *goodsDetailsVC = [stroyBoard instantiateViewControllerWithIdentifier:@"goodsDetailsViewController"];
-    [goodsDetailsVC setIsAct:@"1"];
+    [goodsDetailsVC setIsAct:@"0"];
     if (sender.tag == 0) {
         [goodsDetailsVC setGetID:datas[0]];
     }else{
@@ -218,14 +236,14 @@
 -(void)goodsClick2:(UIButton *)sender{
     UIStoryboard *stroyBoard = GetStoryboard(@"Main");
     goodsDetailsViewController *goodsDetailsVC = [stroyBoard instantiateViewControllerWithIdentifier:@"goodsDetailsViewController"];
-    [goodsDetailsVC setIsAct:@"1"];
+    [goodsDetailsVC setIsAct:@"0"];
     [goodsDetailsVC setGetID:lastDatas[sender.tag*2]];
     [self.navigationController pushViewController:goodsDetailsVC animated:YES];
 }
 -(void)goodsClick3:(UIButton *)sender{
     UIStoryboard *stroyBoard = GetStoryboard(@"Main");
     goodsDetailsViewController *goodsDetailsVC = [stroyBoard instantiateViewControllerWithIdentifier:@"goodsDetailsViewController"];
-    [goodsDetailsVC setIsAct:@"1"];
+    [goodsDetailsVC setIsAct:@"0"];
     [goodsDetailsVC setGetID:lastDatas[sender.tag*2+1]];
     [self.navigationController pushViewController:goodsDetailsVC animated:YES];
 }

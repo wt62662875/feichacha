@@ -70,6 +70,9 @@
     cell.specifications.text = [datas[indexPath.row] objectForKey:@"Size"];
     cell.price.text = [NSString stringWithFormat:@"%@",[datas[indexPath.row] objectForKey:@"Price"]];
     cell.oldPrice.hidden = YES;
+    cell.buyButton.backgroundColor = RGBCOLORA(89, 182, 41, 1);
+    [cell.buyButton setTitle:@"立即购买" forState:UIControlStateNormal];
+    cell.buyButton.userInteractionEnabled = YES;
     if ([[datas[indexPath.row] objectForKey:@"Stock"] intValue] == 0) {
         cell.buyButton.backgroundColor = [UIColor lightGrayColor];
         [cell.buyButton setTitle:@"已抢光" forState:UIControlStateNormal];

@@ -113,7 +113,10 @@
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6P8-NZ-Fr1">
                                 <rect key="frame" x="118" y="220" width="26" height="26"/>
-                                <state key="normal" image="add_btn.png"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <state key="normal" image="add_btn.png">
+                                    <color key="titleColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8Yl-ff-uPy">
                                 <rect key="frame" x="0.0" y="0.0" width="148" height="195"/>
@@ -228,7 +231,10 @@
                             </label>
                             <button opaque="NO" tag="1" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KcC-ID-C2V">
                                 <rect key="frame" x="118" y="220" width="26" height="26"/>
-                                <state key="normal" image="add_btn.png"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <state key="normal" image="add_btn.png">
+                                    <color key="titleColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -337,7 +343,10 @@
                             </label>
                             <button opaque="NO" tag="2" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Kvk-AJ-ZA1">
                                 <rect key="frame" x="118" y="220" width="26" height="26"/>
-                                <state key="normal" image="add_btn.png"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <state key="normal" image="add_btn.png">
+                                    <color key="titleColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -446,7 +455,10 @@
                             </label>
                             <button opaque="NO" tag="3" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xh5-Pm-b1d">
                                 <rect key="frame" x="118" y="220" width="26" height="26"/>
-                                <state key="normal" image="add_btn.png"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <state key="normal" image="add_btn.png">
+                                    <color key="titleColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -556,11 +568,11 @@
                 <outlet property="goodsName2" destination="Mas-dO-9U4" id="Xvu-wo-pfX"/>
                 <outlet property="goodsName3" destination="KXh-ze-tV4" id="p9J-ex-bgO"/>
                 <outlet property="goodsName4" destination="BbO-Io-HEC" id="o0c-em-UL1"/>
-                <outlet property="goodsOldPrice1" destination="GVu-oD-WFN" id="mTq-XN-tb1"/>
+                <outlet property="goodsOldPrice1" destination="kkz-Ql-e2n" id="ZUH-Zp-D55"/>
                 <outlet property="goodsOldPrice2" destination="dVQ-ZW-fa4" id="Djo-G8-5Ro"/>
                 <outlet property="goodsOldPrice3" destination="AQS-O8-JZF" id="PAk-6d-bPn"/>
                 <outlet property="goodsOldPrice4" destination="ctH-5E-CA8" id="y5g-Kl-AQq"/>
-                <outlet property="goodsPrice1" destination="kkz-Ql-e2n" id="YbO-2F-kj7"/>
+                <outlet property="goodsPrice1" destination="GVu-oD-WFN" id="WZU-Ig-ypY"/>
                 <outlet property="goodsPrice2" destination="Uhb-zV-yJj" id="Xdh-dZ-w2Z"/>
                 <outlet property="goodsPrice3" destination="Qoa-Y0-Wva" id="J3U-2N-rgj"/>
                 <outlet property="goodsPrice4" destination="qYh-4x-ihX" id="oXZ-1E-ML6"/>

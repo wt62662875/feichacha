@@ -55,10 +55,10 @@
 @property (weak, nonatomic) IBOutlet UIButton *addShoppingCartButton2;
 @property (weak, nonatomic) IBOutlet UIButton *addShoppingCartButton3;
 
-@property (weak, nonatomic) IBOutlet UIButton *classButton;             //分类图点击按钮
 @property (weak, nonatomic) IBOutlet UIButton *goodsButton1;            //商品点击按钮
 @property (weak, nonatomic) IBOutlet UIButton *goodsButton2;
 @property (weak, nonatomic) IBOutlet UIButton *goodsButton3;
 
+@property (weak, nonatomic) IBOutlet UIButton *classButton;             //分类图点击按钮
 
 @end

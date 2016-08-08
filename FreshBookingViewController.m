@@ -99,30 +99,85 @@
     cell.bannerButton.tag = indexPath.row;
     [cell.bannerButton addTarget:self action:@selector(onClickbannerImage:) forControlEvents:UIControlEventTouchUpInside];
     
-    [cell.goodsImage1 sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[[midDatas[indexPath.row] objectForKey:@"FreshCompany"][0] objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"loading_default"]];
-    [cell.goodsImage2 sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[[midDatas[indexPath.row] objectForKey:@"FreshCompany"][1] objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"loading_default"]];
-    [cell.goodsImage3 sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[[midDatas[indexPath.row] objectForKey:@"FreshCompany"][2] objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"loading_default"]];
-    
-    cell.titleLabel1.text = [[midDatas[indexPath.row] objectForKey:@"FreshCompany"][0] objectForKey:@"ClassId"];
-    cell.titleLabel2.text = [[midDatas[indexPath.row] objectForKey:@"FreshCompany"][1] objectForKey:@"ClassId"];
-    cell.titleLabel3.text = [[midDatas[indexPath.row] objectForKey:@"FreshCompany"][2] objectForKey:@"ClassId"];
-    
-    cell.name1.text = [[midDatas[indexPath.row] objectForKey:@"FreshCompany"][0] objectForKey:@"Name"];
-    cell.name2.text = [[midDatas[indexPath.row] objectForKey:@"FreshCompany"][1] objectForKey:@"Name"];
-    cell.name3.text = [[midDatas[indexPath.row] objectForKey:@"FreshCompany"][2] objectForKey:@"Name"];
+    NSArray *freshArray = [midDatas[indexPath.row] objectForKey:@"FreshCompany"];
+    if (freshArray.count == 0) {
+        cell.titleLabel1.hidden = YES;
+        cell.name1.hidden = YES;
+        cell.message1.hidden = YES;
+        cell.specifications1.hidden = YES;
+        cell.goodsImage1.hidden = YES;
+        cell.goodsButton1.hidden = YES;
 
-    cell.message1.text = [[midDatas[indexPath.row] objectForKey:@"FreshCompany"][0] objectForKey:@"Size"];
-    cell.message2.text = [[midDatas[indexPath.row] objectForKey:@"FreshCompany"][1] objectForKey:@"Size"];
-    cell.message3.text = [[midDatas[indexPath.row] objectForKey:@"FreshCompany"][2] objectForKey:@"Size"];
-    
-    cell.specifications1.text = [NSString stringWithFormat:@"￥%.1f",[[[midDatas[indexPath.row] objectForKey:@"FreshCompany"][0] objectForKey:@"Price"] floatValue]];
-    cell.specifications2.text = [NSString stringWithFormat:@"￥%.1f",[[[midDatas[indexPath.row] objectForKey:@"FreshCompany"][1] objectForKey:@"Price"] floatValue]];
-    cell.specifications3.text = [NSString stringWithFormat:@"￥%.1f",[[[midDatas[indexPath.row] objectForKey:@"FreshCompany"][2] objectForKey:@"Price"] floatValue]];
-    
-//    cell.message1.hidden = YES;
-//    cell.message2.hidden = YES;
-//    cell.message3.hidden = YES;
-
+        cell.titleLabel2.hidden = YES;
+        cell.name2.hidden = YES;
+        cell.message2.hidden = YES;
+        cell.specifications2.hidden = YES;
+        cell.goodsImage2.hidden = YES;
+        cell.goodsButton2.hidden = YES;
+        
+        cell.titleLabel3.hidden = YES;
+        cell.name3.hidden = YES;
+        cell.message3.hidden = YES;
+        cell.specifications3.hidden = YES;
+        cell.goodsImage3.hidden = YES;
+        cell.goodsButton3.hidden = YES;
+    }else if (freshArray.count == 1) {
+        cell.titleLabel2.hidden = YES;
+        cell.name2.hidden = YES;
+        cell.message2.hidden = YES;
+        cell.specifications2.hidden = YES;
+        cell.goodsImage2.hidden = YES;
+        cell.goodsButton2.hidden = YES;
+        
+        cell.titleLabel3.hidden = YES;
+        cell.name3.hidden = YES;
+        cell.message3.hidden = YES;
+        cell.specifications3.hidden = YES;
+        cell.goodsImage3.hidden = YES;
+        cell.goodsButton3.hidden = YES;
+        [cell.goodsImage1 sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[[midDatas[indexPath.row] objectForKey:@"FreshCompany"][0] objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"loading_default"]];
+        cell.titleLabel1.text = [[midDatas[indexPath.row] objectForKey:@"FreshCompany"][0] objectForKey:@"ClassId"];
+        cell.name1.text = [[midDatas[indexPath.row] objectForKey:@"FreshCompany"][0] objectForKey:@"Name"];
+        cell.message1.text = [[midDatas[indexPath.row] objectForKey:@"FreshCompany"][0] objectForKey:@"Size"];
+        cell.specifications1.text = [NSString stringWithFormat:@"￥%.1f",[[[midDatas[indexPath.row] objectForKey:@"FreshCompany"][0] objectForKey:@"Price"] floatValue]];
+    }else if (freshArray.count == 2) {
+        cell.titleLabel3.hidden = YES;
+        cell.name3.hidden = YES;
+        cell.message3.hidden = YES;
+        cell.specifications3.hidden = YES;
+        cell.goodsImage3.hidden = YES;
+        cell.goodsButton3.hidden = YES;
+        [cell.goodsImage1 sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[[midDatas[indexPath.row] objectForKey:@"FreshCompany"][0] objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"loading_default"]];
+        [cell.goodsImage2 sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[[midDatas[indexPath.row] objectForKey:@"FreshCompany"][1] objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"loading_default"]];
+        cell.titleLabel1.text = [[midDatas[indexPath.row] objectForKey:@"FreshCompany"][0] objectForKey:@"ClassId"];
+        cell.titleLabel2.text = [[midDatas[indexPath.row] objectForKey:@"FreshCompany"][1] objectForKey:@"ClassId"];
+        cell.name1.text = [[midDatas[indexPath.row] objectForKey:@"FreshCompany"][0] objectForKey:@"Name"];
+        cell.name2.text = [[midDatas[indexPath.row] objectForKey:@"FreshCompany"][1] objectForKey:@"Name"];
+        cell.message1.text = [[midDatas[indexPath.row] objectForKey:@"FreshCompany"][0] objectForKey:@"Size"];
+        cell.message2.text = [[midDatas[indexPath.row] objectForKey:@"FreshCompany"][1] objectForKey:@"Size"];
+        cell.specifications1.text = [NSString stringWithFormat:@"￥%.1f",[[[midDatas[indexPath.row] objectForKey:@"FreshCompany"][0] objectForKey:@"Price"] floatValue]];
+        cell.specifications2.text = [NSString stringWithFormat:@"￥%.1f",[[[midDatas[indexPath.row] objectForKey:@"FreshCompany"][1] objectForKey:@"Price"] floatValue]];
+    }else{
+        [cell.goodsImage1 sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[[midDatas[indexPath.row] objectForKey:@"FreshCompany"][0] objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"loading_default"]];
+        [cell.goodsImage2 sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[[midDatas[indexPath.row] objectForKey:@"FreshCompany"][1] objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"loading_default"]];
+        [cell.goodsImage3 sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[[midDatas[indexPath.row] objectForKey:@"FreshCompany"][2] objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"loading_default"]];
+        
+        cell.titleLabel1.text = [[midDatas[indexPath.row] objectForKey:@"FreshCompany"][0] objectForKey:@"ClassId"];
+        cell.titleLabel2.text = [[midDatas[indexPath.row] objectForKey:@"FreshCompany"][1] objectForKey:@"ClassId"];
+        cell.titleLabel3.text = [[midDatas[indexPath.row] objectForKey:@"FreshCompany"][2] objectForKey:@"ClassId"];
+        
+        cell.name1.text = [[midDatas[indexPath.row] objectForKey:@"FreshCompany"][0] objectForKey:@"Name"];
+        cell.name2.text = [[midDatas[indexPath.row] objectForKey:@"FreshCompany"][1] objectForKey:@"Name"];
+        cell.name3.text = [[midDatas[indexPath.row] objectForKey:@"FreshCompany"][2] objectForKey:@"Name"];
+        
+        cell.message1.text = [[midDatas[indexPath.row] objectForKey:@"FreshCompany"][0] objectForKey:@"Size"];
+        cell.message2.text = [[midDatas[indexPath.row] objectForKey:@"FreshCompany"][1] objectForKey:@"Size"];
+        cell.message3.text = [[midDatas[indexPath.row] objectForKey:@"FreshCompany"][2] objectForKey:@"Size"];
+        
+        cell.specifications1.text = [NSString stringWithFormat:@"￥%.1f",[[[midDatas[indexPath.row] objectForKey:@"FreshCompany"][0] objectForKey:@"Price"] floatValue]];
+        cell.specifications2.text = [NSString stringWithFormat:@"￥%.1f",[[[midDatas[indexPath.row] objectForKey:@"FreshCompany"][1] objectForKey:@"Price"] floatValue]];
+        cell.specifications3.text = [NSString stringWithFormat:@"￥%.1f",[[[midDatas[indexPath.row] objectForKey:@"FreshCompany"][2] objectForKey:@"Price"] floatValue]];
+    }
     
     cell.goodsButton1.tag = indexPath.row;
     cell.goodsButton2.tag = indexPath.row;

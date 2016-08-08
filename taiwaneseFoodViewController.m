@@ -119,8 +119,8 @@
             cell.name2.text = [lastDatas[indexPath.row*2+1] objectForKey:@"Name"];
             cell.price2.text = [NSString stringWithFormat:@"￥%.1f",[[lastDatas[indexPath.row*2+1] objectForKey:@"Price"] floatValue]];
             if ([[lastDatas[indexPath.row*2+1] objectForKey:@"Stock"] intValue] == 0) {
-                cell.buyButton.backgroundColor = [UIColor lightGrayColor];
-                [cell.buyButton setTitle:@"已抢光" forState:UIControlStateNormal];
+                cell.buyButton2.backgroundColor = [UIColor lightGrayColor];
+                [cell.buyButton2 setTitle:@"已抢光" forState:UIControlStateNormal];
                 cell.buyButton2.userInteractionEnabled = NO;
             }
             

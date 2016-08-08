@@ -152,6 +152,9 @@
     cell.name.text = [[allDatas[indexPath.section-1] objectForKey:@"ActivityProduct"][indexPath.row]objectForKey:@"Name"];
     cell.specifications.text = [[allDatas[indexPath.section-1] objectForKey:@"ActivityProduct"][indexPath.row]objectForKey:@"Size"];
     cell.price.text = [NSString stringWithFormat:@"￥%.1f",[[[allDatas[indexPath.section-1] objectForKey:@"ActivityProduct"][indexPath.row]objectForKey:@"Price"] floatValue]];
+    cell.buyButton.backgroundColor = RGBCOLORA(98, 133, 31, 1);
+    [cell.buyButton setTitle:@"立即购买" forState:UIControlStateNormal];
+    cell.buyButton.userInteractionEnabled = YES;
     if ([[[allDatas[indexPath.section-1] objectForKey:@"ActivityProduct"][indexPath.row]objectForKey:@"Stock"] intValue] == 0) {
         cell.buyButton.backgroundColor = [UIColor lightGrayColor];
         [cell.buyButton setTitle:@"已抢光" forState:UIControlStateNormal];

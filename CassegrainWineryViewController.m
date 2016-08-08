@@ -82,7 +82,7 @@
         cell.name.text = [datas[indexPath.row] objectForKey:@"Name"];
         cell.size.text = [datas[indexPath.row] objectForKey:@"Size"];
         cell.price.text = [NSString stringWithFormat:@"￥%.1f",[[datas[indexPath.row] objectForKey:@"Price"] floatValue]];
-        if ([datas[indexPath.row] objectForKey:@"Stock"]) {
+        if ([[datas[indexPath.row] objectForKey:@"Stock"] intValue] == 0) {
             cell.buyButton.backgroundColor = [UIColor lightGrayColor];
             [cell.buyButton setTitle:@"已抢光" forState:UIControlStateNormal];
             cell.buyButton.userInteractionEnabled = NO;
@@ -104,7 +104,7 @@
         cell.name.text = [datas[indexPath.row] objectForKey:@"Name"];
         cell.size.text = [datas[indexPath.row] objectForKey:@"Size"];
         cell.price.text = [NSString stringWithFormat:@"￥%.1f",[[datas[indexPath.row] objectForKey:@"Price"] floatValue]];
-        if ([datas[indexPath.row] objectForKey:@"Stock"]) {
+        if ([[datas[indexPath.row] objectForKey:@"Stock"] intValue] == 0) {
             cell.buyButton.backgroundColor = [UIColor lightGrayColor];
             [cell.buyButton setTitle:@"已抢光" forState:UIControlStateNormal];
             cell.buyButton.userInteractionEnabled = NO;

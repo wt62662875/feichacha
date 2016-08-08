@@ -137,6 +137,9 @@
         cell.name.text = [datas1[indexPath.row] objectForKey:@"Name"];
         cell.specifications.text = [datas1[indexPath.row] objectForKey:@"Size"];
         cell.price.text = [NSString stringWithFormat:@"￥%1.f",[[datas1[indexPath.row] objectForKey:@"Price"] floatValue]];
+        cell.buyButton.backgroundColor = RGBCOLORA(244, 170, 50, 1);
+        [cell.buyButton setTitle:@"立即购买" forState:UIControlStateNormal];
+        cell.buyButton.userInteractionEnabled = YES;
         if ([[datas1[indexPath.row] objectForKey:@"Stock"] intValue] == 0) {
             cell.buyButton.backgroundColor = [UIColor lightGrayColor];
             [cell.buyButton setTitle:@"已抢光" forState:UIControlStateNormal];
@@ -147,6 +150,9 @@
         cell.name.text = [datas2[indexPath.row] objectForKey:@"Name"];
         cell.specifications.text = [datas2[indexPath.row] objectForKey:@"Size"];
         cell.price.text = [NSString stringWithFormat:@"￥%.1f",[[datas2[indexPath.row] objectForKey:@"Price"] floatValue]];
+        cell.buyButton.backgroundColor = RGBCOLORA(244, 170, 50, 1);
+        [cell.buyButton setTitle:@"立即购买" forState:UIControlStateNormal];
+        cell.buyButton.userInteractionEnabled = YES;
         if ([[datas2[indexPath.row] objectForKey:@"Stock"] intValue] == 0) {
             cell.buyButton.backgroundColor = [UIColor lightGrayColor];
             [cell.buyButton setTitle:@"已抢光" forState:UIControlStateNormal];
@@ -157,6 +163,9 @@
         cell.name.text = [datas3[indexPath.row] objectForKey:@"Name"];
         cell.specifications.text = [datas3[indexPath.row] objectForKey:@"Size"];
         cell.price.text = [NSString stringWithFormat:@"￥%.1f",[[datas3[indexPath.row] objectForKey:@"Price"] floatValue]];
+        cell.buyButton.backgroundColor = RGBCOLORA(244, 170, 50, 1);
+        [cell.buyButton setTitle:@"立即购买" forState:UIControlStateNormal];
+        cell.buyButton.userInteractionEnabled = YES;
         if ([[datas3[indexPath.row] objectForKey:@"Stock"] intValue] == 0) {
             cell.buyButton.backgroundColor = [UIColor lightGrayColor];
             [cell.buyButton setTitle:@"已抢光" forState:UIControlStateNormal];
@@ -167,6 +176,9 @@
         cell.name.text = [datas4[indexPath.row] objectForKey:@"Name"];
         cell.specifications.text = [datas4[indexPath.row] objectForKey:@"Size"];
         cell.price.text = [NSString stringWithFormat:@"￥%.1f",[[datas4[indexPath.row] objectForKey:@"Price"] floatValue]];
+        cell.buyButton.backgroundColor = RGBCOLORA(244, 170, 50, 1);
+        [cell.buyButton setTitle:@"立即购买" forState:UIControlStateNormal];
+        cell.buyButton.userInteractionEnabled = YES;
         if ([[datas4[indexPath.row] objectForKey:@"Stock"] intValue] == 0) {
             cell.buyButton.backgroundColor = [UIColor lightGrayColor];
             [cell.buyButton setTitle:@"已抢光" forState:UIControlStateNormal];
@@ -177,6 +189,9 @@
         cell.name.text = [datas5[indexPath.row] objectForKey:@"Name"];
         cell.specifications.text = [datas5[indexPath.row] objectForKey:@"Size"];
         cell.price.text = [NSString stringWithFormat:@"￥%.1f",[[datas5[indexPath.row] objectForKey:@"Price"] floatValue]];
+        cell.buyButton.backgroundColor = RGBCOLORA(244, 170, 50, 1);
+        [cell.buyButton setTitle:@"立即购买" forState:UIControlStateNormal];
+        cell.buyButton.userInteractionEnabled = YES;
         if ([[datas5[indexPath.row] objectForKey:@"Stock"] intValue] == 0) {
             cell.buyButton.backgroundColor = [UIColor lightGrayColor];
             [cell.buyButton setTitle:@"已抢光" forState:UIControlStateNormal];

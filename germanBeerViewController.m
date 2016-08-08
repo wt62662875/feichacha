@@ -71,6 +71,9 @@
     cell.name.text = [datas[indexPath.row] objectForKey:@"Name"];
     cell.price.text = [NSString stringWithFormat:@"￥%.1f",[[datas[indexPath.row] objectForKey:@"Price"] floatValue]];
     [cell.backImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[datas[indexPath.row] objectForKey:@"ImageUrl"]]]];
+    cell.buyButton.backgroundColor = RGBCOLORA(255, 199, 0, 1);
+    [cell.buyButton setTitle:@"立即购买" forState:UIControlStateNormal];
+    cell.buyButton.userInteractionEnabled = YES;
     if ([[datas[indexPath.row] objectForKey:@"Stock"] intValue] == 0) {
         cell.buyButton.backgroundColor = [UIColor lightGrayColor];
         [cell.buyButton setTitle:@"已抢光" forState:UIControlStateNormal];

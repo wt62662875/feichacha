@@ -223,26 +223,36 @@
 {
     static NSString * CellIdentifier = @"serchCollectionViewCell";
     serchCollectionViewCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:CellIdentifier forIndexPath:indexPath];
-    [cell.goodsImage sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[datas[indexPath.row] objectForKey:@"ImageUrl"]]]];
+    [cell.goodsImage sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",IMGURL,[datas[indexPath.row] objectForKey:@"ImageUrl"]]] placeholderImage:[UIImage imageNamed:@"loading_default"]];
     cell.addShoppingCartButton1.tag = indexPath.row;
     [cell.addShoppingCartButton1 addTarget:self action:@selector(addShoppingCartButton1:) forControlEvents:UIControlEventTouchUpInside];
     cell.goodsName.text = [datas[indexPath.row] objectForKey:@"Name"];
     cell.goodsPrice1.text = [NSString stringWithFormat:@"￥%.1f",[[datas[indexPath.row] objectForKey:@"Price"] floatValue]];
     cell.goodsMessage1.text = [datas[indexPath.row] objectForKey:@"Size"];
-    if (![[datas[indexPath.row] objectForKey:@"IsDirect"] boolValue]) {
+    if ([[datas[indexPath.row] objectForKey:@"IsDirect"] boolValue]) {
         cell.goodsDescribe1.layer.borderColor = RGBCOLORA(114, 172, 74, 1).CGColor;
         cell.goodsDescribe1.layer.borderWidth = 1;
         cell.goodsDescribe1.layer.cornerRadius = 8;
         cell.goodsDescribe1.text = @"进";
         cell.goodsDescribe1.textColor = RGBCOLORA(114, 172, 74, 1);
         cell.goodsDescribe2.hidden = YES;
+    }else{
+        cell.goodsDescribe1.layer.borderColor = [UIColor redColor].CGColor;
+        cell.goodsDescribe1.textColor = [UIColor redColor];
+        cell.goodsDescribe1.text = @"精";
+        cell.goodsDescribe2.hidden = NO;
     }
     if (![[datas[indexPath.row]objectForKey:@"IsImport"] boolValue]) {
         cell.goodsDescribe1.hidden = YES;
+    }else{
+        cell.goodsDescribe1.hidden = NO;
     }
     
     cell.goodsDescribe3.hidden = YES;
     cell.goodsOldPrice1.hidden = YES;
+    
+    cell.goodsClick.tag = indexPath.row;
+    [cell.goodsClick addTarget:self action:@selector(goodsClick:) forControlEvents:UIControlEventTouchUpInside];
 //    /**
 //     老价格加下划线
 //     **/
@@ -313,7 +323,7 @@
     baseViewController *baseVC = [stroyBoard instantiateViewControllerWithIdentifier:@"baseViewController"];
     serchCollectionViewCell *cell = (serchCollectionViewCell *)[_collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:sender.tag inSection:0]];
     [baseVC addProductsAnimation:cell.goodsImage selfView:self.view pointX:SCREENWIDTH-44 pointY:SCREENHTIGHT-44];
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"ReservationShoppingCartGoodsAdd" object:datas[sender.tag]];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"FlashShoppingCartGoodsAdd" object:datas[sender.tag]];
     _badgeLabel.hidden = NO;
     _badgeLabel.text = [NSString stringWithFormat:@"%@",[USERDEFAULTS objectForKey:@"PurchaseQuantity"]];
 }
@@ -348,6 +358,14 @@
         [self serchAPI:@"false"];
     }
     
+}
+-(void)goodsClick:(UIButton *)sender{
+    UIStoryboard *stroyBoard = GetStoryboard(@"Main");
+    goodsDetailsViewController *goodsDetailsVC = [stroyBoard instantiateViewControllerWithIdentifier:@"goodsDetailsViewController"];
+    [goodsDetailsVC setIsAct:@"0"];
+    [goodsDetailsVC setGetID:datas[sender.tag]];
+    [self.navigationController pushViewController:goodsDetailsVC animated:YES];
+
 }
 - (IBAction)shoppingCartButton:(id)sender {
     [self.navigationController popToRootViewControllerAnimated:YES];

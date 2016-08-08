@@ -79,7 +79,7 @@
 }
 #pragma mark CELL的高度
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return 340;
+    return 306;
 }
 #pragma mark CELL的数据
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -104,7 +104,7 @@
     cell.goodsPrice.text = [NSString stringWithFormat:@"￥%.1f",[[datas objectForKey:@"Price"] floatValue]];
     cell.goodsBrand.text = [datas objectForKey:@"BrandId"];
     cell.goodsSpecifications.text = [datas objectForKey:@"Size"];
-    cell.shelfLife.text = [NSString stringWithFormat:@"%d个月",[[datas objectForKey:@"Days"] intValue]/30];
+    cell.shelfLife.text = [NSString stringWithFormat:@"%d天",[[datas objectForKey:@"Days"] intValue]];
     
     return cell;
 }
